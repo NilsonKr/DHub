@@ -200,6 +200,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@nextui-org/react@npm:^1.0.2-alpha.2":
+  version: 1.0.2-alpha.2
+  resolution: "@nextui-org/react@npm:1.0.2-alpha.2"
+  dependencies:
+    "@stitches/react": ^1.2.6
+  peerDependencies:
+    react: ">=16.8.0"
+    react-dom: ">=16.8.0"
+  checksum: cd75fc826742cb7697b6a4980cd12f299f163832b668857c563b3df51a98db34af0924b807eee0a8f63f7ecca05cdf2baa7c9e93297a552d618e79016a4c3934
+  languageName: node
+  linkType: hard
+
 "@nodelib/fs.scandir@npm:2.1.5":
   version: 2.1.5
   resolution: "@nodelib/fs.scandir@npm:2.1.5"
@@ -231,6 +243,15 @@ __metadata:
   version: 1.1.0
   resolution: "@rushstack/eslint-patch@npm:1.1.0"
   checksum: 4602c23454c8bb03502da12398cb5c4c0bfb3b1772535b418ec94ab8c47824f70e6ff32206a35fe7086042d9516959edea439e2371147b1de7eee50ef03ace65
+  languageName: node
+  linkType: hard
+
+"@stitches/react@npm:^1.2.6":
+  version: 1.2.6
+  resolution: "@stitches/react@npm:1.2.6"
+  peerDependencies:
+    react: ">= 16.3.0"
+  checksum: 416088cdde17a22d6cdb04cf1cf756c6e5fc291dd7e41f82ce422bb95432ad32b6d990e7264d996d367c40bbc674d61be087e4e1f7b23eea7f81ef6266373a9c
   languageName: node
   linkType: hard
 
@@ -665,6 +686,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "dmedia@workspace:."
   dependencies:
+    "@nextui-org/react": ^1.0.2-alpha.2
     "@types/node": 17.0.8
     "@types/react": 17.0.38
     eslint: 8.6.0
