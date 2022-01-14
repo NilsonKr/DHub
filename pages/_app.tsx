@@ -1,15 +1,13 @@
 import '../styles/globals.css';
 import type { AppProps } from 'next/app';
-import { CssBaseline, NextUIProvider, createTheme } from '@nextui-org/react';
-
-const theme = createTheme({ type: 'dark' });
+import { ChakraProvider } from '@chakra-ui/react';
+import { theme } from '../styles/theme';
 
 function MyApp({ Component, pageProps }: AppProps) {
 	return (
-		<NextUIProvider theme={theme}>
-			<CssBaseline />
+		<ChakraProvider theme={theme}>
 			<Component {...pageProps} />
-		</NextUIProvider>
+		</ChakraProvider>
 	);
 }
 

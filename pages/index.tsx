@@ -1,13 +1,11 @@
 import type { NextPage } from 'next';
 //UI
-import { useTheme, Container, Text } from '@nextui-org/react';
 import { Header } from '../components/Index';
+import { Container } from '@chakra-ui/react';
 
 const Home: NextPage = () => {
-	const { theme } = useTheme();
-
 	return (
-		<Container>
+		<Container maxW='1000px'>
 			<Header />
 			{/* <Text color={theme?.colors.purple100.value}>Home view</Text> */}
 		</Container>
