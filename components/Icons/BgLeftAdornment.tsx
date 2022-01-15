@@ -42,9 +42,9 @@ export const BgLeftAdornment = ({ ...props }: TSVGProps) => {
 					width='347.385'
 					height='420.314'
 					filterUnits='userSpaceOnUse'
-					color-interpolation-filters='sRGB'
+					colorInterpolationFilters='sRGB'
 				>
-					<feFlood flood-opacity='0' result='BackgroundImageFix' />
+					<feFlood floodOpacity='0' result='BackgroundImageFix' />
 					<feBlend
 						mode='normal'
 						in='SourceGraphic'
@@ -60,9 +60,9 @@ export const BgLeftAdornment = ({ ...props }: TSVGProps) => {
 					width='272'
 					height='327.61'
 					filterUnits='userSpaceOnUse'
-					color-interpolation-filters='sRGB'
+					colorInterpolationFilters='sRGB'
 				>
-					<feFlood flood-opacity='0' result='BackgroundImageFix' />
+					<feFlood floodOpacity='0' result='BackgroundImageFix' />
 					<feBlend
 						mode='normal'
 						in='SourceGraphic'
@@ -78,9 +78,9 @@ export const BgLeftAdornment = ({ ...props }: TSVGProps) => {
 					width='347.385'
 					height='420.314'
 					filterUnits='userSpaceOnUse'
-					color-interpolation-filters='sRGB'
+					colorInterpolationFilters='sRGB'
 				>
-					<feFlood flood-opacity='0' result='BackgroundImageFix' />
+					<feFlood floodOpacity='0' result='BackgroundImageFix' />
 					<feBlend
 						mode='normal'
 						in='SourceGraphic'
@@ -97,9 +97,9 @@ export const BgLeftAdornment = ({ ...props }: TSVGProps) => {
 					gradientUnits='userSpaceOnUse'
 					gradientTransform='translate(173.692 210.157) rotate(90) scale(200.157 163.692)'
 				>
-					<stop stop-color='#D299FF' />
-					<stop offset='0.0001' stop-color='#410075' stop-opacity='0.677083' />
-					<stop offset='1' stop-color='#530094' stop-opacity='0' />
+					<stop stopColor='#D299FF' />
+					<stop offset='0.0001' stopColor='#410075' stopOpacity='0.677083' />
+					<stop offset='1' stopColor='#530094' stopOpacity='0' />
 				</radialGradient>
 				<radialGradient
 					id='paint1_radial_14_3'
@@ -109,9 +109,9 @@ export const BgLeftAdornment = ({ ...props }: TSVGProps) => {
 					gradientUnits='userSpaceOnUse'
 					gradientTransform='translate(304 347.107) rotate(90) scale(153.805 126)'
 				>
-					<stop stop-color='#D299FF' />
-					<stop offset='0.0001' stop-color='#410075' stop-opacity='0.677083' />
-					<stop offset='1' stop-color='#530094' stop-opacity='0' />
+					<stop stopColor='#D299FF' />
+					<stop offset='0.0001' stopColor='#410075' stopOpacity='0.677083' />
+					<stop offset='1' stopColor='#530094' stopOpacity='0' />
 				</radialGradient>
 				<radialGradient
 					id='paint2_radial_14_3'
@@ -121,9 +121,9 @@ export const BgLeftAdornment = ({ ...props }: TSVGProps) => {
 					gradientUnits='userSpaceOnUse'
 					gradientTransform='translate(173.692 479.843) rotate(90) scale(200.157 163.692)'
 				>
-					<stop stop-color='#D299FF' />
-					<stop offset='0.0001' stop-color='#410075' stop-opacity='0.677083' />
-					<stop offset='1' stop-color='#530094' stop-opacity='0' />
+					<stop stopColor='#D299FF' />
+					<stop offset='0.0001' stopColor='#410075' stopOpacity='0.677083' />
+					<stop offset='1' stopColor='#530094' stopOpacity='0' />
 				</radialGradient>
 			</defs>
 		</svg>

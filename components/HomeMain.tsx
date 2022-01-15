@@ -19,6 +19,7 @@ export const HomeMain = () => {
 				alt='Descentralized box'
 				width='250px'
 				height='250px'
+				placeholder='blur'
 			/>
 			<Heading>Your own descentralized storage</Heading>
 			<Text>Get start by sign in</Text>
