@@ -4,10 +4,12 @@ import { motion, Variants } from 'framer-motion';
 import { MagicBox } from './MagicBox';
 import { BgBubble } from './BgBubble';
 import { VStack, Heading, Text, Button, Box } from '@chakra-ui/react';
+import { Register } from './Register';
+import { LoggedIn } from './LoggedIn';
 
 const variants: Variants = {
 	open: {
-		translateY: '80px',
+		translateY: '100px',
 		transition: { duration: 0.7 },
 	},
 };
@@ -17,12 +19,14 @@ export const HomeMain = () => {
 	const [animate, setAnimation] = useState<boolean>(false);
 
 	const handleAnimation = () => {
-		setTimeout(() => setAnimation(true), 2200);
+		setTimeout(() => setAnimation(true), 2000);
 	};
 
 	return (
 		<Box my='10' position='relative'>
 			<BgBubble />
+			{/* {animate && <Register />} */}
+			{animate && <LoggedIn />}
 			<motion.div variants={variants} animate={animate ? 'open' : {}}>
 				<VStack h='100vh' spacing={3} justify='center' align='center' textAlign='center'>
 					<MagicBox open={openBox} />
