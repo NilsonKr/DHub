@@ -14,12 +14,3 @@ a {
 * {
 	box-sizing: border-box;
 }
-
-.pizza-svg {
-	width: 80px;
-	overflow: visible;
-	stroke: #fff;
-	stroke-width: 4;
-	stroke-linejoin: round;
-	stroke-linecap: round;
-}

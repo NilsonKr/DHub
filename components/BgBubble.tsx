@@ -22,7 +22,7 @@ export const BgBubble = (props: BoxProps) => {
 					opacity: opacityKeyFrames,
 				}}
 				initial={initialStyles}
-				transition={{ duration: 10, repeat: Infinity, delay: 2, repeatDelay: 5 }}
+				transition={{ duration: 8, repeat: Infinity, delay: 2, repeatDelay: 4 }}
 				style={{ zIndex: '-1' }}
 			>
 				<Box
@@ -39,7 +39,7 @@ export const BgBubble = (props: BoxProps) => {
 					opacity: opacityKeyFrames,
 				}}
 				initial={initialStyles}
-				transition={{ duration: 10, repeat: Infinity, delay: 7, repeatDelay: 5 }}
+				transition={{ duration: 8, repeat: Infinity, delay: 6, repeatDelay: 4 }}
 				style={{ zIndex: '-1' }}
 			>
 				<Box
