@@ -1,6 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 //UI
+import { BgBubble } from './BgBubble';
 import { VStack, Heading, Text, Button } from '@chakra-ui/react';
 
 export const HomeMain = () => {
@@ -12,7 +13,9 @@ export const HomeMain = () => {
 			justify='center'
 			align='center'
 			textAlign='center'
+			position='relative'
 		>
+			<BgBubble />
 			<Image
 				src='/assets/box.png'
 				blurDataURL='/assets/box.png'

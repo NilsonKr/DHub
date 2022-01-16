@@ -29,9 +29,9 @@ export const Header = () => {
 			<GridItem w='100%'>
 				<Box mx='auto' w='min'>
 					<Avatar
-						bg='purple.700'
+						bg='pink.700'
 						cursor='pointer'
-						_hover={{ bg: 'purple.500' }}
+						_hover={{ bg: 'pink.500' }}
 						_active={{ transform: 'scale(0.9)' }}
 						icon={<AiOutlineUser size='30px' color='white' />}
 					/>
