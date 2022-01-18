@@ -5,3 +5,5 @@ export { HomeMain } from './Home/HomeMain';
 export { Register } from './Form/Register';
 export { BgBubble } from './Miscellaneous/BgBubble';
 export { LoggedIn } from './Miscellaneous/LoggedIn';
+export { Layout } from './Layout/Index';
+export { Card } from './Gallery/Card';
