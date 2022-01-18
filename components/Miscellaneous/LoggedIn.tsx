@@ -1,7 +1,7 @@
 import React from 'react';
 //UI
 import { motion, Variants } from 'framer-motion';
-import { Heading, Text, Box, VStack, HStack, transition } from '@chakra-ui/react';
+import { Heading, Text, Box, VStack, HStack } from '@chakra-ui/react';
 import { CheckCircleIcon } from '@chakra-ui/icons';
 
 const variants: Variants = {

@@ -1,6 +1,6 @@
 import NextLink from 'next/link';
 //UI
-import { LogoIcon } from './Icons';
+import { LogoIcon } from '../Icons';
 import { NavLink } from './Link';
 import { Grid, GridItem, Box, Flex, Heading, Avatar } from '@chakra-ui/react';
 import { AiOutlineUser } from 'react-icons/ai';

@@ -2,10 +2,10 @@ import { useState } from 'react';
 //UI
 import { motion, Variants } from 'framer-motion';
 import { MagicBox } from './MagicBox';
-import { BgBubble } from './BgBubble';
+import { BgBubble } from '../Miscellaneous/BgBubble';
 import { VStack, Heading, Text, Button, Box } from '@chakra-ui/react';
-import { Register } from './Register';
-import { LoggedIn } from './LoggedIn';
+import { Register } from '../Form/Register';
+import { LoggedIn } from '../Miscellaneous/LoggedIn';
 
 const variants: Variants = {
 	open: {
