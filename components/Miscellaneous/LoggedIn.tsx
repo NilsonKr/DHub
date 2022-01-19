@@ -13,7 +13,7 @@ const variants: Variants = {
 		opacity: 1,
 		translateY: '0px',
 		transition: {
-			delay: 0.6,
+			delay: 0.3,
 			duration: 1,
 		},
 	},
