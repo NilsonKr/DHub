@@ -10,7 +10,13 @@ export const RoundedRightArrow = ({
 	size,
 }: TProps) => {
 	return (
-		<Circle w={size} h={size} bg={bg}>
+		<Circle
+			_active={{ transform: 'scale(0.8)' }}
+			transition='transform .1s linear'
+			w={size}
+			h={size}
+			bg={bg}
+		>
 			<Icon
 				cursor='pointer'
 				w={iconSize}

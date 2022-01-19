@@ -1,9 +1,30 @@
-import React from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
 //UI
-import { Box, Text, Heading } from '@chakra-ui/react';
+import { motion } from 'framer-motion';
+import { RoundedRightArrow } from '../Icons';
+import { MdOutlineDownload, MdOutlineCopyAll, MdOutlineCheck } from 'react-icons/md';
+import {
+	Box,
+	Text,
+	Heading,
+	Flex,
+	VStack,
+	Link,
+	Circle,
+	Icon,
+	HStack,
+} from '@chakra-ui/react';
 
 export const Card = () => {
+	const [isCopy, setCopy] = useState<boolean>(false);
+
+	const handleCopy = () => {
+		navigator.clipboard.writeText('Hey from DHub!');
+		setCopy(true);
+		setTimeout(() => setCopy(false), 1500);
+	};
+
 	return (
 		<Box
 			w='100%'
@@ -16,6 +37,7 @@ export const Card = () => {
 			_hover={{
 				shadow: '0px 4px 8px rgba(255, 255, 255, 0.6)',
 			}}
+			role='group'
 		>
 			<Box
 				position='absolute'
@@ -27,14 +49,54 @@ export const Card = () => {
 					bg: 'linear-gradient(180deg, rgba(0,0,0,0.7) 0%, rgba(246,246,246,0) 50%, rgba(0,0,0,0.7) 100%)',
 				}}
 			>
-				<Box ml={4} mt={3}>
-					<Heading mb={1} fontSize='md'>
-						Random paper doge
-					</Heading>
-					<Text color='gray.300' fontSize='sm' fontWeight='semibold'>
-						Chiilest and coolest dog I ever...
-					</Text>
-				</Box>
+				<VStack px='3' py='2' h='100%' justifyContent='space-between'>
+					<Box>
+						<Heading mb={1} fontSize='md'>
+							Random paper doge
+						</Heading>
+						<Text color='gray.300' fontSize='sm' fontWeight='semibold'>
+							Chiilest and coolest dog I ever...
+						</Text>
+					</Box>
+					<Flex
+						opacity='0'
+						align='end'
+						width='100%'
+						justifyContent='space-between'
+						transition='opacity .2s linear'
+						_groupHover={{ opacity: 1 }}
+					>
+						<Flex align='center' cursor='pointer' onClick={handleCopy}>
+							<Link fontSize='sm' mr='1'>
+								Copy link
+							</Link>
+							{isCopy ? (
+								<motion.div
+									animate={{ translateY: [-6, 0, -3, 0, 1] }}
+									transition={{ duration: 0.6 }}
+								>
+									<Circle size='14px' bg='green.400'>
+										<MdOutlineCheck color='white' size='12px' />
+									</Circle>
+								</motion.div>
+							) : (
+								<MdOutlineCopyAll size='14px' />
+							)}
+						</Flex>
+						<HStack spacing='2'>
+							<Circle
+								_active={{ transform: 'scale(0.8)' }}
+								transition='transform .1s linear'
+								bg='pink.500'
+								size='35px'
+								cursor='pointer'
+							>
+								<Icon color='white' h='20px' w='20px' as={MdOutlineDownload} />
+							</Circle>
+							<RoundedRightArrow size='35px' bg='purple.500' iconSize='20px' />
+						</HStack>
+					</Flex>
+				</VStack>
 			</Box>
 			<Image
 				layout='fill'
