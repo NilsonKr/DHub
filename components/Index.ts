@@ -7,3 +7,5 @@ export { BgBubble } from './Miscellaneous/BgBubble';
 export { LoggedIn } from './Miscellaneous/LoggedIn';
 export { Layout } from './Layout/Index';
 export { Card } from './Gallery/Card';
+export { TagsCarousel } from './Gallery/TagsCarousel';
+export { SearchInput } from './Form/SearchInput';

@@ -1,17 +1,25 @@
-import React from 'react';
+import { useState } from 'react';
 //UI
-
 import { Card } from '../components/Index';
 import { BgLeftAdornment, BgRightAdornment } from '../components/Icons/';
 import { Box, Grid, GridItem, Heading, Flex } from '@chakra-ui/react';
+import { SearchInput, TagsCarousel } from '../components/Index';
 
 const gallery = () => {
+	const [query, setQuery] = useState<string>('');
+
 	return (
 		<>
-			<Box as='section' mt='80px'>
-				<Flex>
+			<Box as='section' mt='80px' w='100%'>
+				<Flex w='100%' justifyContent='space-between' align='end'>
 					<Heading mb='10px'>NilsonKr's Gallery</Heading>
+					<SearchInput
+						value={query}
+						handleChange={ev => setQuery(ev.target.value)}
+						clear={() => setQuery('')}
+					/>
 				</Flex>
+				<TagsCarousel />
 				<Grid
 					templateColumns='repeat(auto-fill, 240px)'
 					autoRows='260px'
