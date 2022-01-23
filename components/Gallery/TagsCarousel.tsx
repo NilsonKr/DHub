@@ -1,7 +1,8 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
 //UI
-import { Square, HStack, Icon, Text } from '@chakra-ui/react';
-import { BsFillTagsFill } from 'react-icons/bs';
+import { HStack, Text, Flex } from '@chakra-ui/react';
+import { NewTag, Clear } from '../Buttons';
+import { TagHub } from './Tag';
 
 const tagsList = [
 	'Background',
@@ -18,27 +19,41 @@ const tagsList = [
 	'hobbies',
 ];
 
-export const TagsCarousel = () => {
+type Ttag = string;
+type TProps = { newTag: () => void };
+
+export const TagsCarousel = ({ newTag }: TProps) => {
+	const [tags, setTags] = useState<Ttag[] | void[]>([]);
+
+	const fetchTags = () => {
+		setTags(tagsList);
+	};
+
+	useEffect(fetchTags, []);
+
 	return (
-		<HStack w='100%' my='3' pb='5' pt='2' spacing={4} overflowY='auto' overflowX='scroll'>
-			{tagsList.map((tag, i) => (
-				<Square
-					_hover={{ bg: 'pink.800' }}
-					cursor='pointer'
-					_active={{ transform: 'translateY(-5px)', bg: 'pink.300' }}
-					transition='transform .03s linear'
-					bg='#FF0099'
-					justifyContent='space-around'
-					borderRadius='10px'
-					p='3px 8px'
-					key={i}
-				>
-					<Icon color='black' mr='2' as={BsFillTagsFill} />
-					<Text color='white' fontSize='sm'>
-						{tag}
-					</Text>
-				</Square>
-			))}
-		</HStack>
+		<Flex align='center'>
+			{tags.length > 0 && <Clear />}
+			<HStack
+				w='100%'
+				m='6px 0 6px 25px'
+				pb='3'
+				pt='5'
+				spacing={4}
+				overflowY='auto'
+				overflowX='scroll'
+			>
+				{tags.length > 0 ? (
+					tagsList.map((tag, i) => <TagHub tag={tag} key={i} />)
+				) : (
+					<>
+						<Text fontSize='lg'>
+							👋 You don't have any tags yet, Create your first one!
+						</Text>
+						<NewTag isVariant={false} create={newTag} />
+					</>
+				)}
+			</HStack>
+		</Flex>
 	);
 };
