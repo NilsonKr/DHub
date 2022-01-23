@@ -12,18 +12,30 @@ const tagsList = [
 	'Work',
 	'study',
 	'hobbies',
-	'Photos',
-	'Landscape',
-	'Work',
-	'study',
-	'hobbies',
+	'Photoss',
+	'Landscapes',
+	'Works',
+	'studys',
+	'hobbiess',
 ];
 
-type Ttag = string;
 type TProps = { newTag: () => void };
 
 export const TagsCarousel = ({ newTag }: TProps) => {
 	const [tags, setTags] = useState<Ttag[] | void[]>([]);
+	const [selected, setSelectedTags] = useState<Ttag[]>([]);
+
+	const toggleSelect = (tag: Ttag) => {
+		if (selected.includes(tag)) {
+			const newSelected = [...selected];
+			const tagIdx = selected.findIndex(t => t === tag);
+
+			newSelected.splice(tagIdx, 1);
+			setSelectedTags(newSelected);
+		} else {
+			setSelectedTags(prev => [...prev, tag]);
+		}
+	};
 
 	const fetchTags = () => {
 		setTags(tagsList);
@@ -33,7 +45,9 @@ export const TagsCarousel = ({ newTag }: TProps) => {
 
 	return (
 		<Flex align='center'>
-			{tags.length > 0 && <Clear />}
+			{tags.length > 0 && (
+				<Clear list={selected} handleClear={() => setSelectedTags([])} />
+			)}
 			<HStack
 				w='100%'
 				m='6px 0 6px 25px'
@@ -44,7 +58,9 @@ export const TagsCarousel = ({ newTag }: TProps) => {
 				overflowX='scroll'
 			>
 				{tags.length > 0 ? (
-					tagsList.map((tag, i) => <TagHub tag={tag} key={i} />)
+					tagsList.map((tag, i) => (
+						<TagHub selectedList={selected} select={toggleSelect} tag={tag} key={i} />
+					))
 				) : (
 					<>
 						<Text fontSize='lg'>

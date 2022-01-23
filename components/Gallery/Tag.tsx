@@ -1,22 +1,19 @@
 import { useState } from 'react';
 //UI
-import { Button, Icon, Text, Tag, TagLabel, TagLeftIcon } from '@chakra-ui/react';
+import { Tag, TagLabel, TagLeftIcon } from '@chakra-ui/react';
 import { BsFillTagsFill } from 'react-icons/bs';
 
-export const TagHub = ({ tag }: { tag: string }) => {
-	const [selecteTag, switchSelect] = useState<boolean>(false);
+type TProps = { select: (tag: Ttag) => void; tag: Ttag; selectedList: Ttag[] };
 
-	const handleClick = () => {
-		switchSelect(prev => !prev);
-	};
+export const TagHub = ({ tag, select, selectedList }: TProps) => {
 	return (
 		<Tag
-			onClick={handleClick}
+			onClick={() => select(tag)}
 			_hover={{ bg: 'pink.800' }}
 			cursor='pointer'
-			transform={selecteTag ? 'translateY(-8px)' : 'translateY(0px)'}
+			transform={selectedList.includes(tag) ? 'translateY(-8px)' : 'translateY(0px)'}
 			transition='transform .1s linear'
-			bg={selecteTag ? 'pink.300' : '#FF0099'}
+			bg={selectedList.includes(tag) ? 'pink.300' : '#FF0099'}
 			borderRadius='10px'
 			minW='auto'
 			pr='10px'
