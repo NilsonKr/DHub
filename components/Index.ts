@@ -11,3 +11,4 @@ export { TagsCarousel } from './Gallery/TagsCarousel';
 export { SearchInput } from './Form/SearchInput';
 export { NewTag, Upload, Clear } from './Buttons';
 export { MenuActions } from './Gallery/MenuActions';
+export { CreateTagModal } from './Modal/';

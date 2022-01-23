@@ -3,12 +3,14 @@ import React from 'react';
 import { Flex, ButtonGroup } from '@chakra-ui/react';
 import { Upload, NewTag } from '../Index';
 
-export const MenuActions = () => {
+type TProps = { openTag: () => void; openUpload: () => void };
+
+export const MenuActions = ({ openTag, openUpload }: TProps) => {
 	return (
 		<Flex justifyContent='end' w='100%' my='20px'>
 			<ButtonGroup spacing='5'>
-				<NewTag isVariant create={() => {}} />
-				<Upload size='sm' fireUpload={() => {}} />
+				<NewTag isVariant create={openTag} />
+				<Upload size='sm' fireUpload={openUpload} />
 			</ButtonGroup>
 		</Flex>
 	);

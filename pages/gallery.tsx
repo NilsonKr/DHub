@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 //UI
-import { Card } from '../components/Index';
+import { Card, CreateTagModal } from '../components/Index';
 import { BgLeftAdornment, BgRightAdornment, EmptyHubDraw } from '../components/Icons/';
 import { Box, Grid, GridItem, Heading, Flex } from '@chakra-ui/react';
 import { SearchInput, TagsCarousel, MenuActions, Upload } from '../components/Index';
@@ -8,6 +8,7 @@ import { SearchInput, TagsCarousel, MenuActions, Upload } from '../components/In
 const gallery = () => {
 	const [list, setList] = useState<any[]>([]);
 	const [query, setQuery] = useState<string>('');
+	const [modal, setModal] = useState<string>('');
 
 	const fetchData = () => {
 		const mockList = new Array(10).fill('');
@@ -27,7 +28,12 @@ const gallery = () => {
 						clear={() => setQuery('')}
 					/>
 				</Flex>
-				{list.length > 0 && <MenuActions />}
+				{list.length > 0 && (
+					<MenuActions
+						openTag={() => setModal('new_tag')}
+						openUpload={() => setModal('new_upload')}
+					/>
+				)}
 				{list.length ? (
 					<Grid
 						templateColumns='repeat(auto-fill, 240px)'
@@ -61,6 +67,7 @@ const gallery = () => {
 			<Box position='absolute' bottom='0px' right='0px' zIndex='-1'>
 				<BgRightAdornment />
 			</Box>
+			<CreateTagModal open={modal === 'new_tag'} close={() => setModal('')} />
 		</>
 	);
 };
