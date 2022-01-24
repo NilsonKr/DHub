@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 //UI
-import { Card, CreateTagModal } from '../components/Index';
+import { Card, CreateTagModal, UploadModal } from '../components/Index';
 import { BgLeftAdornment, BgRightAdornment, EmptyHubDraw } from '../components/Icons/';
 import { Box, Grid, GridItem, Heading, Flex } from '@chakra-ui/react';
 import { SearchInput, TagsCarousel, MenuActions, Upload } from '../components/Index';
@@ -68,6 +68,7 @@ const gallery = () => {
 				<BgRightAdornment />
 			</Box>
 			<CreateTagModal open={modal === 'new_tag'} close={() => setModal('')} />
+			<UploadModal open={modal === 'new_upload'} close={() => setModal('')} />
 		</>
 	);
 };

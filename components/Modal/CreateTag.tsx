@@ -24,7 +24,7 @@ export const CreateTagModal = ({ open, close }: TProps) => {
 	return (
 		<Modal isOpen={open} onClose={close}>
 			<ModalOverlay />
-			<ModalContent bg='gray.700'>
+			<ModalContent bg='gray.800'>
 				<ModalCloseButton />
 				<ModalHeader>Crate New Tag</ModalHeader>
 				<ModalBody my='5'>
