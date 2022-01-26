@@ -68,7 +68,7 @@ const gallery = () => {
 				<BgRightAdornment />
 			</Box>
 			<CreateTagModal open={modal === 'new_tag'} close={() => setModal('')} />
-			<UploadModal open={modal === 'new_upload'} close={() => setModal('')} />
+			{modal === 'new_upload' && <UploadModal close={() => setModal('')} />}
 		</>
 	);
 };

@@ -7,6 +7,8 @@ type TProps = {
 	bg?: string;
 	colorSchema?: string;
 	activeColor?: string;
+	variant?: string;
+	borderColor?: string;
 	[x: string]: any;
 };
 
@@ -17,11 +19,15 @@ export const GenericBtn: React.FC<TProps> = ({
 	bg,
 	activeColor,
 	children,
+	variant,
+	borderColor,
 	...props
 }) => {
 	return (
 		<Button
 			onClick={handleClick}
+			variant={variant ? variant : 'solid'}
+			borderColor={borderColor ? borderColor : 'current'}
 			_hover={{ bg: colorSchema ? `${colorSchema}.400` : hoverColor }}
 			_active={{
 				transform: 'scale(.9)',

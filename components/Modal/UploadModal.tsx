@@ -13,9 +13,9 @@ import {
 } from '@chakra-ui/react';
 import { IoIosCloudUpload } from 'react-icons/io';
 
-type TProps = { close: () => void; open: boolean };
+type TProps = { close: () => void };
 
-export const UploadModal = ({ open, close }: TProps) => {
+export const UploadModal = ({ close }: TProps) => {
 	const [isDrag, setDrag] = useState<Boolean>(false);
 	const [file, setFile] = useState<File | null>(null);
 
@@ -51,9 +51,9 @@ export const UploadModal = ({ open, close }: TProps) => {
 	};
 
 	return (
-		<Modal isOpen={open} onClose={close}>
+		<Modal isOpen={true} onClose={close}>
 			<ModalOverlay />
-			<ModalContent bg='gray.700' pb='30px'>
+			<ModalContent bg='gray.800' pb='30px'>
 				<ModalCloseButton />
 				<ModalBody>
 					<Square
@@ -81,7 +81,7 @@ export const UploadModal = ({ open, close }: TProps) => {
 							_hover={{ bg: 'purple.400' }}
 							_active={{ bg: 'purple.600', border: 'none' }}
 							bg='purple.500'
-							boxShadow='rgb(148 0 255 / 35%) 0px 19px 38px, rgb(34 0 60 / 40%) 0px 15px 12px'
+							boxShadow='rgb(148 0 255 / 40%) 0px 19px 38px, rgb(34 0 60 / 50%) 0px 15px 12px'
 						>
 							Browse file
 							<input
