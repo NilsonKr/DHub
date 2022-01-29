@@ -53,7 +53,7 @@ export const TagsCarousel = ({ newTag }: TProps) => {
 				m='6px 0 6px 25px'
 				pb='3'
 				pt='5'
-				spacing={4}
+				spacing={1}
 				overflowY='auto'
 				overflowX='scroll'
 			>

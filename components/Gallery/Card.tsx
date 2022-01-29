@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import NextLink from 'next/link';
 import Image from 'next/image';
 //UI
 import { motion } from 'framer-motion';
@@ -93,7 +94,11 @@ export const Card = () => {
 							>
 								<Icon color='white' h='20px' w='20px' as={MdOutlineDownload} />
 							</Circle>
-							<RoundedRightArrow size='35px' bg='purple.500' iconSize='20px' />
+							<NextLink href='/detail' passHref={true}>
+								<a>
+									<RoundedRightArrow size='35px' bg='purple.500' iconSize='20px' />
+								</a>
+							</NextLink>
 						</HStack>
 					</Flex>
 				</VStack>

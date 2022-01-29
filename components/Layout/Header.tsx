@@ -7,7 +7,7 @@ import { AiOutlineUser } from 'react-icons/ai';
 
 export const Header = () => {
 	return (
-		<Grid mt='12' templateColumns='1fr 3fr 1fr' gap={8} h='18' alignItems='center'>
+		<Grid mt='12' templateColumns='1fr 3fr 1fr' gap={8} alignItems='center'>
 			<GridItem w='100%'>
 				<Heading>
 					<LogoIcon />
