@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { Button } from '@chakra-ui/react';
 
 type TProps = {
@@ -9,6 +9,7 @@ type TProps = {
 	activeColor?: string;
 	variant?: string;
 	borderColor?: string;
+	rightIcon?: ReactElement;
 	[x: string]: any;
 };
 
@@ -21,6 +22,7 @@ export const GenericBtn: React.FC<TProps> = ({
 	children,
 	variant,
 	borderColor,
+	rightIcon,
 	...props
 }) => {
 	return (
@@ -35,6 +37,7 @@ export const GenericBtn: React.FC<TProps> = ({
 			}}
 			transition='transform .1s linear'
 			bg={colorSchema ? `${colorSchema}.600` : bg}
+			rightIcon={rightIcon}
 			{...props}
 		>
 			{children}

@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 //UI
 import { HStack, Text, Flex } from '@chakra-ui/react';
-import { NewTag, Clear } from '../Buttons';
+import { NewTag } from '../Buttons';
 import { TagHub } from '../Miscellaneous/Tag';
+import { MdOutlineAdd } from 'react-icons/md';
+import { RoundedBtn } from '../Index';
 
 const tagsList = [
 	'Background',
@@ -21,21 +23,8 @@ const tagsList = [
 
 type TProps = { newTag: () => void };
 
-export const TagsCarousel = ({ newTag }: TProps) => {
+export const TagsList = ({ newTag }: TProps) => {
 	const [tags, setTags] = useState<Ttag[] | void[]>([]);
-	const [selected, setSelectedTags] = useState<Ttag[]>([]);
-
-	const toggleSelect = (tag: Ttag) => {
-		if (selected.includes(tag)) {
-			const newSelected = [...selected];
-			const tagIdx = selected.findIndex(t => t === tag);
-
-			newSelected.splice(tagIdx, 1);
-			setSelectedTags(newSelected);
-		} else {
-			setSelectedTags(prev => [...prev, tag]);
-		}
-	};
 
 	const fetchTags = () => {
 		setTags(tagsList);
@@ -45,12 +34,9 @@ export const TagsCarousel = ({ newTag }: TProps) => {
 
 	return (
 		<Flex align='center' w='100%'>
-			{tags.length > 0 && (
-				<Clear list={selected} handleClear={() => setSelectedTags([])} />
-			)}
 			<HStack
 				w='100%'
-				m='6px 0 6px 25px'
+				my='6px'
 				pb='3'
 				pt='5'
 				spacing={1}
@@ -59,7 +45,7 @@ export const TagsCarousel = ({ newTag }: TProps) => {
 			>
 				{tags.length > 0 ? (
 					tagsList.map((tag, i) => (
-						<TagHub selectedList={selected} select={toggleSelect} tag={tag} key={i} />
+						<TagHub selectedList={[]} select={() => {}} tag={tag} key={i} />
 					))
 				) : (
 					<>
@@ -70,6 +56,9 @@ export const TagsCarousel = ({ newTag }: TProps) => {
 					</>
 				)}
 			</HStack>
+			<RoundedBtn bg='purple.500' size='30px' ml='15px'>
+				<MdOutlineAdd size='25px' color='white' />
+			</RoundedBtn>
 		</Flex>
 	);
 };
