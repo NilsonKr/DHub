@@ -24,7 +24,7 @@ const tagsList = [
 type TProps = { newTag: () => void };
 
 export const TagsList = ({ newTag }: TProps) => {
-	const [tags, setTags] = useState<Ttag[] | void[]>([]);
+	const [tags, setTags] = useState<Ttag[]>([]);
 
 	const fetchTags = () => {
 		setTags(tagsList);
@@ -44,21 +44,23 @@ export const TagsList = ({ newTag }: TProps) => {
 				overflowX='scroll'
 			>
 				{tags.length > 0 ? (
-					tagsList.map((tag, i) => (
+					tags.map((tag, i) => (
 						<TagHub selectedList={[]} select={() => {}} tag={tag} key={i} />
 					))
 				) : (
 					<>
-						<Text fontSize='lg'>
+						<Text fontSize='lg' mr='2'>
 							👋 You don't have any tags yet, Create your first one!
 						</Text>
 						<NewTag isVariant={false} create={newTag} />
 					</>
 				)}
 			</HStack>
-			<RoundedBtn bg='purple.500' size='30px' ml='15px'>
-				<MdOutlineAdd size='25px' color='white' />
-			</RoundedBtn>
+			{tags.length > 0 && (
+				<RoundedBtn onClick={newTag} bg='purple.500' size='30px' ml='15px'>
+					<MdOutlineAdd size='25px' color='white' />
+				</RoundedBtn>
+			)}
 		</Flex>
 	);
 };
