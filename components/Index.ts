@@ -11,5 +11,10 @@ export { TagsCarousel } from './Gallery/TagsCarousel';
 export { SearchInput } from './Form/SearchInput';
 export { NewTag, Upload, Clear, GenericBtn, RoundedBtn } from './Buttons';
 export { MenuActions } from './Gallery/MenuActions';
-export { CreateTagModal, UploadModal, TransferModal } from './Modal/';
+export {
+	CreateTagModal,
+	UploadModal,
+	TransferModal,
+	UpdateProfilePicModal,
+} from './Modal/';
 export { TagsList } from './Detail/TagsList';

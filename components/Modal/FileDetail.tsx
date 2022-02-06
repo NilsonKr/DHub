@@ -18,15 +18,31 @@ import { BsFileEarmarkFill } from 'react-icons/bs';
 import { MdEdit } from 'react-icons/md';
 import { EmptyFile } from '../Icons/';
 
-type TProps = { file: File | null };
+type TProps = {
+	file: File | null;
+	isProcessed?: boolean;
+	imgInfo?: TFileDefaulInfo;
+	btnLabel?: string;
+};
 type TInfo = { img?: string | false; size: string; ext: string };
 
-export const FileDetail = ({ file }: TProps) => {
+export const FileDetail = ({ file, isProcessed, imgInfo, btnLabel }: TProps) => {
 	const [fileName, setFileName] = useState<string>('');
 	const [info, setInfo] = useState<TInfo>({ size: '', ext: '' });
 
 	useEffect(() => {
-		if (file) {
+		if (isProcessed && imgInfo) {
+			setFileName(imgInfo.name);
+			setInfo({
+				size: imgInfo.size,
+				ext: imgInfo.ext,
+				img: imgInfo.img,
+			});
+		}
+	}, []);
+
+	useEffect(() => {
+		if (file && !isProcessed) {
 			//Get only the name
 			const nameBits = file.name.split('.');
 			nameBits.splice(nameBits.length - 1, 1);
@@ -38,7 +54,6 @@ export const FileDetail = ({ file }: TProps) => {
 			//Get a image url to display preview
 			const urlPreview = ProcessFile(file);
 
-			console.log(urlPreview);
 			setInfo({
 				size: size,
 				ext: file.type.split('/')[1],
@@ -48,7 +63,7 @@ export const FileDetail = ({ file }: TProps) => {
 		}
 	}, [file]);
 
-	return file ? (
+	return file || isProcessed ? (
 		<>
 			<Flex justify='space-around' p='10px' mt='8'>
 				<VStack spacing={3} mr='10px' textAlign='center'>
@@ -105,6 +120,7 @@ export const FileDetail = ({ file }: TProps) => {
 				justify='space-around'
 				disabled={fileName === ''}
 				_hover={{ bg: 'purple.300' }}
+				label={btnLabel}
 			/>
 		</>
 	) : (

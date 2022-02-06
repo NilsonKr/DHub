@@ -12,11 +12,13 @@ import {
 
 type TProps = { close: () => void };
 
-export const UploadModal = ({ close }: TProps) => {
+export const UpdateProfilePicModal = ({ close }: TProps) => {
 	const [file, setFile] = useState<File | null>(null);
+	const [isProcessed, setProcessed] = useState<boolean>(true);
 
 	const handleFile = (file: File) => {
 		setFile(file);
+		if (isProcessed) setProcessed(false);
 	};
 
 	return (
@@ -26,7 +28,17 @@ export const UploadModal = ({ close }: TProps) => {
 				<ModalCloseButton />
 				<ModalBody>
 					<DragNDrop handleFile={handleFile} label='Drag & drop your picture' />
-					<FileDetail file={file} />
+					<FileDetail
+						file={file}
+						isProcessed={isProcessed}
+						imgInfo={{
+							name: 'MyNft',
+							size: '32.2 KB',
+							ext: 'png',
+							img: '/assets/MyNft.png',
+						}}
+						btnLabel='Update'
+					/>
 				</ModalBody>
 			</ModalContent>
 		</Modal>

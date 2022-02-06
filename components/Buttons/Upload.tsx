@@ -4,9 +4,14 @@ import { Button, Text, Icon } from '@chakra-ui/react';
 import { ImUpload } from 'react-icons/im';
 
 type TSizes = 'sm' | 'xl';
-type TProps = { fireUpload: () => void; size: TSizes; [x: string]: any };
+type TProps = {
+	fireUpload: () => void;
+	size: TSizes;
+	[x: string]: any;
+	label: string | undefined;
+};
 
-export const Upload: React.FC<TProps> = ({ fireUpload, size, ...props }) => {
+export const Upload: React.FC<TProps> = ({ fireUpload, size, label, ...props }) => {
 	return (
 		<Button
 			onClick={fireUpload}
@@ -28,7 +33,7 @@ export const Upload: React.FC<TProps> = ({ fireUpload, size, ...props }) => {
 			}
 			{...props}
 		>
-			Upload
+			{label ? label : 'Upload'}
 		</Button>
 	);
 };
