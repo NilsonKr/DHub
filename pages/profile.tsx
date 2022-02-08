@@ -1,6 +1,9 @@
 import { useState } from 'react';
+import { useDebounce } from '../Hooks/useDebounce';
 import Image from 'next/image';
 //UI
+import { motion, Variants } from 'framer-motion';
+import { CheckCircleIcon } from '@chakra-ui/icons';
 import { FaShareSquare } from 'react-icons/fa';
 import { MdEdit } from 'react-icons/md';
 import { GenericBtn, RoundedBtn, UpdateProfilePicModal } from '../components/Index';
@@ -8,33 +11,87 @@ import {
 	Flex,
 	VStack,
 	Input,
+	InputGroup,
+	InputRightElement,
 	FormControl,
 	FormErrorMessage,
+	FormHelperText,
 	Box,
 	Square,
 	Circle,
+	useToast,
 } from '@chakra-ui/react';
 
+const submitVariants: Variants = {
+	initial: { x: 35, opacity: 0 },
+	submit: {
+		translateX: [0, -35, -35, -35, -35, -35],
+		opacity: [0, 1, 1, 1, 1, 1],
+		translateY: [0, 0, 0, 0, 0, -8, 0, -4, 0],
+	},
+};
+
 const profile = () => {
+	const showToast = useToast({
+		variant: 'top-accent',
+		title: 'Gallery Copied 🚀',
+		description: 'Share it with your friends!',
+		status: 'success',
+		position: 'bottom',
+		duration: 1500,
+		isClosable: true,
+	});
 	const [isEdit, setEdit] = useState<boolean>(false);
 	const [username, setUsername] = useState<string>('NilsonKr');
-
+	const [submit, triggerSubmit] = useState<boolean>(false);
 	const emptyName = username === '';
+
+	const handleSubmit = () => {
+		triggerSubmit(true);
+		setTimeout(() => triggerSubmit(false), 2500);
+	};
+
+	const debounce = useDebounce(handleSubmit, 1000);
+
+	const copyGallery = () => {
+		navigator.clipboard.writeText('Gallery from DHub!');
+		showToast();
+	};
 
 	return (
 		<>
 			<VStack spacing={55} w='100%' justify='center' px='10' py='10' h='75vh'>
 				<Flex w='100%' justify='space-evenly' align='center'>
 					<FormControl isInvalid={emptyName} w='250px'>
-						<Input
-							value={username}
-							onChange={ev => setUsername(ev.target.value)}
-							borderColor='white'
-							fontSize='lg'
-							placeholder='Type your username'
-							_placeholder={{ color: 'gray.300' }}
-							variant='flushed'
-						/>
+						<InputGroup>
+							<Input
+								value={username}
+								onChange={ev => {
+									setUsername(ev.target.value);
+									if (ev.target.value !== '') debounce();
+								}}
+								borderColor='white'
+								fontSize='lg'
+								placeholder='Type your username'
+								_placeholder={{ color: 'gray.300' }}
+								variant='flushed'
+							/>
+							<InputRightElement
+								children={
+									submit && (
+										<motion.div
+											animate='submit'
+											initial='initial'
+											transition={{ duration: 1.5 }}
+											variants={submitVariants}
+										>
+											<CheckCircleIcon color='green.400' w='15px' h='15px' />
+										</motion.div>
+									)
+								}
+							/>
+						</InputGroup>
+						{submit && <FormHelperText color='green.400'>Updated!</FormHelperText>}
 						{emptyName && (
 							<FormErrorMessage>Please, introduce your username</FormErrorMessage>
 						)}
@@ -76,7 +133,7 @@ const profile = () => {
 						hoverColor=''
 						leftIcon={<FaShareSquare size='23px' color='white' />}
 						bg='linear-gradient(90deg, #7D5FC0 0%, #4D00FF 100%)'
-						handleClick={() => {}}
+						handleClick={copyGallery}
 						fontSize='xl'
 						p='7'
 						fontWeight='semibold'
