@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Link from 'next/link';
+import { useConfetti } from '../../Hooks/useConfetti';
 //UI
 import { motion, Variants } from 'framer-motion';
 import { MagicBox } from './MagicBox';
@@ -28,6 +29,7 @@ const variants: Variants = {
 type TAnimateState = { state: string; trigger: boolean };
 
 export const HomeMain = () => {
+	const { realisticConfetti } = useConfetti(200);
 	const [openBox, setOpenBox] = useState<boolean>(false);
 	const [animate, setAnimation] = useState<TAnimateState>({
 		state: 'stopped',
@@ -73,6 +75,7 @@ export const HomeMain = () => {
 								onClick={() => {
 									setOpenBox(true);
 									triggerAnimation();
+									setTimeout(realisticConfetti, 2500);
 								}}
 							>
 								Connect wallet
