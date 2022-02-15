@@ -16,5 +16,6 @@ export {
 	UploadModal,
 	TransferModal,
 	UpdateProfilePicModal,
+	QRCodeModal,
 } from './Modal/';
 export { TagsList } from './Detail/TagsList';

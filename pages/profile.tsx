@@ -7,6 +7,7 @@ import { CheckCircleIcon } from '@chakra-ui/icons';
 import { FaShareSquare } from 'react-icons/fa';
 import { MdEdit } from 'react-icons/md';
 import { GenericBtn, RoundedBtn, UpdateProfilePicModal } from '../components/Index';
+import { SubmitEntrance } from '../components/Animations/Common';
 import {
 	Flex,
 	VStack,
@@ -21,15 +22,6 @@ import {
 	Circle,
 	useToast,
 } from '@chakra-ui/react';
-
-const submitVariants: Variants = {
-	initial: { x: 35, opacity: 0 },
-	submit: {
-		translateX: [0, -35, -35, -35, -35, -35],
-		opacity: [0, 1, 1, 1, 1, 1],
-		translateY: [0, 0, 0, 0, 0, -8, 0, -4, 0],
-	},
-};
 
 const profile = () => {
 	const showToast = useToast({
@@ -79,14 +71,9 @@ const profile = () => {
 							<InputRightElement
 								children={
 									submit && (
-										<motion.div
-											animate='submit'
-											initial='initial'
-											transition={{ duration: 1.5 }}
-											variants={submitVariants}
-										>
+										<SubmitEntrance>
 											<CheckCircleIcon color='green.400' w='15px' h='15px' />
-										</motion.div>
+										</SubmitEntrance>
 									)
 								}
 							/>

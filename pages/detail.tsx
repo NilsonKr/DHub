@@ -8,6 +8,7 @@ import {
 	GenericBtn,
 	TagsList,
 	TransferModal,
+	QRCodeModal,
 } from '../components/Index';
 import { BiLink } from 'react-icons/bi';
 import { ImCloudDownload } from 'react-icons/im';
@@ -51,7 +52,11 @@ const detail = () => {
 								<Heading fontWeight='semibold' fontSize='2xl'>
 									Share
 								</Heading>
-								<RoundedBtn bg='purple.500' size='40px'>
+								<RoundedBtn
+									bg='purple.500'
+									size='40px'
+									onClick={() => setModal('qrcode')}
+								>
 									<QrCodeIcon size='20px' color='white' />
 								</RoundedBtn>
 								<RoundedBtn bg='purple.500' size='40px'>
@@ -104,6 +109,7 @@ const detail = () => {
 			</VStack>
 			<CreateTagModal open={modal === 'new_tag'} close={() => setModal('')} />
 			<TransferModal open={modal === 'transfer'} close={() => setModal('')} />
+			<QRCodeModal open={modal === 'qrcode'} close={() => setModal('')} />
 		</>
 	);
 };
