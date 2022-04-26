@@ -1,0 +1,30 @@
+.hover_card {
+  transition: all 0.2s linear;
+  transform-origin: center top;
+  transform-style: preserve-3d;
+}
+
+.hover_card:hover{
+  box-shadow: 0px 4px 12px 3px rgba(255, 255, 255, 0.1);
+  transform: translateY(-3px) scale(1.01) rotateX(10deg);
+}
+
+.hover_card::after {
+  content: '';
+  position: absolute;
+  z-index: 10;
+  width: 480px;
+  height: 260px;
+  top: -90%;
+  left: -20px;
+  opacity: .1;
+  transform: rotate(45deg);
+  background: linear-gradient(to top, transparent, #fff 15%, rgba(255,255,255,0.6));
+  transition: all .3s linear;
+}
+
+.hover_card:hover::after {
+  transform: rotate(30deg);
+  top: -40%;
+  opacity: .2;
+}
