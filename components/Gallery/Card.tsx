@@ -21,6 +21,8 @@ import {
 import { Item } from '@roottypes/gallery'
 //Utils
 import { handleDownload } from '@utils/Item'
+//Styles
+import styles from './styles/card.module.css'
 
 type Props = { index: number, item: Item, setSelected: () => void; openCreateTag: () => void }
 
@@ -40,16 +42,13 @@ export const Card = ({ index, item, setSelected, openCreateTag }: Props) => {
 
 	return (
 		<Box
+			className={styles.hover_card}
 			w='100%'
 			h='100%'
 			position='relative'
 			shadow='0px 4px 8px rgba(255, 255, 255, 0.2)'
 			borderRadius='5px'
 			overflow='hidden'
-			transition='box-shadow .2s linear'
-			_hover={{
-				shadow: '0px 4px 8px rgba(255, 255, 255, 0.6)',
-			}}
 			role='group'
 		>
 			<Box
