@@ -1,7 +1,11 @@
 {
 	"compilerOptions": {
+		"baseUrl": "./",
 		"target": "es5",
 		"lib": ["dom", "dom.iterable", "esnext"],
+		"paths": {
+			"@hooks/*": ["Hooks/*"]
+		},
 		"allowJs": true,
 		"skipLibCheck": true,
 		"strict": true,
