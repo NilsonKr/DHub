@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
-import { useConfetti } from '../../Hooks/useConfetti';
+import { useConfetti } from '@hooks/useConfetti';
+import { useWallet } from '@hooks/web3/useWallet'
 //UI
 import { motion, Variants } from 'framer-motion';
 import { MagicBox } from './MagicBox';
@@ -29,6 +30,7 @@ const variants: Variants = {
 type TAnimateState = { state: string; trigger: boolean };
 
 export const HomeMain = () => {
+	const { connect } = useWallet()
 	const { realisticConfetti } = useConfetti(200);
 	const [openBox, setOpenBox] = useState<boolean>(false);
 	const [animate, setAnimation] = useState<TAnimateState>({
@@ -44,6 +46,14 @@ export const HomeMain = () => {
 	const triggerAnimation = () => {
 		setTimeout(() => handleAnimation(), 2000);
 	};
+
+	const handleConnect = () => {
+		connect()?.then(() => {
+			setOpenBox(true);
+			triggerAnimation();
+			setTimeout(realisticConfetti, 2500);
+		})
+	}
 
 	return (
 		<Box my='10' position='relative'>
@@ -72,11 +82,7 @@ export const HomeMain = () => {
 								py='25px'
 								borderRadius='25px'
 								fontSize='2xl'
-								onClick={() => {
-									setOpenBox(true);
-									triggerAnimation();
-									setTimeout(realisticConfetti, 2500);
-								}}
+								onClick={handleConnect}
 							>
 								Connect wallet
 							</Button>

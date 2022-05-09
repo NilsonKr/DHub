@@ -10,13 +10,8 @@ const Home: NextPage = () => {
 	const { account, connect } = useWallet()
 
 	useEffect(() => {
-		if (!account) {
-			connect()
-		} else {
-			console.log('Hey ' + account)
-		}
 
-	}, [account])
+	}, [])
 
 	return (
 		<>

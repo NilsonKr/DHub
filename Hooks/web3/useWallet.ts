@@ -5,16 +5,16 @@ type ReturnValues = {
 	active: boolean;
 	account: string | null | undefined;
 	error: Error | undefined;
-	connect: () => void;
+	connect: () => Promise<any> | undefined;
 	disconnect: () => void;
 };
 
 export const useWallet = (): ReturnValues => {
 	const { active, activate, deactivate, error, account } = useWeb3React();
 
-	const connect = () => {
+	const connect = (): Promise<any> | undefined => {
 		if (!active) {
-			activate(connector);
+			return activate(connector);
 		}
 	};
 

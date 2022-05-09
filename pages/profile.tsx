@@ -1,11 +1,13 @@
+import { useRouter } from 'next/router'
 import { useState } from 'react';
 import { useDebounce } from '../Hooks/useDebounce';
 import Image from 'next/image';
+import { useWallet } from '@hooks/web3/useWallet';
 //UI
-import { motion, Variants } from 'framer-motion';
-import { CheckCircleIcon } from '@chakra-ui/icons';
 import { FaShareSquare } from 'react-icons/fa';
 import { MdEdit } from 'react-icons/md';
+import { ImExit } from 'react-icons/im'
+import { CheckCircleIcon } from '@chakra-ui/icons';
 import { GenericBtn, RoundedBtn, UpdateProfilePicModal } from '../components/Index';
 import { SubmitEntrance } from '../components/Animations/Common';
 import {
@@ -18,12 +20,15 @@ import {
 	FormErrorMessage,
 	FormHelperText,
 	Box,
-	Square,
+	Text,
 	Circle,
 	useToast,
+	Button
 } from '@chakra-ui/react';
 
 const profile = () => {
+	const { push } = useRouter()
+	const { disconnect } = useWallet()
 	const showToast = useToast({
 		variant: 'top-accent',
 		title: 'Gallery Copied 🚀',
@@ -33,6 +38,7 @@ const profile = () => {
 		duration: 1500,
 		isClosable: true,
 	});
+
 	const [isEdit, setEdit] = useState<boolean>(false);
 	const [username, setUsername] = useState<string>('NilsonKr');
 	const [submit, triggerSubmit] = useState<boolean>(false);
@@ -49,6 +55,11 @@ const profile = () => {
 		navigator.clipboard.writeText('Gallery from DHub!');
 		showToast();
 	};
+
+	const logout = () => {
+		disconnect()
+		push('/')
+	}
 
 	return (
 		<>
@@ -115,21 +126,52 @@ const profile = () => {
 						</Circle>
 					</Box>
 				</Flex>
-				<Square>
+				<Flex w="100%" justify="space-between" align="center" mt="10">
 					<GenericBtn
 						hoverColor=''
 						leftIcon={<FaShareSquare size='23px' color='white' />}
 						bg='linear-gradient(90deg, #7D5FC0 0%, #4D00FF 100%)'
 						handleClick={copyGallery}
 						fontSize='xl'
-						p='7'
+						p='6'
 						fontWeight='semibold'
 						h='50px'
 						borderRadius='25px'
 					>
 						Share Gallery
 					</GenericBtn>
-				</Square>
+					<Button
+						role='group'
+						_hover={{
+							padding: '1.5rem',
+							width: '180px'
+						}}
+						leftIcon={<ImExit size='23px' color='white' style={{ margin: 0 }} />}
+						onClick={logout}
+						bg='red.500'
+						h='50px'
+						w='50px'
+						overflow='hidden'
+						borderRadius='25px'
+						transition='width .4s ease'
+					>
+						<Text
+							position='absolute'
+							fontSize="xl"
+							fontWeight='semibold'
+							transform='translateX(100px)'
+							opacity='0'
+							transition='transform .4s linear'
+							_groupHover={{
+								position: 'static',
+								transform: 'translateX(0)',
+								opacity: '1'
+							}}
+						>
+							Disconnect
+						</Text>
+					</Button>
+				</Flex>
 			</VStack>
 			{isEdit && <UpdateProfilePicModal close={() => setEdit(false)} />}
 		</>
