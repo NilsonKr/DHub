@@ -4,7 +4,8 @@
 		"target": "es5",
 		"lib": ["dom", "dom.iterable", "esnext"],
 		"paths": {
-			"@hooks/*": ["Hooks/*"]
+			"@hooks/*": ["Hooks/*"],
+			"@components/*": ["components/*"]
 		},
 		"allowJs": true,
 		"skipLibCheck": true,

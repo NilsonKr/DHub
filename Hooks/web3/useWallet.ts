@@ -5,6 +5,7 @@ type ReturnValues = {
 	active: boolean;
 	account: string | null | undefined;
 	error: Error | undefined;
+	isUnsupported: boolean;
 	connect: () => Promise<any> | undefined;
 	disconnect: () => void;
 };
@@ -24,5 +25,7 @@ export const useWallet = (): ReturnValues => {
 		}
 	};
 
-	return { active, account, error, connect, disconnect };
+	const isUnsupported = error?.name === 'UnsupportedChainIdError';
+
+	return { active, account, error, connect, disconnect, isUnsupported };
 };
