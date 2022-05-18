@@ -10,3 +10,8 @@ type TFileDefaulInfo = {
 	ext: string;
 	img: string;
 };
+
+interface IDhubContract {
+	address: { [key: number]: string };
+	abi: any;
+}
