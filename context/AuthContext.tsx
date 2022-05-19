@@ -1,11 +1,13 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useContract } from '@hooks/web3/useContract'
 import { useWallet } from '@hooks/web3/useWallet'
 
-import { loginReturn } from '@roottypes/auth'
+import { loginReturn, User } from '@roottypes/auth'
 
 export type Context = {
+  user: User
   login: () => Promise<loginReturn>
+  register: (name: string) => Promise<loginReturn>
 }
 
 export const authContext = React.createContext<Context | null>(null)
@@ -13,6 +15,7 @@ export const authContext = React.createContext<Context | null>(null)
 export const AuthContext: React.FC = ({ children }) => {
   const DhubContract = useContract()
   const { active, account } = useWallet()
+  const [user, setUser] = useState<User>(null)
 
   const login = useCallback(async (): Promise<loginReturn> => {
     try {
@@ -24,7 +27,16 @@ export const AuthContext: React.FC = ({ children }) => {
     }
   }, [account, DhubContract])
 
+  const register = useCallback(async (name: string): Promise<loginReturn> => {
+    try {
+      await DhubContract.methods.register(name, '').send({ from: account })
+      return { error: null, payload: null }
+    } catch (error) {
+      return { error: 'Something went wrong , please try again', payload: null }
+    }
+  }, [])
+
   return (
-    <authContext.Provider value={{ login }} >{children}</authContext.Provider>
+    <authContext.Provider value={{ user, login, register }} >{children}</authContext.Provider>
   )
 }
