@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useConfetti } from '@hooks/useConfetti';
 import { useWallet } from '@hooks/web3/useWallet'
@@ -18,7 +18,7 @@ import {
 } from '@chakra-ui/react';
 import { RoundedRightArrow } from '../Icons';
 import { Register } from '../Form/Register';
-import { LoggedIn } from '../Miscellaneous/LoggedIn';
+import { LoggedIn, ErrorConnection } from '../Miscellaneous';
 
 const variants: Variants = {
 	open: {
@@ -30,36 +30,47 @@ const variants: Variants = {
 type TAnimateState = { state: string; trigger: boolean };
 
 export const HomeMain = () => {
-	const { connect } = useWallet()
+	const { connect, active, isUnsupported } = useWallet()
 	const { realisticConfetti } = useConfetti(200);
 	const [openBox, setOpenBox] = useState<boolean>(false);
 	const [animate, setAnimation] = useState<TAnimateState>({
 		state: 'stopped',
 		trigger: false,
 	});
+	const [error, setError] = useState<string | null>(null)
 
-	const handleAnimation = () => {
+	useEffect(() => {
+		if (openBox) {
+			const isError = isUnsupported && !active ? 'Unsupported Network, Please change to other one as: "Rinkeby"' : null
+			setTimeout(() => handleAnimation(isError), animate.state === 'finish' ? 0 : 2000);
+		}
+	}, [active, openBox])
+
+	const handleAnimation = (error?: string | null) => {
 		setAnimation({ trigger: true, state: 'running' });
 		setTimeout(() => setAnimation({ trigger: true, state: 'finish' }), 1500);
-	};
 
-	const triggerAnimation = () => {
-		setTimeout(() => handleAnimation(), 2000);
+		if (error) {
+			setError(error as string)
+		} else {
+			setError(null)
+			setTimeout(realisticConfetti, 500);
+		}
 	};
 
 	const handleConnect = () => {
 		connect()?.then(() => {
 			setOpenBox(true);
-			triggerAnimation();
-			setTimeout(realisticConfetti, 2500);
 		})
 	}
 
 	return (
 		<Box my='10' position='relative'>
 			<BgBubble />
+
 			{/* {animate && <Register />} */}
-			{animate.trigger && <LoggedIn />}
+			{animate.trigger && !error && <LoggedIn />}
+			{animate.trigger && error && <ErrorConnection errorMsg={error} />}
 
 			<motion.div variants={variants} animate={animate.trigger ? 'open' : {}}>
 				<VStack
@@ -88,8 +99,8 @@ export const HomeMain = () => {
 							</Button>
 						</>
 					)}
-					{animate.state === 'running' && <Box h='270px'></Box>}
-					{animate.state === 'finish' && (
+					{(animate.state === 'running' || error) && <Box h='270px'></Box>}
+					{animate.state === 'finish' && !error && (
 						<HStack
 							style={{ marginTop: '10px !important' }}
 							spacing={10}
