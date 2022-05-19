@@ -11,7 +11,9 @@ export const useContract = (): Contract => {
 
   const DhubContract = useMemo(() => {
     if (active) {
-      return new (library as Web3).eth.Contract(abi, address[chainId as number])
+      const contract = new (library as Web3).eth.Contract(abi, address[chainId as number])
+
+      return contract
     }
   }, [active, library, chainId])
 

@@ -6,7 +6,9 @@
 		"paths": {
 			"@hooks/*": ["Hooks/*"],
 			"@components/*": ["components/*"],
-			"@config/*": ["config/*"]
+			"@config/*": ["config/*"],
+			"@context/*": ["context/*"],
+			"@roottypes/*": ["types/*"]
 		},
 		"allowJs": true,
 		"skipLibCheck": true,
