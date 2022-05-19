@@ -30,11 +30,14 @@ const variants: Variants = {
 
 type TAnimateState = { state: string; trigger: boolean };
 
+type RegisterState = { open: boolean, message: string }
+
 export const HomeMain = () => {
 	const { login } = useContext(authContext) as Context
 	const { connect, active, isUnsupported } = useWallet()
 	const { realisticConfetti } = useConfetti(200);
 	const [openBox, setOpenBox] = useState<boolean>(false);
+	const [isRegister, setRegister] = useState<RegisterState>({ open: false, message: '' })
 	const [animate, setAnimation] = useState<TAnimateState>({
 		state: 'stopped',
 		trigger: false,
@@ -42,48 +45,55 @@ export const HomeMain = () => {
 	const [error, setError] = useState<string | null>(null)
 
 	useEffect(() => {
-		if (openBox) {
+		if (error) {
+			setTimeout(() => handleAnimation(error), animate.trigger ? 0 : 2000)
+			setAnimation({ state: 'stopped', trigger: false })
+
+
+		}
+	}, [error])
+
+	useEffect(() => {
+		const isChainError = isUnsupported && !active ? 'Unsupported Network, Please change to other one as: "Rinkeby"' : null
+
+		if (openBox && !isChainError) {
 			handleLogin()
+		} else {
+			setError(isChainError)
 		}
 	}, [active, openBox])
 
-	const handleAnimation = (error?: string | null) => {
+	const handleAnimation = (error?: string | null, isRegister?: boolean) => {
 		setAnimation({ trigger: true, state: 'running' });
 		setTimeout(() => setAnimation({ trigger: true, state: 'finish' }), 1500);
 
-		if (error) {
-			setError(error as string)
-		} else {
+		if (!error && !isRegister) {
 			setError(null)
 			setTimeout(realisticConfetti, 500);
 		}
 	};
 
-	const handleConnect = () => {
-		connect()?.then(() => {
-			setOpenBox(true);
-		})
+	const handleConnect = async () => {
+		await connect()
+		setOpenBox(true);
 	}
 
 	const handleLogin = async () => {
 		const result = await login()
 
 		if (result.error) {
-			setError(result.error)
-			setTimeout(() => handleAnimation(result.error), animate.state === 'finish' ? 0 : 2000);
-			return
+			setRegister({ message: result.error, open: true })
 		}
 
-		const isError = isUnsupported && !active ? 'Unsupported Network, Please change to other one as: "Rinkeby"' : null
-		isError && setError(result.error)
+		setTimeout(() => handleAnimation(null, true), 2000)
 	}
 
 	return (
 		<Box my='10' position='relative'>
 			<BgBubble />
 
-			{/* {animate && <Register />} */}
-			{animate.trigger && !error && <LoggedIn />}
+			{animate.trigger && isRegister.open && <Register msg={isRegister.message} />}
+			{animate.trigger && !error && !isRegister.open && <LoggedIn />}
 			{animate.trigger && error && <ErrorConnection errorMsg={error} />}
 
 			<motion.div variants={variants} animate={animate.trigger ? 'open' : {}}>
