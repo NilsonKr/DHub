@@ -15,3 +15,11 @@ interface IDhubContract {
 	address: { [key: number]: string };
 	abi: any;
 }
+
+type Web3Error = {
+	originalError: {
+		code: string;
+		data: string;
+		message: string;
+	};
+};

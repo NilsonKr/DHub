@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext, useCallback } from 'react';
+import { authContext, Context } from '@context/AuthContext'
 import Link from 'next/link';
 import { useConfetti } from '@hooks/useConfetti';
 import { useWallet } from '@hooks/web3/useWallet'
@@ -30,6 +31,7 @@ const variants: Variants = {
 type TAnimateState = { state: string; trigger: boolean };
 
 export const HomeMain = () => {
+	const { login } = useContext(authContext) as Context
 	const { connect, active, isUnsupported } = useWallet()
 	const { realisticConfetti } = useConfetti(200);
 	const [openBox, setOpenBox] = useState<boolean>(false);
@@ -41,8 +43,7 @@ export const HomeMain = () => {
 
 	useEffect(() => {
 		if (openBox) {
-			const isError = isUnsupported && !active ? 'Unsupported Network, Please change to other one as: "Rinkeby"' : null
-			setTimeout(() => handleAnimation(isError), animate.state === 'finish' ? 0 : 2000);
+			handleLogin()
 		}
 	}, [active, openBox])
 
@@ -62,6 +63,19 @@ export const HomeMain = () => {
 		connect()?.then(() => {
 			setOpenBox(true);
 		})
+	}
+
+	const handleLogin = async () => {
+		const result = await login()
+
+		if (result.error) {
+			setError(result.error)
+			setTimeout(() => handleAnimation(result.error), animate.state === 'finish' ? 0 : 2000);
+			return
+		}
+
+		const isError = isUnsupported && !active ? 'Unsupported Network, Please change to other one as: "Rinkeby"' : null
+		isError && setError(result.error)
 	}
 
 	return (

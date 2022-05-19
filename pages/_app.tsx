@@ -6,6 +6,7 @@ import { ChakraProvider } from '@chakra-ui/react';
 import { theme } from '../styles/theme';
 import { Web3ReactProvider } from '@web3-react/core'
 import { getLibrary } from '../config/web3'
+import { AuthContext } from '@context/AuthContext'
 
 function MyApp({ Component, pageProps }: AppProps) {
 	return (
@@ -15,9 +16,11 @@ function MyApp({ Component, pageProps }: AppProps) {
 			</Head>
 			<Web3ReactProvider getLibrary={getLibrary}>
 				<ChakraProvider theme={theme}>
-					<Layout>
-						<Component {...pageProps} />
-					</Layout>
+					<AuthContext>
+						<Layout>
+							<Component {...pageProps} />
+						</Layout>
+					</AuthContext>
 				</ChakraProvider>
 			</Web3ReactProvider>
 		</>
