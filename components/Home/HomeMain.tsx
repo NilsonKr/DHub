@@ -33,7 +33,7 @@ type TAnimateState = { state: string; trigger: boolean };
 type RegisterState = { open: boolean, message: string }
 
 export const HomeMain = () => {
-	const { login } = useContext(authContext) as Context
+	const { user, login } = useContext(authContext) as Context
 	const { connect, active, isUnsupported } = useWallet()
 	const { realisticConfetti } = useConfetti(200);
 	const [openBox, setOpenBox] = useState<boolean>(false);
@@ -45,11 +45,17 @@ export const HomeMain = () => {
 	const [error, setError] = useState<string | null>(null)
 
 	useEffect(() => {
+		if (user) {
+			setError(null)
+			setRegister({ open: false, message: '' })
+			setTimeout(() => handleAnimation(null), animate.trigger ? 0 : 2000)
+		}
+	}, [user])
+
+	useEffect(() => {
 		if (error) {
 			setTimeout(() => handleAnimation(error), animate.trigger ? 0 : 2000)
 			setAnimation({ state: 'stopped', trigger: false })
-
-
 		}
 	}, [error])
 
@@ -94,7 +100,7 @@ export const HomeMain = () => {
 
 			{animate.trigger && isRegister.open && <Register msg={isRegister.message} />}
 			{animate.trigger && !error && !isRegister.open && <LoggedIn />}
-			{animate.trigger && error && <ErrorConnection errorMsg={error} />}
+			{animate.trigger && error && !isRegister.open && <ErrorConnection errorMsg={error} />}
 
 			<motion.div variants={variants} animate={animate.trigger ? 'open' : {}}>
 				<VStack
