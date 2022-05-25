@@ -20,7 +20,7 @@ export const AuthContext: React.FC = ({ children }) => {
   const login = useCallback(async (): Promise<loginReturn> => {
     try {
       const payload = await DhubContract.methods.login().call({ from: account })
-      console.log(payload)
+      setUser({ name: payload.name, profileUrl: payload.profileUrl })
       return { error: null, payload: payload }
     } catch (err) {
       return { error: 'User not found', payload: null }
@@ -29,12 +29,9 @@ export const AuthContext: React.FC = ({ children }) => {
 
   const register = useCallback(async (name: string): Promise<loginReturn> => {
     try {
-      //Intentional failed in order to test
-      const result = await DhubContract.methods.register('', '').send({ from: account })
-      console.log(result, 'result')
+      await DhubContract.methods.register(name, '').send({ from: account })
       return { error: null, payload: null }
     } catch (error) {
-      console.log(error, 'error')
       return { error: 'Something went wrong , please try again', payload: null }
     }
   }, [account, DhubContract])

@@ -25,7 +25,7 @@ type ComponenetProps = {
 }
 
 export const Register: React.FC<ComponenetProps> = ConnectAnimation(({ msg }) => {
-	const { register } = useContext(authContext)
+	const { register, login } = useContext(authContext)
 	const toast = useToast()
 	const { form, handleChange } = useForm({ name: '' })
 	const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -41,15 +41,16 @@ export const Register: React.FC<ComponenetProps> = ConnectAnimation(({ msg }) =>
 			variant: 'solid',
 			position: 'top-left',
 			isClosable: true,
-			duration: 20000,
+			duration: 15000,
 		})
 		const result = await register(form.name as string)
 
 		if (result.error) {
 			setError(result.error)
+		} else {
+			await login()
 		}
 
-		console.log(result, 'payload')
 		setIsLoading(false)
 	}
 
