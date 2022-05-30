@@ -20,7 +20,7 @@ export const AuthContext: React.FC = ({ children }) => {
   const login = useCallback(async (): Promise<loginReturn> => {
     try {
       const payload = await DhubContract.methods.login().call({ from: account })
-      console.log(payload)
+      setUser({ name: payload.name, profileUrl: payload.profileUrl })
       return { error: null, payload: payload }
     } catch (err) {
       return { error: 'User not found', payload: null }
@@ -34,7 +34,7 @@ export const AuthContext: React.FC = ({ children }) => {
     } catch (error) {
       return { error: 'Something went wrong , please try again', payload: null }
     }
-  }, [])
+  }, [account, DhubContract])
 
   return (
     <authContext.Provider value={{ user, login, register }} >{children}</authContext.Provider>

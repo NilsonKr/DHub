@@ -23,7 +23,7 @@ export const ConnectAnimation = (Component: React.FC<any>): React.FC<any> => {
     return (
       <Box
         position='absolute'
-        top='100px'
+        top='50px'
         left='50%'
         transform='translateX(-50%)'
         minW='65%'

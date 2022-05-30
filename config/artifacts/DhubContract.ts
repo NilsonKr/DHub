@@ -1,6 +1,6 @@
 export const DhubContract: IDhubContract = {
 	address: {
-		4: '0x93A28F3EA47189923A12CB4335e5Aee438E59666',
+		4: '0x7d8593c1416b1D8eE66056B7802F6D406f91B523',
 	},
 	abi: [
 		{
