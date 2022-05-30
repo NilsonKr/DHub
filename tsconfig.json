@@ -8,6 +8,7 @@
 			"@components/*": ["components/*"],
 			"@config/*": ["config/*"],
 			"@context/*": ["context/*"],
+			"@utils/*": ["utils/*"],
 			"@roottypes/*": ["types/*"]
 		},
 		"allowJs": true,

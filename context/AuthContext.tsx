@@ -7,6 +7,7 @@ import { loginReturn, User } from '@roottypes/auth'
 export type Context = {
   user: User
   isAuth: boolean
+  account: string
   login: () => Promise<loginReturn>
   register: (name: string) => Promise<loginReturn>
 }
@@ -40,6 +41,6 @@ export const AuthContext: React.FC = ({ children }) => {
   }, [account, DhubContract])
 
   return (
-    <authContext.Provider value={{ user, isAuth, login, register }} >{children}</authContext.Provider>
+    <authContext.Provider value={{ user, isAuth, account, login, register }} >{children}</authContext.Provider>
   )
 }
