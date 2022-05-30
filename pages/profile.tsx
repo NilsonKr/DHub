@@ -1,9 +1,11 @@
 import { useRouter } from 'next/router'
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { useDebounce } from '../Hooks/useDebounce';
 import Image from 'next/image';
 import { useWallet } from '@hooks/web3/useWallet';
+import { authContext } from '@context/AuthContext'
 //UI
+import Jazzicon, { jsNumberForAddress } from 'react-jazzicon'
 import { FaShareSquare } from 'react-icons/fa';
 import { MdEdit } from 'react-icons/md';
 import { ImExit } from 'react-icons/im'
@@ -41,8 +43,9 @@ const profile = () => {
 		isClosable: true,
 	});
 
+	const { user, account } = useContext(authContext)
 	const [isEdit, setEdit] = useState<boolean>(false);
-	const [username, setUsername] = useState<string>('NilsonKr');
+	const [username, setUsername] = useState<string>(user.name);
 	const [submit, triggerSubmit] = useState<boolean>(false);
 	const emptyName = username === '';
 
@@ -62,6 +65,7 @@ const profile = () => {
 		disconnect()
 		push('/')
 	}
+
 
 	return (
 		<>
@@ -104,19 +108,22 @@ const profile = () => {
 						shadow='0px 2px 10px rgba(255, 255, 255, 0.5)'
 						role='group'
 					>
-						<Image
+						{user.profileUrl ? <Image
 							className='profilepic'
 							layout='fill'
 							objectFit='cover'
 							src='/assets/MyNft.png'
 							placeholder='blur'
 							blurDataURL='/assets/MyNft.png'
-						/>
+						/> : <div className='profilepic' >
+							<Jazzicon paperStyles={{ borderRadius: '50%' }} diameter={300} seed={jsNumberForAddress(account)} />
+						</div>}
 						<Circle
 							opacity={0}
 							_groupHover={{ opacity: 1 }}
 							transition='opacity .1s linear'
 							position='absolute'
+							top='0'
 							w='100%'
 							h='100%'
 							zIndex={10}
