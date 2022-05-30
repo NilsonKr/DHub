@@ -45,6 +45,15 @@ export const HomeMain = () => {
 	const [error, setError] = useState<string | null>(null)
 
 	useEffect(() => {
+		const autoLogin = async () => {
+			await handleConnect()
+		}
+
+		if (localStorage.getItem('isConnected') === 'true') setTimeout(autoLogin, 1000)
+
+	}, [])
+
+	useEffect(() => {
 		if (user) {
 			setError(null)
 			setRegister({ open: false, message: '' })
