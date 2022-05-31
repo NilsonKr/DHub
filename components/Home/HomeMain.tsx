@@ -3,6 +3,7 @@ import { authContext, Context } from '@context/AuthContext'
 import Link from 'next/link';
 import { useConfetti } from '@hooks/useConfetti';
 import { useWallet } from '@hooks/web3/useWallet'
+import { useInitAuth } from '@hooks/web3/useInitAuth'
 //UI
 import { motion, Variants } from 'framer-motion';
 import { MagicBox } from './MagicBox';
@@ -43,16 +44,9 @@ export const HomeMain = () => {
 		trigger: isAuth,
 	});
 	const [error, setError] = useState<string | null>(null)
-
-	useEffect(() => {
-		if (!isAuth) {
-			const autoLogin = async () => {
-				await handleConnect()
-			}
-
-			if (localStorage.getItem('isConnected') === 'true') setTimeout(autoLogin, 1000)
-		}
-	}, [])
+	useInitAuth(async () => {
+		await handleConnect()
+	})
 
 	useEffect(() => {
 		if (user && !isAuth) {

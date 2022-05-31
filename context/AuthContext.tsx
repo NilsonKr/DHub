@@ -17,7 +17,7 @@ export const AuthContext: React.FC = ({ children }) => {
   const DhubContract = useContract()
   const { active, account } = useWallet()
   const [user, setUser] = useState<User>(null)
-  const [isAuth, setAuthState] = useState<boolean>()
+  const [isAuth, setAuthState] = useState<boolean>(false)
 
   const login = useCallback(async (): Promise<loginReturn> => {
     try {
