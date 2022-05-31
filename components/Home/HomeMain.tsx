@@ -33,28 +33,29 @@ type TAnimateState = { state: string; trigger: boolean };
 type RegisterState = { open: boolean, message: string }
 
 export const HomeMain = () => {
-	const { user, login } = useContext(authContext) as Context
+	const { user, isAuth, login } = useContext(authContext) as Context
 	const { connect, active, isUnsupported } = useWallet()
 	const { realisticConfetti } = useConfetti(200);
 	const [openBox, setOpenBox] = useState<boolean>(false);
 	const [isRegister, setRegister] = useState<RegisterState>({ open: false, message: '' })
 	const [animate, setAnimation] = useState<TAnimateState>({
-		state: 'stopped',
-		trigger: false,
+		state: isAuth ? 'finish' : 'stopped',
+		trigger: isAuth,
 	});
 	const [error, setError] = useState<string | null>(null)
 
 	useEffect(() => {
-		const autoLogin = async () => {
-			await handleConnect()
+		if (!isAuth) {
+			const autoLogin = async () => {
+				await handleConnect()
+			}
+
+			if (localStorage.getItem('isConnected') === 'true') setTimeout(autoLogin, 1000)
 		}
-
-		if (localStorage.getItem('isConnected') === 'true') setTimeout(autoLogin, 1000)
-
 	}, [])
 
 	useEffect(() => {
-		if (user) {
+		if (user && !isAuth) {
 			setError(null)
 			setRegister({ open: false, message: '' })
 			setTimeout(() => handleAnimation(null), animate.trigger ? 0 : 2000)
@@ -71,7 +72,7 @@ export const HomeMain = () => {
 	useEffect(() => {
 		const isChainError = isUnsupported && !active ? 'Unsupported Network, Please change to other one as: "Rinkeby"' : null
 
-		if (openBox && !isChainError) {
+		if (openBox && !isChainError && !isAuth) {
 			handleLogin()
 		} else {
 			setError(isChainError)
