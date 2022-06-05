@@ -1,9 +1,11 @@
+import { useCallback, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useState, useContext } from 'react';
 import { useDebounce } from '../Hooks/useDebounce';
 import Image from 'next/image';
 import { useWallet } from '@hooks/web3/useWallet';
 import { authContext } from '@context/AuthContext'
+import { useContract } from '@hooks/web3/useContract';
 //UI
 import Jazzicon, { jsNumberForAddress } from 'react-jazzicon'
 import { FaShareSquare } from 'react-icons/fa';
@@ -30,9 +32,16 @@ import {
 //HOC
 import InstantAuth from '@components/HOC/InstantAuth'
 
+type SubmitState = {
+	trigger: boolean
+	payload: [string, string]
+}
+
 const profile = () => {
 	const { push } = useRouter()
 	const { disconnect } = useWallet()
+	const DhubContract = useContract()
+
 	const showToast = useToast({
 		variant: 'top-accent',
 		title: 'Gallery Copied 🚀',
@@ -45,16 +54,60 @@ const profile = () => {
 
 	const { user, account } = useContext(authContext)
 	const [isEdit, setEdit] = useState<boolean>(false);
-	const [username, setUsername] = useState<string>(user.name);
-	const [submit, triggerSubmit] = useState<boolean>(false);
+	const [username, setUsername] = useState<string>(user?.name);
+	const [submit, triggerSubmit] = useState<SubmitState>(null);
 	const emptyName = username === '';
 
-	const handleSubmit = () => {
-		triggerSubmit(true);
-		setTimeout(() => triggerSubmit(false), 2500);
-	};
+	useEffect(() => {
+		if (user) setUsername(user.name)
+	}, [user])
 
-	const debounce = useDebounce(handleSubmit, 1000);
+	useEffect(() => {
+		if (submit?.trigger && DhubContract) handleEdit(...submit.payload)
+	}, [submit])
+
+	const handleEdit = async (field: string, newValue: string) => {
+		try {
+			await DhubContract.methods.editUser(field, newValue).send({ from: account })
+				.on('transactionHash', () => {
+					showToast({
+						variant: 'solid',
+						title: `Request to edit ${field} was sended`,
+						description: 'This may take a few seconds o minutes , we will notify you when the transaction was done',
+						status: 'info',
+						duration: 4500,
+						position: 'top',
+					})
+				})
+				.on('receipt', () => {
+					showToast({
+						title: `Profile updated!`,
+						description: `Your new ${field} was succesfully set up`,
+						status: 'success',
+						duration: 5000,
+						position: 'top',
+					})
+					setTimeout(() => triggerSubmit({ trigger: false, payload: null }), 1500);
+				})
+
+		} catch (error) {
+			showToast({
+				title: `There was an unexpected error`,
+				description: 'Please, try again',
+				status: 'error',
+				duration: 2500,
+				position: 'top',
+			})
+			triggerSubmit({ trigger: false, payload: null })
+			setUsername(user.name)
+		}
+	}
+
+	const handleSubmit = (field: string, newValue: string) => {
+		triggerSubmit({ trigger: true, payload: [field, newValue] });
+	}
+
+	const debounce = useCallback(useDebounce((args: [string, string]) => handleSubmit(...args), 1000), [handleSubmit]);
 
 	const copyGallery = () => {
 		navigator.clipboard.writeText('Gallery from DHub!');
@@ -66,7 +119,6 @@ const profile = () => {
 		push('/')
 	}
 
-
 	return (
 		<>
 			<VStack spacing={55} w='100%' justify='center' px='10' py='10' h='75vh'>
@@ -76,18 +128,20 @@ const profile = () => {
 							<Input
 								value={username}
 								onChange={ev => {
-									setUsername(ev.target.value);
-									if (ev.target.value !== '') debounce();
+									const newName = ev.target.value
+									setUsername(newName);
+									if (newName !== '' && newName !== user.name) debounce('name', newName);
 								}}
 								borderColor='white'
 								fontSize='lg'
 								placeholder='Type your username'
 								_placeholder={{ color: 'gray.300' }}
 								variant='flushed'
+								disabled={submit?.trigger}
 							/>
 							<InputRightElement
 								children={
-									submit && (
+									submit?.trigger && (
 										<SubmitEntrance>
 											<CheckCircleIcon color='green.400' w='15px' h='15px' />
 										</SubmitEntrance>
@@ -95,7 +149,7 @@ const profile = () => {
 								}
 							/>
 						</InputGroup>
-						{submit && <FormHelperText color='green.400'>Updated!</FormHelperText>}
+						{submit?.trigger && <FormHelperText color='green.400'>Updated!</FormHelperText>}
 						{emptyName && (
 							<FormErrorMessage>Please, introduce your username</FormErrorMessage>
 						)}
@@ -108,14 +162,14 @@ const profile = () => {
 						shadow='0px 2px 10px rgba(255, 255, 255, 0.5)'
 						role='group'
 					>
-						{user.profileUrl ? <Image
+						{user?.profileUrl ? <Image
 							className='profilepic'
 							layout='fill'
 							objectFit='cover'
 							src='/assets/MyNft.png'
 							placeholder='blur'
 							blurDataURL='/assets/MyNft.png'
-						/> : <div className='profilepic' >
+						/> : account && <div className='profilepic' >
 							<Jazzicon paperStyles={{ borderRadius: '50%' }} diameter={300} seed={jsNumberForAddress(account)} />
 						</div>}
 						<Circle
