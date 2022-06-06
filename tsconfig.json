@@ -9,7 +9,8 @@
 			"@config/*": ["config/*"],
 			"@context/*": ["context/*"],
 			"@utils/*": ["utils/*"],
-			"@roottypes/*": ["types/*"]
+			"@roottypes/*": ["types/*"],
+			"@ipfs/*": ["ipfs/*"]
 		},
 		"allowJs": true,
 		"skipLibCheck": true,
