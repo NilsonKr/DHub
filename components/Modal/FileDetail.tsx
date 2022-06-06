@@ -23,10 +23,11 @@ type TProps = {
 	isProcessed?: boolean;
 	imgInfo?: TFileDefaulInfo;
 	btnLabel?: string;
+	blockEdit?: boolean;
 };
-type TInfo = { img?: string | false; size: string; ext: string };
+type TInfo = { img?: string | false; size: string; ext: string; };
 
-export const FileDetail = ({ file, isProcessed, imgInfo, btnLabel }: TProps) => {
+export const FileDetail = ({ file, isProcessed, imgInfo, btnLabel, blockEdit }: TProps) => {
 	const [fileName, setFileName] = useState<string>('');
 	const [info, setInfo] = useState<TInfo>({ size: '', ext: '' });
 
@@ -93,9 +94,10 @@ export const FileDetail = ({ file, isProcessed, imgInfo, btnLabel }: TProps) => 
 								variant='flushed'
 								maxLength={18}
 								placeholder='Type your filename...'
+								disabled={blockEdit}
 							/>
 
-							<InputRightAddon bg='purple.500'>
+							<InputRightAddon bg={blockEdit ? 'purple.900' : 'purple.500'}>
 								<MdEdit size='20px' color='white' />
 							</InputRightAddon>
 						</InputGroup>
@@ -113,7 +115,7 @@ export const FileDetail = ({ file, isProcessed, imgInfo, btnLabel }: TProps) => 
 			</Flex>
 			<Upload
 				size='xl'
-				fireUpload={() => {}}
+				fireUpload={() => { }}
 				w='60%'
 				m='30px auto 0'
 				display='block'
