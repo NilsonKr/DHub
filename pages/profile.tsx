@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { useWallet } from '@hooks/web3/useWallet';
 import { authContext } from '@context/AuthContext'
 import { useContract } from '@hooks/web3/useContract';
+import { getFile } from '@ipfs/methods/'
 //UI
 import Jazzicon, { jsNumberForAddress } from 'react-jazzicon'
 import { FaShareSquare } from 'react-icons/fa';
@@ -59,6 +60,15 @@ const profile = () => {
 	const [username, setUsername] = useState<string>(user?.name);
 	const [submit, triggerSubmit] = useState<SubmitState>(null);
 	const emptyName = username === '';
+
+	useEffect(() => {
+		const retriveFile = async () => {
+			const file = await getFile('https://bafybeibp7fpxrcwvmwwz5tuanx5vhlbof2pqbcmwldgnrvg273pth2jd3m.ipfs.infura-ipfs.io')
+			console.log(file, 'file')
+		}
+
+		retriveFile()
+	}, [])
 
 	useEffect(() => {
 		if (user) setUsername(user.name)
@@ -167,13 +177,11 @@ const profile = () => {
 						shadow='0px 2px 10px rgba(255, 255, 255, 0.5)'
 						role='group'
 					>
-						{user?.profileUrl ? <Image
+						{true ? <Image
 							className='profilepic'
 							layout='fill'
 							objectFit='cover'
-							src='/assets/MyNft.png'
-							placeholder='blur'
-							blurDataURL='/assets/MyNft.png'
+							src='https://ipfs.infura-ipfs.io/ipfs/bafybeibp7fpxrcwvmwwz5tuanx5vhlbof2pqbcmwldgnrvg273pth2jd3m'
 						/> : account && <div className='profilepic' >
 							<Jazzicon paperStyles={{ borderRadius: '50%' }} diameter={300} seed={jsNumberForAddress(account)} />
 						</div>}

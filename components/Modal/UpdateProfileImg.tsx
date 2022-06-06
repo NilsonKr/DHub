@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { addFileToIpfs } from '@ipfs/methods'
 //UI
 import { FileDetail } from './FileDetail';
 import { DragNDrop } from '../Miscellaneous/DragNDrop';
@@ -16,8 +17,14 @@ export const UpdateProfilePicModal = ({ close }: TProps) => {
 	const [file, setFile] = useState<File | null>(null);
 	const [isProcessed, setProcessed] = useState<boolean>(false);
 
-	const handleFile = (file: File) => {
-		file && setFile(file);
+	const handleFile = async (file: File) => {
+		if (file) {
+			const ipfsResult = await addFileToIpfs(file)
+
+			if (!ipfsResult.error) {
+				setFile(file);
+			}
+		}
 		if (isProcessed) setProcessed(false);
 	};
 
