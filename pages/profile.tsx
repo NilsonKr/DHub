@@ -32,6 +32,8 @@ import {
 //HOC
 import InstantAuth from '@components/HOC/InstantAuth'
 
+import { User } from '@roottypes/auth';
+
 type SubmitState = {
 	trigger: boolean
 	payload: [string, string]
@@ -103,11 +105,13 @@ const profile = () => {
 		}
 	}
 
-	const handleSubmit = (field: string, newValue: string) => {
+	const handleSubmit = (field: string, newValue: string, user: User) => {
+		if (newValue === user[field] || newValue === '') return
+
 		triggerSubmit({ trigger: true, payload: [field, newValue] });
 	}
 
-	const debounce = useCallback(useDebounce((args: [string, string]) => handleSubmit(...args), 1000), [handleSubmit]);
+	const debounce = useCallback(useDebounce((args: [string, string, User]) => handleSubmit(...args), 2000), []);
 
 	const copyGallery = () => {
 		navigator.clipboard.writeText('Gallery from DHub!');
@@ -130,7 +134,8 @@ const profile = () => {
 								onChange={ev => {
 									const newName = ev.target.value
 									setUsername(newName);
-									if (newName !== '' && newName !== user.name) debounce('name', newName);
+
+									debounce('name', newName, user)
 								}}
 								borderColor='white'
 								fontSize='lg'
