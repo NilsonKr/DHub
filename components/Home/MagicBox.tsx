@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { authContext } from '@context/AuthContext'
 import Image from 'next/image';
 //UI
 import { motion, Variants } from 'framer-motion';
@@ -16,8 +17,9 @@ const boxVariants: Variants = {
 };
 
 export const MagicBox = ({ open }: TProps) => {
+	const { isAuth } = useContext(authContext)
 	const [shaking, setShake] = useState<boolean>(false);
-	const [openBox, setOpen] = useState<boolean>(false);
+	const [openBox, setOpen] = useState<boolean>(isAuth);
 
 	const handleShaking = (customTime: number = 800) => {
 		setShake(true);
@@ -25,7 +27,7 @@ export const MagicBox = ({ open }: TProps) => {
 	};
 
 	useEffect(() => {
-		if (open) {
+		if (open && !isAuth) {
 			handleShaking(1600);
 			setTimeout(() => setOpen(true), 2200);
 		}

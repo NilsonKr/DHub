@@ -6,6 +6,7 @@ import { loginReturn, User } from '@roottypes/auth'
 
 export type Context = {
   user: User
+  isAuth: boolean
   login: () => Promise<loginReturn>
   register: (name: string) => Promise<loginReturn>
 }
@@ -16,11 +17,13 @@ export const AuthContext: React.FC = ({ children }) => {
   const DhubContract = useContract()
   const { active, account } = useWallet()
   const [user, setUser] = useState<User>(null)
+  const [isAuth, setAuthState] = useState<boolean>(false)
 
   const login = useCallback(async (): Promise<loginReturn> => {
     try {
       const payload = await DhubContract.methods.login().call({ from: account })
       setUser({ name: payload.name, profileUrl: payload.profileUrl })
+      setAuthState(true)
       return { error: null, payload: payload }
     } catch (err) {
       return { error: 'User not found', payload: null }
@@ -37,6 +40,6 @@ export const AuthContext: React.FC = ({ children }) => {
   }, [account, DhubContract])
 
   return (
-    <authContext.Provider value={{ user, login, register }} >{children}</authContext.Provider>
+    <authContext.Provider value={{ user, isAuth, login, register }} >{children}</authContext.Provider>
   )
 }

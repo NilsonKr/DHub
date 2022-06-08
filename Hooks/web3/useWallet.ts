@@ -13,15 +13,17 @@ type ReturnValues = {
 export const useWallet = (): ReturnValues => {
 	const { active, activate, deactivate, error, account } = useWeb3React();
 
-	const connect = (): Promise<any> | undefined => {
+	const connect = async (): Promise<void> => {
 		if (!active) {
-			return activate(connector);
+			await activate(connector);
+			window.localStorage.setItem('isConnected', 'true');
 		}
 	};
 
 	const disconnect = () => {
 		if (active) {
 			deactivate();
+			window.localStorage.setItem('isConnected', 'false');
 		}
 	};
 

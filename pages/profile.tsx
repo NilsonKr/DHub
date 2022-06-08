@@ -23,8 +23,10 @@ import {
 	Text,
 	Circle,
 	useToast,
-	Button
+	Button,
 } from '@chakra-ui/react';
+//HOC
+import InstantAuth from '@components/HOC/InstantAuth'
 
 const profile = () => {
 	const { push } = useRouter()
@@ -178,4 +180,4 @@ const profile = () => {
 	);
 };
 
-export default profile;
+export default InstantAuth(profile);

@@ -3,6 +3,7 @@ import { authContext, Context } from '@context/AuthContext'
 import Link from 'next/link';
 import { useConfetti } from '@hooks/useConfetti';
 import { useWallet } from '@hooks/web3/useWallet'
+import { useInitAuth } from '@hooks/web3/useInitAuth'
 //UI
 import { motion, Variants } from 'framer-motion';
 import { MagicBox } from './MagicBox';
@@ -33,19 +34,22 @@ type TAnimateState = { state: string; trigger: boolean };
 type RegisterState = { open: boolean, message: string }
 
 export const HomeMain = () => {
-	const { user, login } = useContext(authContext) as Context
+	const { user, isAuth, login } = useContext(authContext) as Context
 	const { connect, active, isUnsupported } = useWallet()
 	const { realisticConfetti } = useConfetti(200);
 	const [openBox, setOpenBox] = useState<boolean>(false);
 	const [isRegister, setRegister] = useState<RegisterState>({ open: false, message: '' })
 	const [animate, setAnimation] = useState<TAnimateState>({
-		state: 'stopped',
-		trigger: false,
+		state: isAuth ? 'finish' : 'stopped',
+		trigger: isAuth,
 	});
 	const [error, setError] = useState<string | null>(null)
+	useInitAuth(async () => {
+		await handleConnect()
+	})
 
 	useEffect(() => {
-		if (user) {
+		if (user && !isAuth) {
 			setError(null)
 			setRegister({ open: false, message: '' })
 			setTimeout(() => handleAnimation(null), animate.trigger ? 0 : 2000)
@@ -62,7 +66,7 @@ export const HomeMain = () => {
 	useEffect(() => {
 		const isChainError = isUnsupported && !active ? 'Unsupported Network, Please change to other one as: "Rinkeby"' : null
 
-		if (openBox && !isChainError) {
+		if (openBox && !isChainError && !isAuth) {
 			handleLogin()
 		} else {
 			setError(isChainError)
