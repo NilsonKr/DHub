@@ -10,13 +10,14 @@ export type Context = {
   account: string
   login: () => Promise<loginReturn>
   register: (name: string) => Promise<loginReturn>
+  logout: () => void
 }
 
 export const authContext = React.createContext<Context | null>(null)
 
 export const AuthContext: React.FC = ({ children }) => {
   const DhubContract = useContract()
-  const { active, account } = useWallet()
+  const { active, account, disconnect } = useWallet()
   const [user, setUser] = useState<User>(null)
   const [isAuth, setAuthState] = useState<boolean>(false)
 
@@ -40,7 +41,13 @@ export const AuthContext: React.FC = ({ children }) => {
     }
   }, [account, DhubContract])
 
+  const logout = () => {
+    disconnect()
+    setUser(null)
+    setAuthState(false)
+  }
+
   return (
-    <authContext.Provider value={{ user, isAuth, account, login, register }} >{children}</authContext.Provider>
+    <authContext.Provider value={{ user, isAuth, account, login, register, logout }} >{children}</authContext.Provider>
   )
 }

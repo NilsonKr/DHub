@@ -1,9 +1,7 @@
-import { useCallback, useEffect } from 'react'
+import { useState, useCallback, useEffect, useContext } from 'react'
 import { useRouter } from 'next/router'
-import { useState, useContext } from 'react';
 import { useDebounce } from '../Hooks/useDebounce';
 import Image from 'next/image';
-import { useWallet } from '@hooks/web3/useWallet';
 import { authContext } from '@context/AuthContext'
 import { useContract } from '@hooks/web3/useContract';
 import { getFile } from '@ipfs/methods/'
@@ -42,7 +40,6 @@ type SubmitState = {
 
 const profile = () => {
 	const { push } = useRouter()
-	const { disconnect } = useWallet()
 	const DhubContract = useContract()
 
 	const showToast = useToast({
@@ -55,7 +52,7 @@ const profile = () => {
 		isClosable: true,
 	});
 
-	const { user, account } = useContext(authContext)
+	const { user, account, logout } = useContext(authContext)
 	const [isEdit, setEdit] = useState<boolean>(false);
 	const [username, setUsername] = useState<string>(user?.name);
 	const [submit, triggerSubmit] = useState<SubmitState>(null);
@@ -128,8 +125,8 @@ const profile = () => {
 		showToast();
 	};
 
-	const logout = () => {
-		disconnect()
+	const handleLogout = () => {
+		logout()
 		push('/')
 	}
 
@@ -223,7 +220,7 @@ const profile = () => {
 							width: '180px'
 						}}
 						leftIcon={<ImExit size='23px' color='white' style={{ margin: 0 }} />}
-						onClick={logout}
+						onClick={handleLogout}
 						bg='red.500'
 						h='50px'
 						w='50px'
