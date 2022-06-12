@@ -23,3 +23,5 @@ type Web3Error = {
 		message: string;
 	};
 };
+
+type TFileInfo = { img?: string | false; size: string; ext: string };

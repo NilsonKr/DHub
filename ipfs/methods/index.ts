@@ -8,7 +8,7 @@ type MethodReturn = {
 export const addFileToIpfs = async (file: File): Promise<MethodReturn> => {
 	try {
 		const ipfsResult = await IPFSClient.add(file);
-		return { error: true, payload: ipfsResult };
+		return { error: false, payload: ipfsResult };
 	} catch (error) {
 		return { error: true, payload: error };
 	}
@@ -21,6 +21,6 @@ export const getFile = async (url: string): Promise<MethodReturn> => {
 
 		return { error: false, payload: fileBlob };
 	} catch (error) {
-		return { error: false, payload: error };
+		return { error: true, payload: error };
 	}
 };
