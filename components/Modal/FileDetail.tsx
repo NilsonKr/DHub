@@ -20,16 +20,16 @@ import { EmptyFile } from '../Icons/';
 
 type TProps = {
 	file: File | null;
+	fireUpload: (info: TFileInfo, fileName: string) => Promise<void> | void;
 	isProcessed?: boolean;
 	imgInfo?: TFileDefaulInfo;
 	btnLabel?: string;
 	blockEdit?: boolean;
 };
-type TInfo = { img?: string | false; size: string; ext: string; };
 
-export const FileDetail = ({ file, isProcessed, imgInfo, btnLabel, blockEdit }: TProps) => {
+export const FileDetail = ({ file, isProcessed, imgInfo, btnLabel, blockEdit, fireUpload }: TProps) => {
 	const [fileName, setFileName] = useState<string>('');
-	const [info, setInfo] = useState<TInfo>({ size: '', ext: '' });
+	const [info, setInfo] = useState<TFileInfo>({ size: '', ext: '' });
 
 	useEffect(() => {
 		if (isProcessed && imgInfo) {
@@ -115,7 +115,7 @@ export const FileDetail = ({ file, isProcessed, imgInfo, btnLabel, blockEdit }: 
 			</Flex>
 			<Upload
 				size='xl'
-				fireUpload={() => { }}
+				fireUpload={() => fireUpload(info, fileName)}
 				w='60%'
 				m='30px auto 0'
 				display='block'
