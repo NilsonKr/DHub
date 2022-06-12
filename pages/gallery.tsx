@@ -4,6 +4,8 @@ import { Card, CreateTagModal, UploadModal } from '../components/Index';
 import { BgLeftAdornment, BgRightAdornment, EmptyHubDraw } from '../components/Icons/';
 import { Box, Grid, GridItem, Heading, Flex } from '@chakra-ui/react';
 import { SearchInput, TagsCarousel, MenuActions, Upload } from '../components/Index';
+//HOC
+import InstantAuth from '@components/HOC/InstantAuth'
 
 const gallery = () => {
 	const [list, setList] = useState<any[]>([]);
@@ -56,10 +58,10 @@ const gallery = () => {
 						<Heading mt='3' fontSize='xl'>
 							You dont have any Item storaged :(
 						</Heading>
-						<Upload fireUpload={() => {}} size='xl' mt='8' />
+						<Upload fireUpload={() => { }} size='xl' mt='8' />
 					</Flex>
 				)}
-				{list.length > 0 && <TagsCarousel newTag={() => {}} />}
+				{list.length > 0 && <TagsCarousel newTag={() => { }} />}
 			</Box>
 			<Box position='absolute' top='0px' left='10px' zIndex='-1'>
 				<BgLeftAdornment />
@@ -73,4 +75,4 @@ const gallery = () => {
 	);
 };
 
-export default gallery;
+export default InstantAuth(gallery);
