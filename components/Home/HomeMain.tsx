@@ -35,7 +35,7 @@ type RegisterState = { open: boolean, message: string }
 
 export const HomeMain = () => {
 	const { user, isAuth, login } = useContext(authContext) as Context
-	const { connect, active, isUnsupported } = useWallet()
+	const { connect, active, isUnsupported, walletError } = useWallet()
 	const { realisticConfetti } = useConfetti(200);
 	const [openBox, setOpenBox] = useState<boolean>(false);
 	const [isRegister, setRegister] = useState<RegisterState>({ open: false, message: '' })
@@ -49,6 +49,7 @@ export const HomeMain = () => {
 	})
 
 	useEffect(() => {
+		//When register but is not logged in already
 		if (user && !isAuth) {
 			setError(null)
 			setRegister({ open: false, message: '' })
@@ -66,10 +67,10 @@ export const HomeMain = () => {
 	useEffect(() => {
 		const isChainError = isUnsupported && !active ? 'Unsupported Network, Please change to other one as: "Rinkeby"' : null
 
-		if (openBox && !isChainError && !isAuth) {
+		if (openBox && !isChainError && !walletError && !isAuth) {
 			handleLogin()
 		} else {
-			setError(isChainError)
+			setError(isChainError || walletError?.message)
 		}
 	}, [active, openBox])
 
