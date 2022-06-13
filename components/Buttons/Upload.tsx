@@ -8,7 +8,7 @@ type TProps = {
 	fireUpload: () => void;
 	size: TSizes;
 	[x: string]: any;
-	label: string | undefined;
+	label?: string | undefined;
 };
 
 export const Upload: React.FC<TProps> = ({ fireUpload, size, label, ...props }) => {
