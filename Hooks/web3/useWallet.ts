@@ -4,7 +4,7 @@ import { connector } from '../../config/web3';
 type ReturnValues = {
 	active: boolean;
 	account: string | null | undefined;
-	error: Error | undefined;
+	walletError: Error | undefined;
 	isUnsupported: boolean;
 	connect: () => Promise<any> | undefined;
 	disconnect: () => void;
@@ -29,5 +29,5 @@ export const useWallet = (): ReturnValues => {
 
 	const isUnsupported = error?.name === 'UnsupportedChainIdError';
 
-	return { active, account, error, connect, disconnect, isUnsupported };
+	return { active, account, walletError: error, connect, disconnect, isUnsupported };
 };
