@@ -1,10 +1,10 @@
 import { useState } from 'react';
 //UI
-import { Heading, Button, Square } from '@chakra-ui/react';
+import { Heading, Button, Square, Skeleton } from '@chakra-ui/react';
 
-type TProps = { handleFile: (file: File) => void; label?: string };
+type TProps = { handleFile: (file: File) => void; label?: string, loading?: boolean };
 
-export const DragNDrop = ({ handleFile, label }: TProps) => {
+export const DragNDrop = ({ handleFile, label, loading }: TProps) => {
 	const [isDrag, setDrag] = useState<boolean>(false);
 
 	const handleDragEnter = (ev: React.DragEvent<HTMLDivElement>) => {
@@ -33,7 +33,7 @@ export const DragNDrop = ({ handleFile, label }: TProps) => {
 		}
 	};
 
-	return (
+	return !loading ? (
 		<Square
 			onDragOver={handleDragEnter}
 			onDragLeave={handleDragExit}
@@ -71,5 +71,5 @@ export const DragNDrop = ({ handleFile, label }: TProps) => {
 				/>
 			</Button>
 		</Square>
-	);
+	) : <Skeleton h='280px' w='100%' mt='40px' startColor='purple.500' endColor='gray.600' />;
 };

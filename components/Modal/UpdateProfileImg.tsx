@@ -18,9 +18,10 @@ import {
 type TProps = { close: () => void };
 
 export const UpdateProfilePicModal = ({ close }: TProps) => {
-	const { login } = useContext(authContext)
+	const { login, user } = useContext(authContext)
 	const [file, setFile] = useState<File | null>(null);
 	const [isProcessed, setProcessed] = useState<boolean>(false);
+	const [isLoading, setLoading] = useState<boolean>(false)
 	const showToast = useToast()
 	const { account } = useWallet()
 	const Dhub = useContract()
@@ -33,6 +34,7 @@ export const UpdateProfilePicModal = ({ close }: TProps) => {
 	};
 
 	const uploadFile = async () => {
+		setLoading(true)
 		try {
 			const ipfsResult = await addFileToIpfs(file)
 			const ipfsUrl = `https://ipfs.infura-ipfs.io/ipfs/${ipfsResult.payload.path}`
@@ -50,6 +52,7 @@ export const UpdateProfilePicModal = ({ close }: TProps) => {
 				})
 				.on('receipt', () => {
 					login()
+					setLoading(false)
 					showToast({
 						title: `Profile updated!`,
 						description: `Your new profile photo was succesfully uploaded`,
@@ -59,6 +62,7 @@ export const UpdateProfilePicModal = ({ close }: TProps) => {
 					})
 				})
 		} catch (error) {
+			setLoading(false)
 			showToast({
 				title: `There was an unexpected error`,
 				description: 'Please, try again',
@@ -75,13 +79,14 @@ export const UpdateProfilePicModal = ({ close }: TProps) => {
 			<ModalContent bg='gray.800' pb='30px'>
 				<ModalCloseButton />
 				<ModalBody>
-					<DragNDrop handleFile={handleFile} label='Drag & drop your picture' />
+					<DragNDrop loading={isLoading} handleFile={handleFile} label='Drag & drop your picture' />
 					<FileDetail
 						fireUpload={uploadFile}
 						blockEdit
 						file={file}
 						isProcessed={isProcessed}
 						btnLabel='Update'
+						loading={isLoading}
 					/>
 				</ModalBody>
 			</ModalContent>
