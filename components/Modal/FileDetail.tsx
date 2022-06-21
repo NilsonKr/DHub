@@ -25,9 +25,10 @@ type TProps = {
 	imgInfo?: TFileDefaulInfo;
 	btnLabel?: string;
 	blockEdit?: boolean;
+	loading?: boolean
 };
 
-export const FileDetail = ({ file, isProcessed, imgInfo, btnLabel, blockEdit, fireUpload }: TProps) => {
+export const FileDetail = ({ file, isProcessed, imgInfo, btnLabel, blockEdit, loading, fireUpload }: TProps) => {
 	const [fileName, setFileName] = useState<string>('');
 	const [info, setInfo] = useState<TFileInfo>({ size: '', ext: '' });
 
@@ -120,15 +121,15 @@ export const FileDetail = ({ file, isProcessed, imgInfo, btnLabel, blockEdit, fi
 				m='30px auto 0'
 				display='block'
 				justify='space-around'
-				disabled={fileName === ''}
+				disabled={fileName === '' || loading}
 				_hover={{ bg: 'purple.300' }}
 				label={btnLabel}
+				loading={loading}
 			/>
 		</>
 	) : (
 		<Flex direction='column' align='center' w='100%' mt='50px'>
 			<EmptyFile />
-			{/* <EmptyHubDraw /> */}
 			<Text fontSize={'lg'}>No file selected</Text>
 		</Flex>
 	);
