@@ -1,10 +1,20 @@
 {
 	"compilerOptions": {
+		"baseUrl": "./",
 		"target": "es5",
 		"lib": ["dom", "dom.iterable", "esnext"],
+		"paths": {
+			"@hooks/*": ["Hooks/*"],
+			"@components/*": ["components/*"],
+			"@config/*": ["config/*"],
+			"@context/*": ["context/*"],
+			"@utils/*": ["utils/*"],
+			"@roottypes/*": ["types/*"],
+			"@ipfs/*": ["ipfs/*"]
+		},
 		"allowJs": true,
 		"skipLibCheck": true,
-		"strict": true,
+		"strict": false,
 		"forceConsistentCasingInFileNames": true,
 		"noEmit": true,
 		"esModuleInterop": true,

@@ -20,15 +20,17 @@ import { EmptyFile } from '../Icons/';
 
 type TProps = {
 	file: File | null;
+	fireUpload: (info: TFileInfo, fileName: string) => Promise<void> | void;
 	isProcessed?: boolean;
 	imgInfo?: TFileDefaulInfo;
 	btnLabel?: string;
+	blockEdit?: boolean;
+	loading?: boolean
 };
-type TInfo = { img?: string | false; size: string; ext: string };
 
-export const FileDetail = ({ file, isProcessed, imgInfo, btnLabel }: TProps) => {
+export const FileDetail = ({ file, isProcessed, imgInfo, btnLabel, blockEdit, loading, fireUpload }: TProps) => {
 	const [fileName, setFileName] = useState<string>('');
-	const [info, setInfo] = useState<TInfo>({ size: '', ext: '' });
+	const [info, setInfo] = useState<TFileInfo>({ size: '', ext: '' });
 
 	useEffect(() => {
 		if (isProcessed && imgInfo) {
@@ -93,9 +95,10 @@ export const FileDetail = ({ file, isProcessed, imgInfo, btnLabel }: TProps) => 
 								variant='flushed'
 								maxLength={18}
 								placeholder='Type your filename...'
+								disabled={blockEdit}
 							/>
 
-							<InputRightAddon bg='purple.500'>
+							<InputRightAddon bg={blockEdit ? 'purple.900' : 'purple.500'}>
 								<MdEdit size='20px' color='white' />
 							</InputRightAddon>
 						</InputGroup>
@@ -113,20 +116,20 @@ export const FileDetail = ({ file, isProcessed, imgInfo, btnLabel }: TProps) => 
 			</Flex>
 			<Upload
 				size='xl'
-				fireUpload={() => {}}
+				fireUpload={() => fireUpload(info, fileName)}
 				w='60%'
 				m='30px auto 0'
 				display='block'
 				justify='space-around'
-				disabled={fileName === ''}
+				disabled={fileName === '' || loading}
 				_hover={{ bg: 'purple.300' }}
 				label={btnLabel}
+				loading={loading}
 			/>
 		</>
 	) : (
 		<Flex direction='column' align='center' w='100%' mt='50px'>
 			<EmptyFile />
-			{/* <EmptyHubDraw /> */}
 			<Text fontSize={'lg'}>No file selected</Text>
 		</Flex>
 	);

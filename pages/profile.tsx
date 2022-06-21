@@ -1,11 +1,16 @@
-import { useState } from 'react';
+import { useState, useCallback, useEffect, useContext } from 'react'
+import { useRouter } from 'next/router'
 import { useDebounce } from '../Hooks/useDebounce';
 import Image from 'next/image';
+import { authContext } from '@context/AuthContext'
+import { useContract } from '@hooks/web3/useContract';
+import { getFile } from '@ipfs/methods/'
 //UI
-import { motion, Variants } from 'framer-motion';
-import { CheckCircleIcon } from '@chakra-ui/icons';
+import Jazzicon, { jsNumberForAddress } from 'react-jazzicon'
 import { FaShareSquare } from 'react-icons/fa';
 import { MdEdit } from 'react-icons/md';
+import { ImExit } from 'react-icons/im'
+import { CheckCircleIcon } from '@chakra-ui/icons';
 import { GenericBtn, RoundedBtn, UpdateProfilePicModal } from '../components/Index';
 import { SubmitEntrance } from '../components/Animations/Common';
 import {
@@ -18,12 +23,25 @@ import {
 	FormErrorMessage,
 	FormHelperText,
 	Box,
-	Square,
+	Text,
 	Circle,
 	useToast,
+	Button,
 } from '@chakra-ui/react';
+//HOC
+import InstantAuth from '@components/HOC/InstantAuth'
+
+import { User } from '@roottypes/auth';
+
+type SubmitState = {
+	trigger: boolean
+	payload: [string, string]
+}
 
 const profile = () => {
+	const { push } = useRouter()
+	const DhubContract = useContract()
+
 	const showToast = useToast({
 		variant: 'top-accent',
 		title: 'Gallery Copied 🚀',
@@ -33,22 +51,75 @@ const profile = () => {
 		duration: 1500,
 		isClosable: true,
 	});
+
+	const { user, account, logout } = useContext(authContext)
 	const [isEdit, setEdit] = useState<boolean>(false);
-	const [username, setUsername] = useState<string>('NilsonKr');
-	const [submit, triggerSubmit] = useState<boolean>(false);
+	const [username, setUsername] = useState<string>(user?.name);
+	const [submit, triggerSubmit] = useState<SubmitState>(null);
 	const emptyName = username === '';
 
-	const handleSubmit = () => {
-		triggerSubmit(true);
-		setTimeout(() => triggerSubmit(false), 2500);
-	};
+	useEffect(() => {
+		if (user) setUsername(user.name)
+	}, [user])
 
-	const debounce = useDebounce(handleSubmit, 1000);
+	useEffect(() => {
+		if (submit?.trigger && DhubContract) handleEdit(...submit.payload)
+	}, [submit])
+
+	const handleEdit = async (field: string, newValue: string) => {
+		try {
+			await DhubContract.methods.editUser(field, newValue).send({ from: account })
+				.on('transactionHash', () => {
+					showToast({
+						variant: 'solid',
+						title: `Request to edit ${field} was sended`,
+						description: 'This may take a few seconds o minutes , we will notify you when the transaction was done',
+						status: 'info',
+						duration: 4500,
+						position: 'top',
+					})
+				})
+				.on('receipt', () => {
+					showToast({
+						title: `Profile updated!`,
+						description: `Your new ${field} was succesfully set up`,
+						status: 'success',
+						duration: 5000,
+						position: 'top',
+					})
+					setTimeout(() => triggerSubmit({ trigger: false, payload: null }), 1500);
+				})
+
+		} catch (error) {
+			showToast({
+				title: `There was an unexpected error`,
+				description: 'Please, try again',
+				status: 'error',
+				duration: 2500,
+				position: 'top',
+			})
+			triggerSubmit({ trigger: false, payload: null })
+			setUsername(user.name)
+		}
+	}
+
+	const handleSubmit = (field: string, newValue: string, user: User) => {
+		if (newValue === user[field] || newValue === '') return
+
+		triggerSubmit({ trigger: true, payload: [field, newValue] });
+	}
+
+	const debounce = useCallback(useDebounce((args: [string, string, User]) => handleSubmit(...args), 2000), []);
 
 	const copyGallery = () => {
 		navigator.clipboard.writeText('Gallery from DHub!');
 		showToast();
 	};
+
+	const handleLogout = () => {
+		logout()
+		push('/')
+	}
 
 	return (
 		<>
@@ -59,18 +130,21 @@ const profile = () => {
 							<Input
 								value={username}
 								onChange={ev => {
-									setUsername(ev.target.value);
-									if (ev.target.value !== '') debounce();
+									const newName = ev.target.value
+									setUsername(newName);
+
+									debounce('name', newName, user)
 								}}
 								borderColor='white'
 								fontSize='lg'
 								placeholder='Type your username'
 								_placeholder={{ color: 'gray.300' }}
 								variant='flushed'
+								disabled={submit?.trigger}
 							/>
 							<InputRightElement
 								children={
-									submit && (
+									submit?.trigger && (
 										<SubmitEntrance>
 											<CheckCircleIcon color='green.400' w='15px' h='15px' />
 										</SubmitEntrance>
@@ -78,7 +152,7 @@ const profile = () => {
 								}
 							/>
 						</InputGroup>
-						{submit && <FormHelperText color='green.400'>Updated!</FormHelperText>}
+						{submit?.trigger && <FormHelperText color='green.400'>Updated!</FormHelperText>}
 						{emptyName && (
 							<FormErrorMessage>Please, introduce your username</FormErrorMessage>
 						)}
@@ -91,19 +165,20 @@ const profile = () => {
 						shadow='0px 2px 10px rgba(255, 255, 255, 0.5)'
 						role='group'
 					>
-						<Image
+						{!!user?.profileUrl ? <Image
 							className='profilepic'
 							layout='fill'
 							objectFit='cover'
-							src='/assets/MyNft.png'
-							placeholder='blur'
-							blurDataURL='/assets/MyNft.png'
-						/>
+							src={user.profileUrl}
+						/> : account && <div className='profilepic' >
+							<Jazzicon paperStyles={{ borderRadius: '50%' }} diameter={300} seed={jsNumberForAddress(account)} />
+						</div>}
 						<Circle
 							opacity={0}
 							_groupHover={{ opacity: 1 }}
 							transition='opacity .1s linear'
 							position='absolute'
+							top='0'
 							w='100%'
 							h='100%'
 							zIndex={10}
@@ -115,25 +190,56 @@ const profile = () => {
 						</Circle>
 					</Box>
 				</Flex>
-				<Square>
+				<Flex w="100%" justify="space-between" align="center" mt="10">
 					<GenericBtn
 						hoverColor=''
 						leftIcon={<FaShareSquare size='23px' color='white' />}
 						bg='linear-gradient(90deg, #7D5FC0 0%, #4D00FF 100%)'
 						handleClick={copyGallery}
 						fontSize='xl'
-						p='7'
+						p='6'
 						fontWeight='semibold'
 						h='50px'
 						borderRadius='25px'
 					>
 						Share Gallery
 					</GenericBtn>
-				</Square>
+					<Button
+						role='group'
+						_hover={{
+							padding: '1.5rem',
+							width: '180px'
+						}}
+						leftIcon={<ImExit size='23px' color='white' style={{ margin: 0 }} />}
+						onClick={handleLogout}
+						bg='red.500'
+						h='50px'
+						w='50px'
+						overflow='hidden'
+						borderRadius='25px'
+						transition='width .4s ease'
+					>
+						<Text
+							position='absolute'
+							fontSize="xl"
+							fontWeight='semibold'
+							transform='translateX(100px)'
+							opacity='0'
+							transition='transform .4s linear'
+							_groupHover={{
+								position: 'static',
+								transform: 'translateX(0)',
+								opacity: '1'
+							}}
+						>
+							Disconnect
+						</Text>
+					</Button>
+				</Flex>
 			</VStack>
 			{isEdit && <UpdateProfilePicModal close={() => setEdit(false)} />}
 		</>
 	);
 };
 
-export default profile;
+export default InstantAuth(profile);

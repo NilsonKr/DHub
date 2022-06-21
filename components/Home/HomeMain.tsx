@@ -1,6 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect, useContext, useCallback } from 'react';
+import { authContext, Context } from '@context/AuthContext'
 import Link from 'next/link';
-import { useConfetti } from '../../Hooks/useConfetti';
+import { useConfetti } from '@hooks/useConfetti';
+import { useWallet } from '@hooks/web3/useWallet'
+import { useInitAuth } from '@hooks/web3/useInitAuth'
 //UI
 import { motion, Variants } from 'framer-motion';
 import { MagicBox } from './MagicBox';
@@ -17,7 +20,7 @@ import {
 } from '@chakra-ui/react';
 import { RoundedRightArrow } from '../Icons';
 import { Register } from '../Form/Register';
-import { LoggedIn } from '../Miscellaneous/LoggedIn';
+import { LoggedIn, ErrorConnection } from '../Miscellaneous';
 
 const variants: Variants = {
 	open: {
@@ -28,28 +31,81 @@ const variants: Variants = {
 
 type TAnimateState = { state: string; trigger: boolean };
 
+type RegisterState = { open: boolean, message: string }
+
 export const HomeMain = () => {
+	const { user, isAuth, login } = useContext(authContext) as Context
+	const { connect, active, isUnsupported, walletError } = useWallet()
 	const { realisticConfetti } = useConfetti(200);
 	const [openBox, setOpenBox] = useState<boolean>(false);
+	const [isRegister, setRegister] = useState<RegisterState>({ open: false, message: '' })
 	const [animate, setAnimation] = useState<TAnimateState>({
-		state: 'stopped',
-		trigger: false,
+		state: isAuth ? 'finish' : 'stopped',
+		trigger: isAuth,
 	});
+	const [error, setError] = useState<string | null>(null)
+	useInitAuth(async () => {
+		await handleConnect()
+	})
 
-	const handleAnimation = () => {
+	useEffect(() => {
+		//When register but is not logged in already
+		if (user && !isAuth) {
+			setError(null)
+			setRegister({ open: false, message: '' })
+			setTimeout(() => handleAnimation(null), animate.trigger ? 0 : 2000)
+		}
+	}, [user])
+
+	useEffect(() => {
+		if (error) {
+			setTimeout(() => handleAnimation(error), animate.trigger ? 0 : 2000)
+			setAnimation({ state: 'stopped', trigger: false })
+		}
+	}, [error])
+
+	useEffect(() => {
+		const isChainError = isUnsupported && !active ? 'Unsupported Network, Please change to other one as: "Rinkeby"' : null
+
+		if (openBox && !isChainError && !walletError && !isAuth) {
+			handleLogin()
+		} else {
+			setError(isChainError || walletError?.message)
+		}
+	}, [active, openBox])
+
+	const handleAnimation = (error?: string | null, isRegister?: boolean) => {
 		setAnimation({ trigger: true, state: 'running' });
 		setTimeout(() => setAnimation({ trigger: true, state: 'finish' }), 1500);
+
+		if (!error && !isRegister) {
+			setError(null)
+			setTimeout(realisticConfetti, 500);
+		}
 	};
 
-	const triggerAnimation = () => {
-		setTimeout(() => handleAnimation(), 2000);
-	};
+	const handleConnect = async () => {
+		await connect()
+		setOpenBox(true);
+	}
+
+	const handleLogin = async () => {
+		const result = await login()
+
+		if (result.error) {
+			setRegister({ message: result.error, open: true })
+		}
+
+		setTimeout(() => handleAnimation(null, true), 2000)
+	}
 
 	return (
 		<Box my='10' position='relative'>
 			<BgBubble />
-			{/* {animate && <Register />} */}
-			{animate.trigger && <LoggedIn />}
+
+			{animate.trigger && isRegister.open && <Register msg={isRegister.message} />}
+			{animate.trigger && !error && !isRegister.open && <LoggedIn />}
+			{animate.trigger && error && !isRegister.open && <ErrorConnection errorMsg={error} />}
 
 			<motion.div variants={variants} animate={animate.trigger ? 'open' : {}}>
 				<VStack
@@ -72,18 +128,14 @@ export const HomeMain = () => {
 								py='25px'
 								borderRadius='25px'
 								fontSize='2xl'
-								onClick={() => {
-									setOpenBox(true);
-									triggerAnimation();
-									setTimeout(realisticConfetti, 2500);
-								}}
+								onClick={handleConnect}
 							>
 								Connect wallet
 							</Button>
 						</>
 					)}
-					{animate.state === 'running' && <Box h='270px'></Box>}
-					{animate.state === 'finish' && (
+					{(animate.state === 'running' || error) && <Box h='270px'></Box>}
+					{animate.state === 'finish' && !error && (
 						<HStack
 							style={{ marginTop: '10px !important' }}
 							spacing={10}

@@ -1,11 +1,18 @@
-import type { NextPage } from 'next';
+import type { NextPage, } from 'next';
+import { useEffect } from 'react'
+import { useWallet } from '@hooks/web3/useWallet'
 //UI
-import { Container } from '@chakra-ui/react';
-import { Header, Footer, HomeMain } from '../components/Index';
+import { HomeMain } from '../components/Index';
 import { Box } from '@chakra-ui/react';
 import { BgLeftAdornment, BgRightAdornment } from '../components/Icons/';
 
 const Home: NextPage = () => {
+	const { account, connect } = useWallet()
+
+	useEffect(() => {
+
+	}, [])
+
 	return (
 		<>
 			<Box position='absolute' top='0px' left='10px' zIndex='-1'>

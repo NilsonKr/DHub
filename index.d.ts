@@ -10,3 +10,18 @@ type TFileDefaulInfo = {
 	ext: string;
 	img: string;
 };
+
+interface IDhubContract {
+	address: { [key: number]: string };
+	abi: any;
+}
+
+type Web3Error = {
+	originalError: {
+		code: string;
+		data: string;
+		message: string;
+	};
+};
+
+type TFileInfo = { img?: string | false; size: string; ext: string };

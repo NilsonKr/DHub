@@ -1,6 +1,6 @@
 import React from 'react';
 //UI
-import { Button, Text, Icon } from '@chakra-ui/react';
+import { Button, Icon, Spinner } from '@chakra-ui/react';
 import { ImUpload } from 'react-icons/im';
 
 type TSizes = 'sm' | 'xl';
@@ -8,10 +8,11 @@ type TProps = {
 	fireUpload: () => void;
 	size: TSizes;
 	[x: string]: any;
-	label: string | undefined;
+	label?: string | undefined;
+	loading?: boolean
 };
 
-export const Upload: React.FC<TProps> = ({ fireUpload, size, label, ...props }) => {
+export const Upload: React.FC<TProps> = ({ fireUpload, size, label, loading, ...props }) => {
 	return (
 		<Button
 			onClick={fireUpload}
@@ -33,7 +34,7 @@ export const Upload: React.FC<TProps> = ({ fireUpload, size, label, ...props }) 
 			}
 			{...props}
 		>
-			{label ? label : 'Upload'}
+			{!loading ? (label ? label : 'Upload') : <Spinner size='lg' />}
 		</Button>
 	);
 };
