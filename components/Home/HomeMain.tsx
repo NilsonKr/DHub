@@ -44,9 +44,8 @@ export const HomeMain = () => {
 		trigger: isAuth,
 	});
 	const [error, setError] = useState<string | null>(null)
-	useInitAuth(async () => {
-		await handleConnect()
-	})
+
+	useInitAuth(() => setOpenBox(true))
 
 	useEffect(() => {
 		//When register but is not logged in already
