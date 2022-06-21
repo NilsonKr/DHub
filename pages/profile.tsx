@@ -53,7 +53,7 @@ const profile = () => {
 	});
 
 	const { user, account, logout } = useContext(authContext)
-	const [isEdit, setEdit] = useState<boolean>(false);
+	const [isUpload, setUpload] = useState<boolean>(false);
 	const [username, setUsername] = useState<string>(user?.name);
 	const [submit, triggerSubmit] = useState<SubmitState>(null);
 	const emptyName = username === '';
@@ -184,7 +184,7 @@ const profile = () => {
 							zIndex={10}
 							bg='rgba(255,41,170,.5)'
 						>
-							<RoundedBtn onClick={() => setEdit(true)} size='80px' bg='rgba(0,0,0,.85)'>
+							<RoundedBtn onClick={() => setUpload(true)} size='80px' bg='rgba(0,0,0,.85)'>
 								<MdEdit size='40px' color='white' />
 							</RoundedBtn>
 						</Circle>
@@ -237,7 +237,7 @@ const profile = () => {
 					</Button>
 				</Flex>
 			</VStack>
-			{isEdit && <UpdateProfilePicModal close={() => setEdit(false)} />}
+			{isUpload && <UpdateProfilePicModal close={() => setUpload(false)} />}
 		</>
 	);
 };
