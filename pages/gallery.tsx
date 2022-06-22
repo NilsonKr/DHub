@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
+import { useGallery } from '@hooks/web3/useGallery'
 //UI
-import { Card, CreateTagModal, UploadModal } from '../components/Index';
-import { BgLeftAdornment, BgRightAdornment, EmptyHubDraw } from '../components/Icons/';
 import { Box, Grid, GridItem, Heading, Flex } from '@chakra-ui/react';
+import { Card, CreateTagModal, UploadModal, SkeletonCard } from '../components/Index';
+import { BgLeftAdornment, BgRightAdornment, EmptyHubDraw } from '../components/Icons/';
 import { SearchInput, TagsCarousel, MenuActions, Upload } from '../components/Index';
 //HOC
 import InstantAuth from '@components/HOC/InstantAuth'
@@ -11,6 +12,7 @@ const gallery = () => {
 	const [list, setList] = useState<any[]>([]);
 	const [query, setQuery] = useState<string>('');
 	const [modal, setModal] = useState<string>('');
+	const { files, isLoading } = useGallery()
 
 	const fetchData = () => {
 		const mockList = new Array(10).fill('');
@@ -36,7 +38,19 @@ const gallery = () => {
 						openUpload={() => setModal('new_upload')}
 					/>
 				)}
-				{list.length ? (
+				{isLoading && <Grid
+					templateColumns='repeat(auto-fill, 240px)'
+					autoRows='260px'
+					gap='30px 50px'
+					py='20px'
+					h='65vh'
+					overflowY='scroll'
+					justifyContent='center'
+				>
+					{new Array(6).fill(null).map(() => <SkeletonCard />)}
+				</Grid>
+				}
+				{!isLoading && (list.length ? (
 					<Grid
 						templateColumns='repeat(auto-fill, 240px)'
 						autoRows='260px'
@@ -60,7 +74,7 @@ const gallery = () => {
 						</Heading>
 						<Upload fireUpload={() => { }} size='xl' mt='8' />
 					</Flex>
-				)}
+				))}
 				{list.length > 0 && <TagsCarousel newTag={() => { }} />}
 			</Box>
 			<Box position='absolute' top='0px' left='10px' zIndex='-1'>
