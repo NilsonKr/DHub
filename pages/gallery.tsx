@@ -9,30 +9,22 @@ import { SearchInput, TagsCarousel, MenuActions, Upload } from '../components/In
 import InstantAuth from '@components/HOC/InstantAuth'
 
 const gallery = () => {
-	const [list, setList] = useState<any[]>([]);
 	const [query, setQuery] = useState<string>('');
 	const [modal, setModal] = useState<string>('');
-	const { files, isLoading } = useGallery()
-
-	const fetchData = () => {
-		const mockList = new Array(10).fill('');
-		setList(mockList);
-	};
-
-	useEffect(fetchData, []);
+	const { files, isLoading, getUserFiles } = useGallery()
 
 	return (
 		<>
 			<Box as='section' mt='80px' w='100%'>
 				<Flex w='100%' justifyContent='space-between' align='end' mb='10px'>
 					<Heading>NilsonKr's Gallery</Heading>
-					<SearchInput
+					{!!files.length && <SearchInput
 						value={query}
 						handleChange={ev => setQuery(ev.target.value)}
 						clear={() => setQuery('')}
-					/>
+					/>}
 				</Flex>
-				{list.length > 0 && (
+				{files.length > 0 && (
 					<MenuActions
 						openTag={() => setModal('new_tag')}
 						openUpload={() => setModal('new_upload')}
@@ -47,10 +39,10 @@ const gallery = () => {
 					overflowY='scroll'
 					justifyContent='center'
 				>
-					{new Array(6).fill(null).map(() => <SkeletonCard />)}
+					{new Array(6).fill(null).map((_, index) => <SkeletonCard key={index} />)}
 				</Grid>
 				}
-				{!isLoading && (list.length ? (
+				{!isLoading && (files.length ? (
 					<Grid
 						templateColumns='repeat(auto-fill, 240px)'
 						autoRows='260px'
@@ -60,7 +52,7 @@ const gallery = () => {
 						overflowY='scroll'
 						justifyContent='center'
 					>
-						{list.map((item, i) => (
+						{files.map((item, i) => (
 							<GridItem key={i} h='100%' w='100%' borderRadius='5px'>
 								<Card />
 							</GridItem>
@@ -72,10 +64,10 @@ const gallery = () => {
 						<Heading mt='3' fontSize='xl'>
 							You dont have any Item storaged :(
 						</Heading>
-						<Upload fireUpload={() => { }} size='xl' mt='8' />
+						<Upload fireUpload={() => setModal('new_upload')} size='xl' mt='8' />
 					</Flex>
 				))}
-				{list.length > 0 && <TagsCarousel newTag={() => { }} />}
+				{files.length > 0 && <TagsCarousel newTag={() => { }} />}
 			</Box>
 			<Box position='absolute' top='0px' left='10px' zIndex='-1'>
 				<BgLeftAdornment />
@@ -84,7 +76,7 @@ const gallery = () => {
 				<BgRightAdornment />
 			</Box>
 			<CreateTagModal open={modal === 'new_tag'} close={() => setModal('')} />
-			{modal === 'new_upload' && <UploadModal close={() => setModal('')} />}
+			{modal === 'new_upload' && <UploadModal refreshItems={getUserFiles} close={() => setModal('')} />}
 		</>
 	);
 };

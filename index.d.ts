@@ -24,4 +24,4 @@ type Web3Error = {
 	};
 };
 
-type TFileInfo = { img?: string | false; size: string; ext: string };
+type TFileInfo = { img?: string | false; size: string; ext: string; rawSize?: number };

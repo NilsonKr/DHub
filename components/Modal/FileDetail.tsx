@@ -58,6 +58,7 @@ export const FileDetail = ({ file, isProcessed, imgInfo, btnLabel, blockEdit, lo
 
 			setInfo({
 				size: size,
+				rawSize: file.size,
 				ext: file.type.split('/')[1],
 				img: urlPreview,
 			});
