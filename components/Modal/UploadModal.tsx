@@ -28,13 +28,13 @@ export const UploadModal = ({ close, refreshItems }: TProps) => {
 		setFile(file);
 	};
 
-	const upload = async (info: TFileInfo, fileName: string) => {
+	const upload = async (info: TFileInfo, fileForm: DocumentForm) => {
 		setLoading(true)
 		try {
 			const ipfsResult = await addFileToIpfs(file)
 			const ipfsUrl = `https://ipfs.infura-ipfs.io/ipfs/${ipfsResult.payload.path}`
 
-			const fileRecord = [0, ipfsUrl, fileName, 'Dummie file', new Date().toString(), info.rawSize]
+			const fileRecord = [0, ipfsUrl, fileForm.name, fileForm.description, new Date().toString(), info.rawSize]
 			await Dhub.methods.uploadFile(fileRecord).send({ from: account })
 
 			refreshItems(account)

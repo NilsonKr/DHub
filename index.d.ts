@@ -25,3 +25,4 @@ type Web3Error = {
 };
 
 type TFileInfo = { img?: string | false; size: string; ext: string; rawSize?: number };
+type DocumentForm = { name: string; description: string };
