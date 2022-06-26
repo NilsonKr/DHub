@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useContext } from 'react';
 import { useGallery } from '@hooks/web3/useGallery'
+import { authContext } from '@context/AuthContext'
 //UI
 import { Box, Grid, GridItem, Heading, Flex } from '@chakra-ui/react';
 import { Card, CreateTagModal, UploadModal, SkeletonCard } from '../components/Index';
@@ -9,6 +10,7 @@ import { SearchInput, TagsCarousel, MenuActions, Upload } from '../components/In
 import InstantAuth from '@components/HOC/InstantAuth'
 
 const gallery = () => {
+	const { user } = useContext(authContext)
 	const [query, setQuery] = useState<string>('');
 	const [modal, setModal] = useState<string>('');
 	const { files, isLoading, getUserFiles } = useGallery()
@@ -17,7 +19,7 @@ const gallery = () => {
 		<>
 			<Box as='section' mt='80px' w='100%'>
 				<Flex w='100%' justifyContent='space-between' align='end' mb='10px'>
-					<Heading>NilsonKr's Gallery</Heading>
+					<Heading>{user?.name}'s Gallery</Heading>
 					{!!files.length && <SearchInput
 						value={query}
 						handleChange={ev => setQuery(ev.target.value)}
@@ -54,7 +56,7 @@ const gallery = () => {
 					>
 						{files.map((item, i) => (
 							<GridItem key={i} h='100%' w='100%' borderRadius='5px'>
-								<Card />
+								<Card item={item} />
 							</GridItem>
 						))}
 					</Grid>
