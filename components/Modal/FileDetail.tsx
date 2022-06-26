@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, ChangeEventHandler, ChangeEvent } from 'react';
 import Image from 'next/image';
-import { ProcessFile } from '../Utils/processFile';
+import { useForm } from '@hooks/useForm'
 //UI
 import {
 	Flex,
@@ -10,17 +10,20 @@ import {
 	InputGroup,
 	InputRightAddon,
 	Tag,
-	Divider,
 	Box,
+	Textarea,
 } from '@chakra-ui/react';
+import { AddIcon } from '@chakra-ui/icons'
 import { Upload } from '../Buttons';
 import { BsFileEarmarkFill } from 'react-icons/bs';
 import { MdEdit } from 'react-icons/md';
 import { EmptyFile } from '../Icons/';
+//Utils
+import { ProcessFile } from '../Utils/processFile';
 
 type TProps = {
 	file: File | null;
-	fireUpload: (info: TFileInfo, fileName: string) => Promise<void> | void;
+	fireUpload: (info: TFileInfo, form: DocumentForm) => Promise<void> | void;
 	isProcessed?: boolean;
 	imgInfo?: TFileDefaulInfo;
 	btnLabel?: string;
@@ -29,12 +32,13 @@ type TProps = {
 };
 
 export const FileDetail = ({ file, isProcessed, imgInfo, btnLabel, blockEdit, loading, fireUpload }: TProps) => {
-	const [fileName, setFileName] = useState<string>('');
+	const { form, handleChange } = useForm({ name: '', description: '' })
 	const [info, setInfo] = useState<TFileInfo>({ size: '', ext: '' });
+	const [isDescription, setDescription] = useState<boolean>(false)
 
 	useEffect(() => {
 		if (isProcessed && imgInfo) {
-			setFileName(imgInfo.name);
+			handleChange('name', imgInfo.name)
 			setInfo({
 				size: imgInfo.size,
 				ext: imgInfo.ext,
@@ -58,10 +62,11 @@ export const FileDetail = ({ file, isProcessed, imgInfo, btnLabel, blockEdit, lo
 
 			setInfo({
 				size: size,
+				rawSize: file.size,
 				ext: file.type.split('/')[1],
 				img: urlPreview,
 			});
-			setFileName(nameBits.join('.'));
+			handleChange('name', nameBits.join('.'));
 		}
 	}, [file]);
 
@@ -82,22 +87,21 @@ export const FileDetail = ({ file, isProcessed, imgInfo, btnLabel, blockEdit, lo
 						<BsFileEarmarkFill color='white' size='50px' />
 					)}
 					<Text fontSize='sm' color='gray.400'>
-						{fileName}.{info.ext}
+						{form.name}.{info.ext}
 					</Text>
 				</VStack>
 				<VStack spacing={3} mr='10px' align='start'>
 					<Box>
 						<InputGroup w='230px'>
 							<Input
-								value={fileName}
-								onChange={ev => setFileName(ev.target.value)}
+								value={form.name}
+								onChange={ev => handleChange('name', ev.target.value)}
 								borderColor='gray.500'
 								variant='flushed'
 								maxLength={18}
 								placeholder='Type your filename...'
 								disabled={blockEdit}
 							/>
-
 							<InputRightAddon bg={blockEdit ? 'purple.900' : 'purple.500'}>
 								<MdEdit size='20px' color='white' />
 							</InputRightAddon>
@@ -105,6 +109,22 @@ export const FileDetail = ({ file, isProcessed, imgInfo, btnLabel, blockEdit, lo
 						<Text fontSize='xs' mt='1' color='gray.500'>
 							Maximun 18 characters*
 						</Text>
+						{isDescription ?
+							<Textarea
+								value={form.description}
+								onChange={(e: ChangeEvent<HTMLTextAreaElement>) => handleChange('description', e.target.value)}
+								my='2'
+								placeholder='Write your description here'
+								variant="filled"
+								_focus={{ bg: 'gray.750' }}
+								_placeholder={{ fontSize: '.9rem', color: 'gray.500' }}
+							/>
+							: <Flex align='center' gap='2' mt='3' cursor='pointer' onClick={() => setDescription(true)}>
+								<AddIcon color='purple.400' />
+								<Text fontSize='sm' fontWeight='600' color='purple.400'>
+									Add a description
+								</Text>
+							</Flex>}
 					</Box>
 					<Text fontWeight='semibold'>
 						Size:{' '}
@@ -116,12 +136,12 @@ export const FileDetail = ({ file, isProcessed, imgInfo, btnLabel, blockEdit, lo
 			</Flex>
 			<Upload
 				size='xl'
-				fireUpload={() => fireUpload(info, fileName)}
+				fireUpload={() => fireUpload(info, form as DocumentForm)}
 				w='60%'
 				m='30px auto 0'
 				display='block'
 				justify='space-around'
-				disabled={fileName === '' || loading}
+				disabled={form.name === '' || loading}
 				_hover={{ bg: 'purple.300' }}
 				label={btnLabel}
 				loading={loading}
