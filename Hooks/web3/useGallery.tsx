@@ -3,10 +3,17 @@ import { useWallet } from './useWallet'
 import { useContract } from './useContract'
 import { authContext } from '@context/AuthContext'
 import { useToast } from '@chakra-ui/react'
+import { useSearch } from '@hooks/useSearch'
 //Types
 import { Item } from '@roottypes/gallery'
 
-type HookShape = () => { files: Item[], isLoading: boolean, getUserFiles: (acc: string) => Promise<void> }
+type HookShape = () => {
+  files: Item[],
+  searchedItems: Item[],
+  isLoading: boolean,
+  getUserFiles: (acc: string) => Promise<void>
+  handleSearch: (key: string, value: string) => void
+}
 
 export const useGallery: HookShape = () => {
   const { isAuth } = useContext(authContext)
@@ -15,6 +22,7 @@ export const useGallery: HookShape = () => {
   const showToast = useToast()
   const [isLoading, setLoading] = useState<boolean>(true)
   const [files, setFiles] = useState<Item[]>([])
+  const { items, setItems, handleSearch } = useSearch<Item>([])
 
   useEffect(() => {
     if (isAuth) {
@@ -26,6 +34,7 @@ export const useGallery: HookShape = () => {
     setLoading(true)
     try {
       const payload = await DhubContract.methods.getFilesByUser().call({ from: acc })
+      setItems(payload)
       setFiles(payload)
     } catch (error) {
       showToast({
@@ -39,5 +48,5 @@ export const useGallery: HookShape = () => {
     setLoading(false)
   }
 
-  return { files, isLoading, getUserFiles }
+  return { files, searchedItems: items, isLoading, getUserFiles, handleSearch }
 }
