@@ -2,10 +2,11 @@ import { useEffect, useState, useContext } from 'react'
 import { useWallet } from './useWallet'
 import { useContract } from './useContract'
 import { authContext } from '@context/AuthContext'
-
 import { useToast } from '@chakra-ui/react'
+//Types
+import { Item } from '@roottypes/gallery'
 
-type HookShape = () => { files: any[], isLoading: boolean, getUserFiles: (acc: string) => Promise<void> }
+type HookShape = () => { files: Item[], isLoading: boolean, getUserFiles: (acc: string) => Promise<void> }
 
 export const useGallery: HookShape = () => {
   const { isAuth } = useContext(authContext)
@@ -13,7 +14,7 @@ export const useGallery: HookShape = () => {
   const DhubContract = useContract()
   const showToast = useToast()
   const [isLoading, setLoading] = useState<boolean>(true)
-  const [files, setFiles] = useState<any[]>([])
+  const [files, setFiles] = useState<Item[]>([])
 
   useEffect(() => {
     if (isAuth) {
