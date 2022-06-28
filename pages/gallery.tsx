@@ -1,6 +1,7 @@
 import { useState, useContext } from 'react';
 import { useGallery } from '@hooks/web3/useGallery'
 import { authContext } from '@context/AuthContext'
+import NextImage from 'next/image'
 //UI
 import { Box, Grid, GridItem, Heading, Flex } from '@chakra-ui/react';
 import { Card, CreateTagModal, UploadModal, SkeletonCard } from '../components/Index';
@@ -11,20 +12,15 @@ import InstantAuth from '@components/HOC/InstantAuth'
 
 const gallery = () => {
 	const { user } = useContext(authContext)
-	const [query, setQuery] = useState<string>('');
 	const [modal, setModal] = useState<string>('');
-	const { files, isLoading, getUserFiles } = useGallery()
+	const { files, searchedItems, isLoading, getUserFiles, handleSearch } = useGallery()
 
 	return (
 		<>
 			<Box as='section' mt='80px' w='100%'>
 				<Flex w='100%' justifyContent='space-between' align='end' mb='10px'>
 					<Heading>{user?.name}'s Gallery</Heading>
-					{!!files.length && <SearchInput
-						value={query}
-						handleChange={ev => setQuery(ev.target.value)}
-						clear={() => setQuery('')}
-					/>}
+					{!!files.length && <SearchInput handleSearch={(value: string) => handleSearch('title', value)} />}
 				</Flex>
 				{files.length > 0 && (
 					<MenuActions
@@ -44,7 +40,7 @@ const gallery = () => {
 					{new Array(6).fill(null).map((_, index) => <SkeletonCard key={index} />)}
 				</Grid>
 				}
-				{!isLoading && (files.length ? (
+				{!isLoading && !!searchedItems.length && (files.length ? (
 					<Grid
 						templateColumns='repeat(auto-fill, 240px)'
 						autoRows='260px'
@@ -54,7 +50,7 @@ const gallery = () => {
 						overflowY='scroll'
 						justifyContent='center'
 					>
-						{files.map((item, i) => (
+						{searchedItems.map((item, i) => (
 							<GridItem key={i} h='100%' w='100%' borderRadius='5px'>
 								<Card item={item} />
 							</GridItem>
@@ -69,6 +65,12 @@ const gallery = () => {
 						<Upload fireUpload={() => setModal('new_upload')} size='xl' mt='8' />
 					</Flex>
 				))}
+				{files.length && !searchedItems.length && <Flex h='65vh' w='100%' direction='column' justify='center' align='center'>
+					<NextImage src='/assets/search.png' width='160px' height='180px' />
+					<Heading mt='3' fontSize='xl'>
+						We couldn't find any match :(
+					</Heading>
+				</Flex>}
 				{files.length > 0 && <TagsCarousel newTag={() => { }} />}
 			</Box>
 			<Box position='absolute' top='0px' left='10px' zIndex='-1'>
