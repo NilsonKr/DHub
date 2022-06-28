@@ -1,13 +1,13 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 
-const firebaseConfig = {
-	apiKey: 'AIzaSyBxZPRo4tv7GDpuRO6VcdQqg5hUsW_aLl0',
-	authDomain: 'dhub-b5fab.firebaseapp.com',
-	projectId: 'dhub-b5fab',
-	storageBucket: 'dhub-b5fab.appspot.com',
-	messagingSenderId: '632655706040',
-	appId: '1:632655706040:web:b846d98dd5f7b5d643814d',
+export const firebaseConfig = {
+	apiKey: `${process.env.DB_KEY}`,
+	authDomain: `${process.env.FIREBASE_ID}.firebaseapp.com`,
+	projectId: `${process.env.FIREBASE_ID}`,
+	storageBucket: `${process.env.FIREBASE_ID}.appspot.com`,
+	messagingSenderId: `${process.env.FIREBASE_MSG}`,
+	appId: `${process.env.FIREBASE_APP}`,
 };
 
 const app = initializeApp(firebaseConfig);
