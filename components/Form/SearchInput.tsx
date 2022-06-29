@@ -1,20 +1,24 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 //UI
 import { Circle, InputGroup, InputRightElement, Input } from '@chakra-ui/react';
 import { SmallCloseIcon } from '@chakra-ui/icons';
 
 type TProps = {
-	handleChange: (ev: React.ChangeEvent<HTMLInputElement>) => void;
-	value: string;
-	clear: () => void;
+	handleSearch: (value: string) => void;
 };
 
-export const SearchInput = ({ handleChange = () => {}, value, clear }: TProps) => {
+export const SearchInput = ({ handleSearch }: TProps) => {
+	const [query, setQuery] = useState<string>('');
+
+	useEffect(() => {
+		handleSearch(query)
+	}, [query])
+
 	return (
 		<InputGroup w='auto' borderBottom='1px solid white'>
 			<Input
-				onChange={handleChange}
-				value={value}
+				onChange={(ev) => setQuery(ev.target.value)}
+				value={query}
 				pl='4'
 				border='none'
 				placeholder='Search...'
@@ -26,8 +30,8 @@ export const SearchInput = ({ handleChange = () => {}, value, clear }: TProps) =
 				_active={{ transform: 'scale(.9)' }}
 				transition='transform .1s linear'
 			>
-				{value !== '' && (
-					<Circle size='15px' bg='white' onClick={clear}>
+				{query !== '' && (
+					<Circle size='15px' bg='white' onClick={() => setQuery('')}>
 						<SmallCloseIcon h='15px' w='15px' color='black' />
 					</Circle>
 				)}

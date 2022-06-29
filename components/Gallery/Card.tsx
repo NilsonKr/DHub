@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import NextLink from 'next/link';
 import Image from 'next/image';
 //UI
@@ -16,12 +16,31 @@ import {
 	Icon,
 	HStack,
 } from '@chakra-ui/react';
+//Types
+import { Item } from '@roottypes/gallery'
 
-export const Card = () => {
+type Props = { item: Item }
+type DownloadInfo = { url: string, ext: string }
+
+export const Card = ({ item }: Props) => {
 	const [isCopy, setCopy] = useState<boolean>(false);
+	const downloadRef = useRef<HTMLAnchorElement>(null)
+
+	const handleDownload = async () => {
+		const data = await fetch(item.url)
+		const blob = await data.blob()
+
+		const url = URL.createObjectURL(blob)
+		const extension = blob.type.split('/')[1]
+
+		downloadRef.current.download = `${item.title}.${extension}`
+		downloadRef.current.href = url
+
+		downloadRef.current.click()
+	}
 
 	const handleCopy = () => {
-		navigator.clipboard.writeText('Hey from DHub!');
+		navigator.clipboard.writeText(window.location.host + `/detail/${item.id}`);
 		setCopy(true);
 		setTimeout(() => setCopy(false), 1500);
 	};
@@ -51,12 +70,12 @@ export const Card = () => {
 				}}
 			>
 				<VStack px='3' py='2' h='100%' justifyContent='space-between'>
-					<Box>
+					<Box w='100%'>
 						<Heading mb={1} fontSize='md'>
-							Random paper doge
+							{item.title}
 						</Heading>
-						<Text color='gray.300' fontSize='sm' fontWeight='semibold'>
-							Chiilest and coolest dog I ever...
+						<Text color='gray.300' fontSize='sm' fontWeight='semibold' maxW='95%' textOverflow='ellipsis' overflow='hidden' whiteSpace='nowrap' >
+							{item.description}
 						</Text>
 					</Box>
 					<Flex
@@ -91,10 +110,11 @@ export const Card = () => {
 								bg='pink.500'
 								size='35px'
 								cursor='pointer'
+								onClick={handleDownload}
 							>
 								<Icon color='white' h='20px' w='20px' as={MdOutlineDownload} />
 							</Circle>
-							<NextLink href='/detail' passHref={true}>
+							<NextLink href={`detail/${item.id}`} passHref={true}>
 								<a>
 									<RoundedRightArrow size='35px' bg='purple.500' iconSize='20px' />
 								</a>
@@ -106,10 +126,10 @@ export const Card = () => {
 			<Image
 				layout='fill'
 				objectFit='cover'
-				src='/assets/exampleImg.jpg'
-				placeholder='blur'
-				blurDataURL='/assets/exampleImg.jpg'
+				src={item.url}
 			/>
+			<a ref={downloadRef} download='' href='' >
+			</a>
 		</Box>
 	);
 };

@@ -1,42 +1,46 @@
-import { useState, useEffect } from 'react';
+import { useState, useContext } from 'react';
+import { useGallery } from '@hooks/web3/useGallery'
+import { authContext } from '@context/AuthContext'
+import NextImage from 'next/image'
 //UI
-import { Card, CreateTagModal, UploadModal } from '../components/Index';
-import { BgLeftAdornment, BgRightAdornment, EmptyHubDraw } from '../components/Icons/';
 import { Box, Grid, GridItem, Heading, Flex } from '@chakra-ui/react';
+import { Card, CreateTagModal, UploadModal, SkeletonCard } from '../components/Index';
+import { BgLeftAdornment, BgRightAdornment, EmptyHubDraw } from '../components/Icons/';
 import { SearchInput, TagsCarousel, MenuActions, Upload } from '../components/Index';
 //HOC
 import InstantAuth from '@components/HOC/InstantAuth'
 
 const gallery = () => {
-	const [list, setList] = useState<any[]>([]);
-	const [query, setQuery] = useState<string>('');
+	const { user } = useContext(authContext)
 	const [modal, setModal] = useState<string>('');
-
-	const fetchData = () => {
-		const mockList = new Array(10).fill('');
-		setList(mockList);
-	};
-
-	useEffect(fetchData, []);
+	const { files, searchedItems, isLoading, getUserFiles, handleSearch } = useGallery()
 
 	return (
 		<>
 			<Box as='section' mt='80px' w='100%'>
 				<Flex w='100%' justifyContent='space-between' align='end' mb='10px'>
-					<Heading>NilsonKr's Gallery</Heading>
-					<SearchInput
-						value={query}
-						handleChange={ev => setQuery(ev.target.value)}
-						clear={() => setQuery('')}
-					/>
+					<Heading>{user?.name}'s Gallery</Heading>
+					{!!files.length && <SearchInput handleSearch={(value: string) => handleSearch('title', value)} />}
 				</Flex>
-				{list.length > 0 && (
+				{files.length > 0 && (
 					<MenuActions
 						openTag={() => setModal('new_tag')}
 						openUpload={() => setModal('new_upload')}
 					/>
 				)}
-				{list.length ? (
+				{isLoading && <Grid
+					templateColumns='repeat(auto-fill, 240px)'
+					autoRows='260px'
+					gap='30px 50px'
+					py='20px'
+					h='65vh'
+					overflowY='scroll'
+					justifyContent='center'
+				>
+					{new Array(6).fill(null).map((_, index) => <SkeletonCard key={index} />)}
+				</Grid>
+				}
+				{!isLoading && !!searchedItems.length && (files.length ? (
 					<Grid
 						templateColumns='repeat(auto-fill, 240px)'
 						autoRows='260px'
@@ -46,9 +50,9 @@ const gallery = () => {
 						overflowY='scroll'
 						justifyContent='center'
 					>
-						{list.map((item, i) => (
+						{searchedItems.map((item, i) => (
 							<GridItem key={i} h='100%' w='100%' borderRadius='5px'>
-								<Card />
+								<Card item={item} />
 							</GridItem>
 						))}
 					</Grid>
@@ -58,10 +62,16 @@ const gallery = () => {
 						<Heading mt='3' fontSize='xl'>
 							You dont have any Item storaged :(
 						</Heading>
-						<Upload fireUpload={() => { }} size='xl' mt='8' />
+						<Upload fireUpload={() => setModal('new_upload')} size='xl' mt='8' />
 					</Flex>
-				)}
-				{list.length > 0 && <TagsCarousel newTag={() => { }} />}
+				))}
+				{files.length && !searchedItems.length && <Flex h='65vh' w='100%' direction='column' justify='center' align='center'>
+					<NextImage src='/assets/search.png' width='160px' height='180px' />
+					<Heading mt='3' fontSize='xl'>
+						We couldn't find any match :(
+					</Heading>
+				</Flex>}
+				{files.length > 0 && <TagsCarousel newTag={() => { }} />}
 			</Box>
 			<Box position='absolute' top='0px' left='10px' zIndex='-1'>
 				<BgLeftAdornment />
@@ -70,7 +80,7 @@ const gallery = () => {
 				<BgRightAdornment />
 			</Box>
 			<CreateTagModal open={modal === 'new_tag'} close={() => setModal('')} />
-			{modal === 'new_upload' && <UploadModal close={() => setModal('')} />}
+			{modal === 'new_upload' && <UploadModal refreshItems={getUserFiles} close={() => setModal('')} />}
 		</>
 	);
 };
