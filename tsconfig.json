@@ -10,7 +10,8 @@
 			"@context/*": ["context/*"],
 			"@utils/*": ["utils/*"],
 			"@roottypes/*": ["types/*"],
-			"@ipfs/*": ["ipfs/*"]
+			"@ipfs/*": ["ipfs/*"],
+			"@db/": ["db/*"]
 		},
 		"allowJs": true,
 		"skipLibCheck": true,
