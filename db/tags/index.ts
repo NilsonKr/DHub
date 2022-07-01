@@ -7,7 +7,7 @@ import {
 	updateDoc,
 	onSnapshot,
 	DocumentData,
-	QuerySnapshot,
+	DocumentSnapshot,
 } from 'firebase/firestore';
 import { FirebaseError } from 'firebase/app';
 
@@ -15,7 +15,7 @@ import { dbInstance } from '../';
 
 import { USER_COLLECTION } from '@utils/index';
 
-type SnapshotCallback = (snapshot: QuerySnapshot<DocumentData>) => void;
+type SnapshotCallback = (snapshot: DocumentSnapshot<DocumentData>) => void;
 
 export const CreateTags = async (account: string, tag: string) => {
 	try {
@@ -42,8 +42,8 @@ export const AddTag = async (account: string, tag: string) => {
 	}
 };
 
-export const GetTags = (cb: SnapshotCallback) => {
-	onSnapshot(collection(dbInstance, USER_COLLECTION), cb);
+export const GetTags = (account: string, cb: SnapshotCallback) => {
+	onSnapshot(doc(dbInstance, USER_COLLECTION, account), cb);
 };
 
 export const DeleteTag = async (account: string, tag: string) => {

@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
+import { useTags } from '@hooks/useTags'
 //UI
 import { HStack, Text, Flex } from '@chakra-ui/react';
 import { NewTag, Clear } from '../Buttons';
 import { TagHub } from '../Miscellaneous/Tag';
+
 
 const tagsList = [
 	'Background',
@@ -22,23 +24,10 @@ const tagsList = [
 type TProps = { newTag: () => void };
 
 export const TagsCarousel = ({ newTag }: TProps) => {
-	const [tags, setTags] = useState<Ttag[] | void[]>([]);
-	const [selected, setSelectedTags] = useState<Ttag[]>([]);
-
-	const toggleSelect = (tag: Ttag) => {
-		if (selected.includes(tag)) {
-			const newSelected = [...selected];
-			const tagIdx = selected.findIndex(t => t === tag);
-
-			newSelected.splice(tagIdx, 1);
-			setSelectedTags(newSelected);
-		} else {
-			setSelectedTags(prev => [...prev, tag]);
-		}
-	};
+	const { tags, selected, setTagsState, toggleSelect, resetSelected } = useTags()
 
 	const fetchTags = () => {
-		setTags(tagsList);
+		setTagsState(tagsList);
 	};
 
 	useEffect(fetchTags, []);
@@ -46,7 +35,7 @@ export const TagsCarousel = ({ newTag }: TProps) => {
 	return (
 		<Flex align='center' w='100%'>
 			{tags.length > 0 && (
-				<Clear list={selected} handleClear={() => setSelectedTags([])} />
+				<Clear list={selected} handleClear={resetSelected} />
 			)}
 			<HStack
 				w='100%'
