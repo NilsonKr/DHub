@@ -6,3 +6,7 @@ export type Item = {
 	size: string;
 	url: string;
 };
+
+export type TagsRecord = {
+	tags: string[];
+};

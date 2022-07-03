@@ -1,6 +1,7 @@
 import { useState, useContext } from 'react';
 import { useGallery } from '@hooks/web3/useGallery'
 import { authContext } from '@context/AuthContext'
+import { useWallet } from '@hooks/web3/useWallet';
 import NextImage from 'next/image'
 //UI
 import { Box, Grid, GridItem, Heading, Flex } from '@chakra-ui/react';
@@ -11,6 +12,7 @@ import { SearchInput, TagsCarousel, MenuActions, Upload } from '../components/In
 import InstantAuth from '@components/HOC/InstantAuth'
 
 const gallery = () => {
+	const { account } = useWallet()
 	const { user } = useContext(authContext)
 	const [modal, setModal] = useState<string>('');
 	const { files, searchedItems, isLoading, getUserFiles, handleSearch } = useGallery()
@@ -65,13 +67,13 @@ const gallery = () => {
 						<Upload fireUpload={() => setModal('new_upload')} size='xl' mt='8' />
 					</Flex>
 				))}
-				{files.length && !searchedItems.length && <Flex h='65vh' w='100%' direction='column' justify='center' align='center'>
+				{!!files.length && !searchedItems.length && <Flex h='65vh' w='100%' direction='column' justify='center' align='center'>
 					<NextImage src='/assets/search.png' width='160px' height='180px' />
 					<Heading mt='3' fontSize='xl'>
 						We couldn't find any match :(
 					</Heading>
 				</Flex>}
-				{files.length > 0 && <TagsCarousel newTag={() => { }} />}
+				{files.length > 0 && <TagsCarousel account={account} newTag={() => { }} />}
 			</Box>
 			<Box position='absolute' top='0px' left='10px' zIndex='-1'>
 				<BgLeftAdornment />
