@@ -27,7 +27,7 @@ export const useInitAuth: HookProps = (handleLogin) => {
         push('/')
       }
 
-    } else if (!active && !isAuth) {
+    } else if (!active) {
       handleConnect()
     }
 

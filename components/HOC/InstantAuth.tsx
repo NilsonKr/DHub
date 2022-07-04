@@ -5,19 +5,13 @@ import { useInitAuth } from '@hooks/web3/useInitAuth'
 
 const InstantAuth = (Component: React.FC<any>): React.FC<any> => {
   return () => {
-    const { login } = useContext(authContext)
-    const { connect, active } = useWallet()
+    const { login, isAuth } = useContext(authContext)
 
-    useInitAuth(async () => {
-      await connect()
+    useInitAuth(() => {
+      login()
     })
 
-    useEffect(() => {
-      if (active) login()
-    }, [active])
-
-
-    return <Component />
+    return isAuth && <Component />
   }
 }
 
