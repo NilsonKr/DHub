@@ -1,5 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useTags } from '@hooks/useTags'
+//Context
+import { tagsContext } from '@context/TagsContext'
 //UI
 import { HStack, Text, Flex } from '@chakra-ui/react';
 import { NewTag, Clear } from '../Buttons';
@@ -19,25 +21,10 @@ const mockTags = [
 	'hobbies',
 ];
 
-type TProps = { newTag: () => void, account: string };
+type TProps = { newTag: () => void };
 
-export const TagsCarousel = ({ newTag, account }: TProps) => {
-	const { tags, selected, setTagsState, toggleSelect, resetSelected } = useTags()
-	const [isLoading, setIsLoading] = useState<boolean>(false)
-
-	const fetchTags = () => {
-		setIsLoading(true)
-		GetTags(account, (snapshot) => {
-			const record = snapshot.data() as TagsRecord
-
-			if (record) {
-				setTagsState(record.tags)
-			}
-			setIsLoading(false)
-		})
-	};
-
-	useEffect(fetchTags, []);
+export const TagsCarousel = ({ newTag }: TProps) => {
+	const { tags, selected, isLoading, toggleSelect, resetSelected } = useContext(tagsContext)
 
 	return (
 		<Flex align='center' w='100%'>

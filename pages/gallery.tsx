@@ -3,6 +3,8 @@ import { useGallery } from '@hooks/web3/useGallery'
 import { authContext } from '@context/AuthContext'
 import { useWallet } from '@hooks/web3/useWallet';
 import NextImage from 'next/image'
+//Context
+import { TagsContext } from '@context/TagsContext'
 //UI
 import { Box, Grid, GridItem, Heading, Flex } from '@chakra-ui/react';
 import { Card, CreateTagModal, UploadModal, SkeletonCard } from '../components/Index';
@@ -18,7 +20,7 @@ const gallery = () => {
 	const { files, searchedItems, isLoading, getUserFiles, handleSearch } = useGallery()
 
 	return (
-		<>
+		<TagsContext>
 			<Box as='section' mt='80px' w='100%'>
 				<Flex w='100%' justifyContent='space-between' align='end' mb='10px'>
 					<Heading>{user?.name}'s Gallery</Heading>
@@ -73,7 +75,7 @@ const gallery = () => {
 						We couldn't find any match :(
 					</Heading>
 				</Flex>}
-				{files.length > 0 && <TagsCarousel account={account} newTag={() => setModal('new_tag')} />}
+				{files.length > 0 && <TagsCarousel newTag={() => setModal('new_tag')} />}
 			</Box>
 			<Box position='absolute' top='0px' left='10px' zIndex='-1'>
 				<BgLeftAdornment />
@@ -83,7 +85,7 @@ const gallery = () => {
 			</Box>
 			<CreateTagModal account={account} open={modal === 'new_tag'} close={() => setModal('')} />
 			{modal === 'new_upload' && <UploadModal refreshItems={getUserFiles} close={() => setModal('')} />}
-		</>
+		</TagsContext>
 	);
 };
 

@@ -25,8 +25,8 @@ export const CreateTags = async (account: string, tag: string) => {
 
 		return true;
 	} catch (error) {
-		console.log((error as FirebaseError).message);
-		return false;
+		const msg = (error as FirebaseError).message;
+		throw new Error(msg);
 	}
 };
 
@@ -38,7 +38,6 @@ export const AddTag = async (account: string, tag: string) => {
 		});
 	} catch (error) {
 		const msg = (error as FirebaseError).message;
-		console.log(msg);
 		throw new Error(msg);
 	}
 };
