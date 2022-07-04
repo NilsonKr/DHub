@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 //UI
 import {
 	Modal,
@@ -14,13 +14,48 @@ import {
 	Icon,
 	Button,
 	ButtonGroup,
+	useToast
 } from '@chakra-ui/react';
 import { AiOutlineTags } from 'react-icons/ai';
 import { GenericBtn } from '../Buttons/index';
+//DB
+import { AddTag, CreateTags } from '@db/tags'
 
-type TProps = { close: () => void; open: boolean };
 
-export const CreateTagModal = ({ open, close }: TProps) => {
+type TProps = { account: string; open: boolean; hasTags?: boolean, close: () => void; };
+
+export const CreateTagModal = ({ account, open, hasTags = false, close }: TProps) => {
+	const showToast = useToast()
+	const [tag, setTag] = useState<string>('')
+
+	const handleAddTag = (tag: string) => {
+		return hasTags ? AddTag(account, tag) : CreateTags(account, tag)
+	}
+
+	const handleTagCreation = async () => {
+		try {
+			await handleAddTag(tag)
+
+			showToast({
+				title: `You got a new tag!`,
+				description: `Your new tag "${tag}" was added`,
+				status: 'success',
+				duration: 1500,
+				position: 'top',
+			})
+			close()
+		} catch (error) {
+			showToast({
+				title: `There was an unexpected error`,
+				description: 'Please, try again',
+				status: 'error',
+				duration: 2500,
+				position: 'top',
+			})
+			console.log(error)
+		}
+	}
+
 	return (
 		<Modal isOpen={open} onClose={close}>
 			<ModalOverlay />
@@ -29,7 +64,7 @@ export const CreateTagModal = ({ open, close }: TProps) => {
 				<ModalHeader>Crate New Tag</ModalHeader>
 				<ModalBody my='5'>
 					<InputGroup>
-						<Input placeholder='Type a name' _placeholder={{ color: 'gray.400' }} />
+						<Input onChange={(e) => setTag(e.target.value)} placeholder='Type a name' _placeholder={{ color: 'gray.400' }} />
 						<InputRightAddon
 							bg='purple.500'
 							children={<Icon color='white' h='25px' w='25px' as={AiOutlineTags} />}
@@ -41,7 +76,7 @@ export const CreateTagModal = ({ open, close }: TProps) => {
 						<Button onClick={close} variant='outline' colorScheme='white'>
 							Close
 						</Button>
-						<GenericBtn w='100px' handleClick={() => {}} colorSchema='purple'>
+						<GenericBtn w='100px' handleClick={handleTagCreation} disabled={!tag} colorSchema='purple'>
 							Create
 						</GenericBtn>
 					</ButtonGroup>

@@ -73,7 +73,7 @@ const gallery = () => {
 						We couldn't find any match :(
 					</Heading>
 				</Flex>}
-				{files.length > 0 && <TagsCarousel account={account} newTag={() => { }} />}
+				{files.length > 0 && <TagsCarousel account={account} newTag={() => setModal('new_tag')} />}
 			</Box>
 			<Box position='absolute' top='0px' left='10px' zIndex='-1'>
 				<BgLeftAdornment />
@@ -81,7 +81,7 @@ const gallery = () => {
 			<Box position='absolute' bottom='0px' right='0px' zIndex='-1'>
 				<BgRightAdornment />
 			</Box>
-			<CreateTagModal open={modal === 'new_tag'} close={() => setModal('')} />
+			<CreateTagModal account={account} open={modal === 'new_tag'} close={() => setModal('')} />
 			{modal === 'new_upload' && <UploadModal refreshItems={getUserFiles} close={() => setModal('')} />}
 		</>
 	);

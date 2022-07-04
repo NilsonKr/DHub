@@ -32,13 +32,14 @@ export const CreateTags = async (account: string, tag: string) => {
 
 export const AddTag = async (account: string, tag: string) => {
 	try {
-		const newTags = arrayUnion([tag]);
+		const newTags = arrayUnion(tag);
 		await updateDoc(doc(dbInstance, USER_COLLECTION, account), {
 			tags: newTags,
 		});
 	} catch (error) {
-		console.log((error as FirebaseError).message);
-		return false;
+		const msg = (error as FirebaseError).message;
+		console.log(msg);
+		throw new Error(msg);
 	}
 };
 
@@ -48,7 +49,7 @@ export const GetTags = (account: string, cb: SnapshotCallback) => {
 
 export const DeleteTag = async (account: string, tag: string) => {
 	try {
-		const newTags = arrayRemove([tag]);
+		const newTags = arrayRemove(tag);
 		await updateDoc(doc(dbInstance, USER_COLLECTION, account), {
 			tags: newTags,
 		});

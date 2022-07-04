@@ -29,7 +29,10 @@ export const TagsCarousel = ({ newTag, account }: TProps) => {
 		setIsLoading(true)
 		GetTags(account, (snapshot) => {
 			const record = snapshot.data() as TagsRecord
-			setTagsState(record.tags)
+
+			if (record) {
+				setTagsState(record.tags)
+			}
 			setIsLoading(false)
 		})
 	};
