@@ -5,3 +5,4 @@ export { RoundedRightArrow } from './Arrows';
 export { EmptyHubDraw } from './EmptyHubDraw';
 export { EmptyFile } from './EmptyFile';
 export { QrCodeIcon } from './QrCode';
+export { CircleIcon } from './CircleIcon';

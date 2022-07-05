@@ -3,8 +3,9 @@ import NextLink from 'next/link';
 import Image from 'next/image';
 //UI
 import { motion } from 'framer-motion';
-import { RoundedRightArrow } from '../Icons';
+import { RoundedRightArrow, CircleIcon } from '../Icons';
 import { MdOutlineDownload, MdOutlineCopyAll, MdOutlineCheck } from 'react-icons/md';
+import { BsFillTagsFill } from 'react-icons/bs';
 import {
 	Box,
 	Text,
@@ -19,10 +20,9 @@ import {
 //Types
 import { Item } from '@roottypes/gallery'
 
-type Props = { item: Item }
-type DownloadInfo = { url: string, ext: string }
+type Props = { item: Item, openCreateTag: () => void }
 
-export const Card = ({ item }: Props) => {
+export const Card = ({ item, openCreateTag }: Props) => {
 	const [isCopy, setCopy] = useState<boolean>(false);
 	const downloadRef = useRef<HTMLAnchorElement>(null)
 
@@ -71,7 +71,7 @@ export const Card = ({ item }: Props) => {
 			>
 				<VStack px='3' py='2' h='100%' justifyContent='space-between'>
 					<Box w='100%'>
-						<Heading mb={1} fontSize='md'>
+						<Heading fontSize='md'>
 							{item.title}
 						</Heading>
 						<Text color='gray.300' fontSize='sm' fontWeight='semibold' maxW='95%' textOverflow='ellipsis' overflow='hidden' whiteSpace='nowrap' >
@@ -104,19 +104,23 @@ export const Card = ({ item }: Props) => {
 							)}
 						</Flex>
 						<HStack spacing='2'>
-							<Circle
-								_active={{ transform: 'scale(0.8)' }}
-								transition='transform .1s linear'
+							<CircleIcon
 								bg='pink.500'
 								size='35px'
-								cursor='pointer'
+								iconSize='15px'
+								IconAs={BsFillTagsFill}
+								onClick={openCreateTag}
+							/>
+							<CircleIcon
+								bg='pink.700'
+								size='35px'
+								iconSize='20px'
+								IconAs={MdOutlineDownload}
 								onClick={handleDownload}
-							>
-								<Icon color='white' h='20px' w='20px' as={MdOutlineDownload} />
-							</Circle>
+							/>
 							<NextLink href={`detail/${item.id}`} passHref={true}>
 								<a>
-									<RoundedRightArrow size='35px' bg='purple.500' iconSize='20px' />
+									<RoundedRightArrow size='35px' bg='purple.600' iconSize='20px' />
 								</a>
 							</NextLink>
 						</HStack>
