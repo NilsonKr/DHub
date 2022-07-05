@@ -1,5 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
-import { useTags } from '@hooks/useTags'
+import { useContext } from 'react';
 //Context
 import { tagsContext } from '@context/TagsContext'
 //UI
@@ -7,9 +6,6 @@ import { HStack, Text, Flex } from '@chakra-ui/react';
 import { NewTag, Clear } from '../Buttons';
 import { TagHub } from '../Miscellaneous/Tag';
 import { SkeletonTag } from '../Miscellaneous/SkeletonTag';
-//DB
-import { GetTags } from '@db/tags/index'
-import { TagsRecord } from '@roottypes/gallery'
 
 const mockTags = [
 	'Background',
@@ -21,9 +17,9 @@ const mockTags = [
 	'hobbies',
 ];
 
-type TProps = { newTag: () => void };
+type TProps = { newTag: () => void; account: string };
 
-export const TagsCarousel = ({ newTag }: TProps) => {
+export const TagsCarousel = ({ account, newTag }: TProps) => {
 	const { tags, selected, isLoading, toggleSelect, resetSelected } = useContext(tagsContext)
 
 	return (
@@ -42,7 +38,7 @@ export const TagsCarousel = ({ newTag }: TProps) => {
 			>
 				{!isLoading && (tags.length > 0 ? (
 					tags.map((tag, i) => (
-						<TagHub selectedList={selected} select={toggleSelect} tag={tag} key={i} />
+						<TagHub account={account} selectedList={selected} select={toggleSelect} tag={tag} key={i} />
 					))
 				) : (
 					<>

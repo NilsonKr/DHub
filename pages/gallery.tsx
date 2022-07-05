@@ -75,7 +75,7 @@ const gallery = () => {
 						We couldn't find any match :(
 					</Heading>
 				</Flex>}
-				{files.length > 0 && <TagsCarousel newTag={() => setModal('new_tag')} />}
+				{files.length > 0 && <TagsCarousel account={account} newTag={() => setModal('new_tag')} />}
 			</Box>
 			<Box position='absolute' top='0px' left='10px' zIndex='-1'>
 				<BgLeftAdornment />

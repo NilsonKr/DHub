@@ -11,22 +11,54 @@ import {
 	HStack,
 	PopoverCloseButton,
 	Heading,
-	MenuList,
-	MenuItem,
-	Menu,
 	Text,
 	Fade,
+	useToast
 } from '@chakra-ui/react';
 import { Tag, TagLabel, TagLeftIcon } from '@chakra-ui/react';
 import { DeleteIcon } from '@chakra-ui/icons';
 import { BsFillTagsFill } from 'react-icons/bs';
 import { GenericBtn } from '../Buttons';
+//Db
+import { DeleteTag } from '@db/tags'
 
-type TProps = { select: (tag: Ttag) => void; tag: Ttag; selectedList: Ttag[] };
+type TProps = { account: string; tag: Ttag; selectedList: Ttag[]; select: (tag: Ttag) => void; };
 
-export const TagHub = ({ tag, select, selectedList }: TProps) => {
+export const TagHub = ({ account, tag, selectedList, select }: TProps) => {
+	const showToast = useToast()
 	const [view, setView] = useState<number>(0);
 	const [openDelete, setOpenDelete] = useState<boolean>(false);
+	const [isLoading, setIsLoading] = useState<boolean>(false)
+
+	const handleToggle = () => {
+		setOpenDelete(prev => !prev)
+		setView(0)
+	}
+
+	const handleDeleteTag = async () => {
+		setIsLoading(true)
+		try {
+			await DeleteTag(account, tag)
+
+			handleToggle()
+			showToast({
+				title: `Bye bye ${tag}!`,
+				description: `Your old tag has been deleted`,
+				status: 'success',
+				duration: 200,
+				position: 'top',
+			})
+		} catch (error) {
+			showToast({
+				title: `There was an unexpected error`,
+				description: 'Please, try again',
+				status: 'error',
+				duration: 2500,
+				position: 'top',
+			})
+		}
+		setIsLoading(true)
+	}
 
 	return (
 		<Popover isOpen={openDelete} onClose={() => setOpenDelete(false)} closeOnBlur={true}>
@@ -35,8 +67,7 @@ export const TagHub = ({ tag, select, selectedList }: TProps) => {
 					onClick={() => select(tag)}
 					onContextMenu={e => {
 						e.preventDefault();
-						setOpenDelete(prev => !prev);
-						setView(0);
+						handleToggle()
 					}}
 					_hover={{ bg: 'pink.800' }}
 					cursor='pointer'
@@ -83,10 +114,7 @@ export const TagHub = ({ tag, select, selectedList }: TProps) => {
 						<PopoverFooter borderColor='transparent' mt='2'>
 							<HStack w='100%' justify='end' spacing={3}>
 								<GenericBtn
-									handleClick={() => {
-										setOpenDelete(false);
-										setView(0);
-									}}
+									handleClick={handleToggle}
 									activeColor='purple.900'
 									hoverColor='gray.800'
 									variant='outline'
@@ -95,10 +123,7 @@ export const TagHub = ({ tag, select, selectedList }: TProps) => {
 									Cancel
 								</GenericBtn>
 								<GenericBtn
-									handleClick={() => {
-										setOpenDelete(false);
-										setView(0);
-									}}
+									handleClick={handleDeleteTag}
 									bg='red.400'
 									hoverColor='red.600'
 									activeColor='red.300'
