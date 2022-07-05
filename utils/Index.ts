@@ -1,1 +1,1 @@
-export default {};
+export { USER_COLLECTION } from './constants';
