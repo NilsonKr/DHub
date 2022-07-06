@@ -19,12 +19,10 @@ import { Tag, TagLabel, TagLeftIcon } from '@chakra-ui/react';
 import { DeleteIcon } from '@chakra-ui/icons';
 import { BsFillTagsFill } from 'react-icons/bs';
 import { GenericBtn } from '../Buttons';
-//Db
-import { DeleteTag } from '@db/tags'
 
-type TProps = { account: string; tag: Ttag; selectedList: Ttag[]; select: (tag: Ttag) => void; };
+type TProps = { tag: Ttag; selectedList: Ttag[]; deleteTag: (tag: string, cb: () => void) => Promise<void>; select: (tag: Ttag) => void; };
 
-export const TagHub = ({ account, tag, selectedList, select }: TProps) => {
+export const TagHub = ({ tag, selectedList, deleteTag, select }: TProps) => {
 	const showToast = useToast()
 	const [view, setView] = useState<number>(0);
 	const [openDelete, setOpenDelete] = useState<boolean>(false);
@@ -37,27 +35,8 @@ export const TagHub = ({ account, tag, selectedList, select }: TProps) => {
 
 	const handleDeleteTag = async () => {
 		setIsLoading(true)
-		try {
-			await DeleteTag(account, tag)
-
-			handleToggle()
-			showToast({
-				title: `Bye bye ${tag}!`,
-				description: `Your old tag has been deleted`,
-				status: 'success',
-				duration: 200,
-				position: 'top',
-			})
-		} catch (error) {
-			showToast({
-				title: `There was an unexpected error`,
-				description: 'Please, try again',
-				status: 'error',
-				duration: 2500,
-				position: 'top',
-			})
-		}
-		setIsLoading(true)
+		await deleteTag(tag, handleToggle)
+		setIsLoading(false)
 	}
 
 	return (

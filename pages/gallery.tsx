@@ -18,6 +18,7 @@ const gallery = () => {
 	const { user } = useContext(authContext)
 	const [modal, setModal] = useState<string>('');
 	const { files, searchedItems, isLoading, getUserFiles, handleSearch } = useGallery()
+	const [selected, setSelected] = useState<number>(null)
 
 	return (
 		<TagsContext>
@@ -56,7 +57,7 @@ const gallery = () => {
 					>
 						{searchedItems.map((item, i) => (
 							<GridItem key={i} h='100%' w='100%' borderRadius='5px'>
-								<Card item={item} openCreateTag={() => setModal('new_tag')} />
+								<Card item={item} setSelected={() => setSelected(i)} openCreateTag={() => setModal('new_tag')} />
 							</GridItem>
 						))}
 					</Grid>
@@ -83,7 +84,14 @@ const gallery = () => {
 			<Box position='absolute' bottom='0px' right='0px' zIndex='-1'>
 				<BgRightAdornment />
 			</Box>
-			<CreateTagModal account={account} open={modal === 'new_tag'} close={() => setModal('')} />
+			<CreateTagModal
+				account={account}
+				open={modal === 'new_tag'}
+				close={() => {
+					setModal('')
+					setSelected(null)
+				}}
+				tagsFrom={selected} />
 			{modal === 'new_upload' && <UploadModal refreshItems={getUserFiles} close={() => setModal('')} />}
 		</TagsContext>
 	);

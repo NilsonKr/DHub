@@ -2,10 +2,12 @@ import { useContext } from 'react';
 //Context
 import { tagsContext } from '@context/TagsContext'
 //UI
-import { HStack, Text, Flex } from '@chakra-ui/react';
+import { HStack, Text, Flex, useToast } from '@chakra-ui/react';
 import { NewTag, Clear } from '../Buttons';
 import { TagHub } from '../Miscellaneous/Tag';
 import { SkeletonTag } from '../Miscellaneous/SkeletonTag';
+//Db
+import { DeleteTag } from '@db/tags'
 
 const mockTags = [
 	'Background',
@@ -20,7 +22,31 @@ const mockTags = [
 type TProps = { newTag: () => void; account: string };
 
 export const TagsCarousel = ({ account, newTag }: TProps) => {
+	const showToast = useToast()
 	const { tags, selected, isLoading, toggleSelect, resetSelected } = useContext(tagsContext)
+
+	const deleteMethod = async (tag: string, cb: () => void) => {
+		try {
+			await DeleteTag(account, tag)
+
+			cb()
+			showToast({
+				title: `Bye bye ${tag}!`,
+				description: `Your old tag has been deleted`,
+				status: 'success',
+				duration: 200,
+				position: 'top',
+			})
+		} catch (error) {
+			showToast({
+				title: `There was an unexpected error`,
+				description: 'Please, try again',
+				status: 'error',
+				duration: 2500,
+				position: 'top',
+			})
+		}
+	}
 
 	return (
 		<Flex align='center' w='100%'>
@@ -38,7 +64,7 @@ export const TagsCarousel = ({ account, newTag }: TProps) => {
 			>
 				{!isLoading && (tags.length > 0 ? (
 					tags.map((tag, i) => (
-						<TagHub account={account} selectedList={selected} select={toggleSelect} tag={tag} key={i} />
+						<TagHub deleteTag={deleteMethod} selectedList={selected} select={toggleSelect} tag={tag} key={i} />
 					))
 				) : (
 					<>

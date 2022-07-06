@@ -20,9 +20,9 @@ import {
 //Types
 import { Item } from '@roottypes/gallery'
 
-type Props = { item: Item, openCreateTag: () => void }
+type Props = { item: Item, setSelected: () => void; openCreateTag: () => void }
 
-export const Card = ({ item, openCreateTag }: Props) => {
+export const Card = ({ item, setSelected, openCreateTag }: Props) => {
 	const [isCopy, setCopy] = useState<boolean>(false);
 	const downloadRef = useRef<HTMLAnchorElement>(null)
 
@@ -109,7 +109,10 @@ export const Card = ({ item, openCreateTag }: Props) => {
 								size='35px'
 								iconSize='15px'
 								IconAs={BsFillTagsFill}
-								onClick={openCreateTag}
+								onClick={() => {
+									setSelected()
+									openCreateTag()
+								}}
 							/>
 							<CircleIcon
 								bg='pink.700'
