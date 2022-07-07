@@ -8,8 +8,8 @@ type ReturnProps = {
 	resetSelected: () => void;
 };
 
-export const useTags = (): ReturnProps => {
-	const [tags, setTags] = useState<Ttag[]>([]);
+export const useTags = (initialTags: string[] = []): ReturnProps => {
+	const [tags, setTags] = useState<Ttag[]>(initialTags);
 	const [selected, setSelectedTags] = useState<Ttag[]>([]);
 
 	const toggleSelect = (tag: Ttag) => {

@@ -6,7 +6,7 @@ import { TagHub } from '@components/Miscellaneous'
 
 type ComponentProps = { index: number }
 
-export const ItemTags: React.FC<ComponentProps> = ({ index }) => {
+export const ItemTagsRow: React.FC<ComponentProps> = ({ index }) => {
   const { tags, docTags } = useContext(tagsContext)
   const showToast = useToast()
 

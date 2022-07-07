@@ -12,6 +12,7 @@ import { BgLeftAdornment, BgRightAdornment, EmptyHubDraw } from '../components/I
 import { SearchInput, TagsCarousel, MenuActions, Upload } from '../components/Index';
 //HOC
 import InstantAuth from '@components/HOC/InstantAuth'
+import { ItemTags } from '@components/Modal/ItemTags';
 
 const gallery = () => {
 	const { account } = useWallet()
@@ -57,7 +58,7 @@ const gallery = () => {
 					>
 						{searchedItems.map((item, i) => (
 							<GridItem key={i} h='100%' w='100%' borderRadius='5px'>
-								<Card item={item} setSelected={() => setSelected(i)} openCreateTag={() => setModal('new_tag')} />
+								<Card item={item} setSelected={() => setSelected(i)} openCreateTag={() => setModal('item_tags')} />
 							</GridItem>
 						))}
 					</Grid>
@@ -91,7 +92,8 @@ const gallery = () => {
 					setModal('')
 					setSelected(null)
 				}}
-				tagsFrom={selected} />
+			/>
+			<ItemTags tagsFrom={selected} open={modal === 'item_tags'} close={(newModal?: string) => setModal(newModal || '')} />
 			{modal === 'new_upload' && <UploadModal refreshItems={getUserFiles} close={() => setModal('')} />}
 		</TagsContext>
 	);

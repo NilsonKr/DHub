@@ -21,14 +21,13 @@ import {
 } from '@chakra-ui/react';
 import { AiOutlineTags } from 'react-icons/ai';
 import { GenericBtn } from '../Buttons/index';
-import { ItemTags } from '@components/Miscellaneous/'
 //DB
 import { AddTag, CreateTags } from '@db/tags'
 
-type TProps = { account: string; open: boolean; tagsFrom: number; close: () => void; };
+type TProps = { account: string; open: boolean; close: () => void; };
 
-export const CreateTagModal = ({ account, open, tagsFrom, close }: TProps) => {
-	const { tags, docTags } = useContext(tagsContext)
+export const CreateTagModal = ({ account, open, close }: TProps) => {
+	const { tags } = useContext(tagsContext)
 	const showToast = useToast()
 	const [tag, setTag] = useState<string>('')
 	const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -67,14 +66,8 @@ export const CreateTagModal = ({ account, open, tagsFrom, close }: TProps) => {
 			<ModalOverlay />
 			<ModalContent bg='gray.800'>
 				<ModalCloseButton />
-				{tagsFrom !== null && <>
-					<ModalBody my='5'>
-						<ItemTags index={tagsFrom} />
-					</ModalBody>
-					<Divider orientation='horizontal' w='90%' margin='0 auto' borderWidth='1px' />
-				</>}
 				<ModalHeader>Crate New Tag</ModalHeader>
-				<ModalBody >
+				<ModalBody my='4'>
 					<InputGroup>
 						<Input onChange={(e) => setTag(e.target.value)} placeholder='Type a name' _placeholder={{ color: 'gray.400' }} />
 						<InputRightAddon

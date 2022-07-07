@@ -19,11 +19,23 @@ const mockTags = [
 	'hobbies',
 ];
 
-type TProps = { newTag: () => void; account: string };
+type TProps = {
+	account: string,
+	selected?: string[],
+	newTag: () => void,
+	toggleSelect?: (tag: string) => void;
+	resetSelected?: () => void
+};
 
-export const TagsCarousel = ({ account, newTag }: TProps) => {
+export const TagsCarousel = ({ account, selected, newTag, resetSelected, toggleSelect }: TProps) => {
 	const showToast = useToast()
-	const { tags, selected, isLoading, toggleSelect, resetSelected } = useContext(tagsContext)
+	const tagsContextValues = useContext(tagsContext)
+
+	const { tags, isLoading } = tagsContextValues
+
+	const selectedTags = selected || tagsContextValues.selected
+	const toggleTag = toggleSelect || tagsContextValues.toggleSelect
+	const resetSelectedTags = resetSelected || tagsContextValues.resetSelected
 
 	const deleteMethod = async (tag: string, cb: () => void) => {
 		try {
@@ -51,7 +63,7 @@ export const TagsCarousel = ({ account, newTag }: TProps) => {
 	return (
 		<Flex align='center' w='100%'>
 			{tags.length > 0 && (
-				<Clear list={selected} handleClear={resetSelected} />
+				<Clear list={selectedTags} handleClear={resetSelectedTags} />
 			)}
 			<HStack
 				w='100%'
@@ -64,7 +76,7 @@ export const TagsCarousel = ({ account, newTag }: TProps) => {
 			>
 				{!isLoading && (tags.length > 0 ? (
 					tags.map((tag, i) => (
-						<TagHub deleteTag={deleteMethod} selectedList={selected} select={toggleSelect} tag={tag} key={i} />
+						<TagHub deleteTag={deleteMethod} selectedList={selectedTags} select={toggleTag} tag={tag} key={i} />
 					))
 				) : (
 					<>
