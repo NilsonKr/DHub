@@ -31,8 +31,11 @@ import { AddTag, CreateTags } from '@db/tags'
 type ComponentProps = { tagsFrom: number, open: boolean, close: (newModal?: string) => void }
 
 export const ItemTags: React.FC<ComponentProps> = ({ open, tagsFrom, close }) => {
+  if (tagsFrom === null)
+    return null
+
   const { account } = useWallet()
-  const { tags } = useContext(tagsContext)
+  const { tags, isLoading: isLoadingTags, docTags } = useContext(tagsContext)
   const { selected, resetSelected, toggleSelect } = useTags(tags)
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
@@ -48,14 +51,21 @@ export const ItemTags: React.FC<ComponentProps> = ({ open, tagsFrom, close }) =>
       </>}
       <ModalHeader pb='0' >Add a new Tag</ModalHeader>
       <ModalBody>
-        <TagsCarousel selected={selected} toggleSelect={toggleSelect} resetSelected={resetSelected} account={account} newTag={() => close('new_tag')} />
+        <TagsCarousel
+          account={account}
+          tags={tags.filter((_, index) => !docTags[tagsFrom].includes(`${index}`))}
+          isLoading={isLoadingTags}
+          selectedTags={selected}
+          toggleSelect={toggleSelect}
+          resetSelected={resetSelected}
+          newTag={() => close('new_tag')} />
       </ModalBody>
       <ModalFooter>
         <ButtonGroup spacing={4}>
           <Button onClick={() => close()} variant='outline' colorScheme='white' disabled={false}>
             Close
           </Button>
-          <GenericBtn w='100px' handleClick={() => { }} disabled={selected.length || isLoading} colorSchema='purple'>
+          <GenericBtn w='100px' handleClick={() => { }} disabled={!selected.length || isLoading} colorSchema='purple'>
             {isLoading ? <Spinner size='md' color='white' /> : 'Add tags'}
           </GenericBtn>
         </ButtonGroup>

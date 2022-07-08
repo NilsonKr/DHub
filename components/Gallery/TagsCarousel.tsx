@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 //Context
 import { tagsContext } from '@context/TagsContext'
 //UI
@@ -19,23 +19,20 @@ const mockTags = [
 	'hobbies',
 ];
 
-type TProps = {
+type ComponentProps = {
 	account: string,
-	selected?: string[],
+	tags: string[]
+	selectedTags: string[],
+	isLoading: boolean,
 	newTag: () => void,
-	toggleSelect?: (tag: string) => void;
-	resetSelected?: () => void
+	toggleSelect: (tag: string) => void;
+	resetSelected: () => void
 };
 
-export const TagsCarousel = ({ account, selected, newTag, resetSelected, toggleSelect }: TProps) => {
+export const TagsCarousel: React.FC<ComponentProps> = ({
+	account, tags, selectedTags, isLoading, newTag, resetSelected, toggleSelect }
+) => {
 	const showToast = useToast()
-	const tagsContextValues = useContext(tagsContext)
-
-	const { tags, isLoading } = tagsContextValues
-
-	const selectedTags = selected || tagsContextValues.selected
-	const toggleTag = toggleSelect || tagsContextValues.toggleSelect
-	const resetSelectedTags = resetSelected || tagsContextValues.resetSelected
 
 	const deleteMethod = async (tag: string, cb: () => void) => {
 		try {
@@ -63,7 +60,7 @@ export const TagsCarousel = ({ account, selected, newTag, resetSelected, toggleS
 	return (
 		<Flex align='center' w='100%'>
 			{tags.length > 0 && (
-				<Clear list={selectedTags} handleClear={resetSelectedTags} />
+				<Clear list={selectedTags} handleClear={resetSelected} />
 			)}
 			<HStack
 				w='100%'
@@ -76,7 +73,7 @@ export const TagsCarousel = ({ account, selected, newTag, resetSelected, toggleS
 			>
 				{!isLoading && (tags.length > 0 ? (
 					tags.map((tag, i) => (
-						<TagHub deleteTag={deleteMethod} selectedList={selectedTags} select={toggleTag} tag={tag} key={i} />
+						<TagHub deleteTag={deleteMethod} selectedList={selectedTags} select={toggleSelect} tag={tag} key={i} />
 					))
 				) : (
 					<>

@@ -1,6 +1,7 @@
 import { useState, useContext } from 'react';
 import { useGallery } from '@hooks/web3/useGallery'
 import { authContext } from '@context/AuthContext'
+import { tagsContext } from '@context/TagsContext'
 import { useWallet } from '@hooks/web3/useWallet';
 import NextImage from 'next/image'
 //Context
@@ -9,10 +10,11 @@ import { TagsContext } from '@context/TagsContext'
 import { Box, Grid, GridItem, Heading, Flex } from '@chakra-ui/react';
 import { Card, CreateTagModal, UploadModal, SkeletonCard } from '../components/Index';
 import { BgLeftAdornment, BgRightAdornment, EmptyHubDraw } from '../components/Icons/';
-import { SearchInput, TagsCarousel, MenuActions, Upload } from '../components/Index';
+import { SearchInput, GalleryTags, MenuActions, Upload } from '../components/Index';
+import { ItemTags } from '@components/Modal/ItemTags';
 //HOC
 import InstantAuth from '@components/HOC/InstantAuth'
-import { ItemTags } from '@components/Modal/ItemTags';
+import GalleryWrapper from '@components/HOC/GalleryWrapper';
 
 const gallery = () => {
 	const { account } = useWallet()
@@ -22,7 +24,7 @@ const gallery = () => {
 	const [selected, setSelected] = useState<number>(null)
 
 	return (
-		<TagsContext>
+		<>
 			<Box as='section' mt='80px' w='100%'>
 				<Flex w='100%' justifyContent='space-between' align='end' mb='10px'>
 					<Heading>{user?.name}'s Gallery</Heading>
@@ -77,7 +79,7 @@ const gallery = () => {
 						We couldn't find any match :(
 					</Heading>
 				</Flex>}
-				{files.length > 0 && <TagsCarousel account={account} newTag={() => setModal('new_tag')} />}
+				{files.length > 0 && <GalleryTags account={account} openNewTag={() => setModal('new_tag')} />}
 			</Box>
 			<Box position='absolute' top='0px' left='10px' zIndex='-1'>
 				<BgLeftAdornment />
@@ -95,8 +97,8 @@ const gallery = () => {
 			/>
 			<ItemTags tagsFrom={selected} open={modal === 'item_tags'} close={(newModal?: string) => setModal(newModal || '')} />
 			{modal === 'new_upload' && <UploadModal refreshItems={getUserFiles} close={() => setModal('')} />}
-		</TagsContext>
+		</>
 	);
 };
 
-export default InstantAuth(gallery);
+export default InstantAuth(GalleryWrapper(gallery));

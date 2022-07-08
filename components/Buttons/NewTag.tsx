@@ -15,6 +15,7 @@ export const NewTag = ({ create, isVariant }: TNewProps) => {
 			transition='transform .1s linear'
 			bg='#FF0099'
 			borderRadius='10px'
+			minW='90px'
 			p='0px 12px'
 			h='32px'
 			rightIcon={<AddIcon color='white' h='12px' w='12px' />}
