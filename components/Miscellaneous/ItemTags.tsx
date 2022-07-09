@@ -4,9 +4,11 @@ import { tagsContext } from '@context/TagsContext'
 import { HStack, Text, useToast } from '@chakra-ui/react'
 import { TagHub } from '@components/Miscellaneous'
 
-type ComponentProps = { index: number }
+import { GenericBtn } from '@components/Buttons/GenericBtn'
 
-export const ItemTagsRow: React.FC<ComponentProps> = ({ index }) => {
+type ComponentProps = { index: number, linkTag: () => void }
+
+export const ItemTagsRow: React.FC<ComponentProps> = ({ index, linkTag }) => {
   const { tags, docTags } = useContext(tagsContext)
   const showToast = useToast()
 
@@ -19,6 +21,7 @@ export const ItemTagsRow: React.FC<ComponentProps> = ({ index }) => {
       <HStack
         w='100%'
         pt='5'
+        px='1'
         spacing='1'
         overflowY='auto'
         overflowX='scroll'
@@ -29,9 +32,10 @@ export const ItemTagsRow: React.FC<ComponentProps> = ({ index }) => {
           ))
         ) : (
           <>
-            <Text fontSize='lg' mr='2'>
-              👋 You don't have any tags yet, Create your first one!
+            <Text fontSize='md' mr='1' color='gray.400'>
+              You have not added any tags to this item yet
             </Text>
+            <GenericBtn handleClick={linkTag} bg='#FF0099' hoverColor='pink.400' p='0px 20px'> Add one </GenericBtn>
           </>
         ))}
       </HStack>

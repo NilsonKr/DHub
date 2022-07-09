@@ -43,7 +43,7 @@ export const TagsCarousel: React.FC<ComponentProps> = ({
 				title: `Bye bye ${tag}!`,
 				description: `Your old tag has been deleted`,
 				status: 'success',
-				duration: 200,
+				duration: 2000,
 				position: 'top',
 			})
 		} catch (error) {

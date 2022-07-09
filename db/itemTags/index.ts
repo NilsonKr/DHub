@@ -11,21 +11,20 @@ import {
 } from 'firebase/firestore';
 import { FirebaseError } from 'firebase/app';
 
-import { dbInstance } from '../';
+import { dbInstance } from '..';
 
 import { USER_COLLECTION } from '@utils/index';
-
-type LinkedDocs = { [k: number]: string[] };
+import { DocTags } from '@roottypes/gallery';
 
 export const AddTagsToItem = async (
 	account: string,
-	tagIndex: number,
+	tagsIndex: number[],
 	itemId: number,
-	current: LinkedDocs
+	current: DocTags
 ) => {
 	try {
 		await updateDoc(doc(dbInstance, USER_COLLECTION, account), {
-			linkedDocs: { ...current, [itemId]: [...current[itemId], tagIndex] },
+			linkedDocs: { ...current, [itemId]: [...current[itemId], ...tagsIndex] },
 		});
 	} catch (error) {
 		console.log(error);

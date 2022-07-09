@@ -8,7 +8,7 @@ export type Item = {
 };
 
 export type DocTags = {
-	[x: string]: string[];
+	[x: string]: number[];
 };
 
 export type TagsRecord = {
