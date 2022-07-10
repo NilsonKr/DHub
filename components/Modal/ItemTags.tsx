@@ -20,19 +20,15 @@ import {
   Flex,
   useToast,
 } from '@chakra-ui/react';
-import { AiOutlineTags } from 'react-icons/ai';
 import { GenericBtn } from '../Buttons/index';
 import { ItemTagsRow } from '@components/Miscellaneous/'
 import { TagsCarousel } from '@components/Gallery/TagsCarousel'
 //DB
 import { AddTagsToItem } from '@db/itemTags/'
 
-type ComponentProps = { tagsFrom: number, open: boolean, close: (newModal?: string) => void }
+type ComponentProps = { tagsFrom: number, close: (newModal?: string) => void }
 
-export const ItemTags: React.FC<ComponentProps> = ({ open, tagsFrom, close }) => {
-  if (tagsFrom === null)
-    return null
-
+export const ItemTags: React.FC<ComponentProps> = ({ tagsFrom, close }) => {
   const showToast = useToast()
   const { account } = useWallet()
   const { tags, isLoading: isLoadingTags, docTags } = useContext(tagsContext)
@@ -74,13 +70,13 @@ export const ItemTags: React.FC<ComponentProps> = ({ open, tagsFrom, close }) =>
 
   const availableTags = tags.filter((_, index) => !docTags[tagsFrom].includes(index))
 
-  return <Modal isOpen={open} onClose={close}>
+  return <Modal isOpen onClose={close}>
     <ModalOverlay />
     <ModalContent bg='gray.800'>
       <ModalCloseButton />
       {tagsFrom !== null && <>
         <ModalBody my='5'>
-          <ItemTagsRow index={tagsFrom} linkTag={linkTag} />
+          <ItemTagsRow account={account} index={tagsFrom} linkTag={linkTag} />
         </ModalBody>
         <Divider orientation='horizontal' w='90%' margin='0 auto' borderWidth='1px' />
       </>}
@@ -94,12 +90,16 @@ export const ItemTags: React.FC<ComponentProps> = ({ open, tagsFrom, close }) =>
           toggleSelect={toggleSelect}
           resetSelected={resetSelected}
           newTag={() => close('new_tag')}
-        /> : <Flex align='center' gap='1'>
-          <Text>There's no more tags available</Text>
-          <Badge onClick={() => close('new_tag')} fontSize='md' cursor='pointer' colorScheme='purple' textTransform='none'>
-            Create a new one
-          </Badge>
-        </Flex>}
+          blockDelete={true}
+          deleteTag={(tag, index, cb) => { }}
+        />
+          :
+          <Flex align='center' gap='1'>
+            <Text>There's no more tags available</Text>
+            <Badge onClick={() => close('new_tag')} fontSize='md' cursor='pointer' colorScheme='purple' textTransform='none'>
+              Create a new one
+            </Badge>
+          </Flex>}
       </ModalBody>
       <ModalFooter>
         <ButtonGroup spacing={4}>

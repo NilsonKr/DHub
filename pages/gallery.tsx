@@ -95,7 +95,7 @@ const gallery = () => {
 					setSelected(null)
 				}}
 			/>
-			<ItemTags tagsFrom={selected} open={modal === 'item_tags'} close={(newModal?: string) => setModal(newModal || '')} />
+			{modal === 'item_tags' && <ItemTags tagsFrom={selected} close={(newModal?: string) => setModal(newModal || '')} />}
 			{modal === 'new_upload' && <UploadModal refreshItems={getUserFiles} close={() => setModal('')} />}
 		</>
 	);

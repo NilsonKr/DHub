@@ -24,38 +24,16 @@ type ComponentProps = {
 	tags: string[]
 	selectedTags: string[],
 	isLoading: boolean,
+	blockDelete?: boolean,
 	newTag: () => void,
 	toggleSelect: (tag: string) => void;
 	resetSelected: () => void
+	deleteTag: (tag: string, index?: number, cb?: () => void) => Promise<void> | void
 };
 
 export const TagsCarousel: React.FC<ComponentProps> = ({
-	account, tags, selectedTags, isLoading, newTag, resetSelected, toggleSelect }
+	tags, selectedTags, blockDelete, isLoading, newTag, resetSelected, toggleSelect, deleteTag }
 ) => {
-	const showToast = useToast()
-
-	const deleteMethod = async (tag: string, cb: () => void) => {
-		try {
-			await DeleteTag(account, tag)
-
-			cb()
-			showToast({
-				title: `Bye bye ${tag}!`,
-				description: `Your old tag has been deleted`,
-				status: 'success',
-				duration: 2000,
-				position: 'top',
-			})
-		} catch (error) {
-			showToast({
-				title: `There was an unexpected error`,
-				description: 'Please, try again',
-				status: 'error',
-				duration: 2500,
-				position: 'top',
-			})
-		}
-	}
 
 	return (
 		<Flex align='center' w='100%'>
@@ -73,7 +51,7 @@ export const TagsCarousel: React.FC<ComponentProps> = ({
 			>
 				{!isLoading && (tags.length > 0 ? (
 					tags.map((tag, i) => (
-						<TagHub deleteTag={deleteMethod} selectedList={selectedTags} select={toggleSelect} tag={tag} key={i} />
+						<TagHub tag={tag} key={i} blockDelete={blockDelete} selectedList={selectedTags} deleteTag={(tag, cb) => deleteTag(tag, i, cb)} select={toggleSelect} />
 					))
 				) : (
 					<>

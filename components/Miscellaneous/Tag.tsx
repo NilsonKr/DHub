@@ -13,17 +13,21 @@ import {
 	Heading,
 	Text,
 	Fade,
-	useToast
 } from '@chakra-ui/react';
 import { Tag, TagLabel, TagLeftIcon } from '@chakra-ui/react';
 import { DeleteIcon } from '@chakra-ui/icons';
 import { BsFillTagsFill } from 'react-icons/bs';
 import { GenericBtn } from '../Buttons';
 
-type TProps = { tag: Ttag; selectedList: Ttag[]; deleteTag: (tag: string, cb: () => void) => Promise<void>; select: (tag: Ttag) => void; };
+type TProps = {
+	tag: Ttag;
+	selectedList: Ttag[];
+	blockDelete?: boolean;
+	deleteTag: (tag: string, cb?: () => void) => Promise<void> | void;
+	select: (tag: Ttag) => void;
+};
 
-export const TagHub = ({ tag, selectedList, deleteTag, select }: TProps) => {
-	const showToast = useToast()
+export const TagHub = ({ tag, selectedList, blockDelete, deleteTag, select }: TProps) => {
 	const [view, setView] = useState<number>(0);
 	const [openDelete, setOpenDelete] = useState<boolean>(false);
 	const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -46,7 +50,9 @@ export const TagHub = ({ tag, selectedList, deleteTag, select }: TProps) => {
 					onClick={() => select(tag)}
 					onContextMenu={e => {
 						e.preventDefault();
-						handleToggle()
+						if (!blockDelete) {
+							handleToggle()
+						}
 					}}
 					_hover={{ bg: 'pink.800' }}
 					cursor='pointer'

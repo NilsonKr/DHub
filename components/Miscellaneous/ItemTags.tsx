@@ -6,13 +6,33 @@ import { TagHub } from '@components/Miscellaneous'
 
 import { GenericBtn } from '@components/Buttons/GenericBtn'
 
-type ComponentProps = { index: number, linkTag: () => void }
+import { DeleteTagsFrom } from '@db/itemTags'
 
-export const ItemTagsRow: React.FC<ComponentProps> = ({ index, linkTag }) => {
+type ComponentProps = { account: string, index: number, linkTag: () => void }
+
+export const ItemTagsRow: React.FC<ComponentProps> = ({ account, index, linkTag }) => {
   const { tags, docTags } = useContext(tagsContext)
   const showToast = useToast()
 
-  const handleUnlinkTags = async () => {
+  const handleUnlinkTags = async (tag: string, tagIndex: number, cb: () => void) => {
+    try {
+      await DeleteTagsFrom(account, tagIndex, index, docTags)
+      showToast({
+        title: `See you soon ${tag}!`,
+        description: `This has been unliked from the item`,
+        status: 'success',
+        duration: 2000,
+        position: 'top',
+      })
+    } catch (error) {
+      showToast({
+        title: `There was an unexpected error`,
+        description: 'Please, try again',
+        status: 'error',
+        duration: 2500,
+        position: 'top',
+      })
+    }
   }
 
   return (
@@ -28,7 +48,7 @@ export const ItemTagsRow: React.FC<ComponentProps> = ({ index, linkTag }) => {
       >
         {index !== null && (docTags[index].length > 0 ? (
           docTags[index].map((tagIndex, i) => (
-            <TagHub deleteTag={handleUnlinkTags} selectedList={[]} select={() => { }} tag={tags[tagIndex]} key={i} />
+            <TagHub deleteTag={(tag, cb) => handleUnlinkTags(tag, i, cb)} selectedList={[]} select={() => { }} tag={tags[tagIndex]} key={i} />
           ))
         ) : (
           <>

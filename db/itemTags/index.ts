@@ -27,7 +27,24 @@ export const AddTagsToItem = async (
 			linkedDocs: { ...current, [itemId]: [...current[itemId], ...tagsIndex] },
 		});
 	} catch (error) {
-		console.log(error);
+		const msg = (error as FirebaseError).message;
+		throw new Error(msg);
+	}
+};
+
+export const DeleteTagsFrom = async (
+	account: string,
+	index: number,
+	itemId: number,
+	current: DocTags
+) => {
+	try {
+		const newTags = [...current[itemId]];
+		newTags.splice(index, 1);
+		await updateDoc(doc(dbInstance, USER_COLLECTION, account), {
+			linkedDocs: { ...current, [itemId]: [...newTags] },
+		});
+	} catch (error) {
 		const msg = (error as FirebaseError).message;
 		throw new Error(msg);
 	}
