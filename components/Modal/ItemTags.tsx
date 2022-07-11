@@ -38,9 +38,10 @@ export const ItemTags: React.FC<ComponentProps> = ({ tagsFrom, close }) => {
   const addTag = async () => {
     setIsLoading(true)
     const tagsIndex = selected.map(tag => tags.findIndex((val) => val === tag))
-
     try {
       await AddTagsToItem(account, tagsIndex, tagsFrom, docTags)
+
+      resetSelected()
       showToast({
         title: `There're new tags in your item!`,
         description: `Added succesfully`,
@@ -68,7 +69,7 @@ export const ItemTags: React.FC<ComponentProps> = ({ tagsFrom, close }) => {
     }
   }
 
-  const availableTags = tags.filter((_, index) => !docTags[tagsFrom].includes(index))
+  const availableTags = docTags[tagsFrom] ? tags.filter((_, index) => !docTags[tagsFrom].includes(index)) : tags
 
   return <Modal isOpen onClose={close}>
     <ModalOverlay />

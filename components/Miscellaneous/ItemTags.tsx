@@ -17,6 +17,8 @@ export const ItemTagsRow: React.FC<ComponentProps> = ({ account, index, linkTag 
   const handleUnlinkTags = async (tag: string, tagIndex: number, cb: () => void) => {
     try {
       await DeleteTagsFrom(account, tagIndex, index, docTags)
+
+      cb()
       showToast({
         title: `See you soon ${tag}!`,
         description: `This has been unliked from the item`,
@@ -46,7 +48,7 @@ export const ItemTagsRow: React.FC<ComponentProps> = ({ account, index, linkTag 
         overflowY='auto'
         overflowX='scroll'
       >
-        {index !== null && (docTags[index].length > 0 ? (
+        {index !== null && ((docTags[index] && docTags[index].length > 0) ? (
           docTags[index].map((tagIndex, i) => (
             <TagHub deleteTag={(tag, cb) => handleUnlinkTags(tag, i, cb)} selectedList={[]} select={() => { }} tag={tags[tagIndex]} key={i} />
           ))

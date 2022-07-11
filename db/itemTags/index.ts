@@ -23,8 +23,9 @@ export const AddTagsToItem = async (
 	current: DocTags
 ) => {
 	try {
+		const newTags = current[itemId] ? [...current[itemId], ...tagsIndex] : [...tagsIndex];
 		await updateDoc(doc(dbInstance, USER_COLLECTION, account), {
-			linkedDocs: { ...current, [itemId]: [...current[itemId], ...tagsIndex] },
+			linkedDocs: { ...current, [itemId]: newTags },
 		});
 	} catch (error) {
 		const msg = (error as FirebaseError).message;

@@ -60,7 +60,7 @@ const gallery = () => {
 					>
 						{searchedItems.map((item, i) => (
 							<GridItem key={i} h='100%' w='100%' borderRadius='5px'>
-								<Card item={item} setSelected={() => setSelected(i)} openCreateTag={() => setModal('item_tags')} />
+								<Card item={item} setSelected={() => setSelected(Number(item.id))} openCreateTag={() => setModal('item_tags')} />
 							</GridItem>
 						))}
 					</Grid>
