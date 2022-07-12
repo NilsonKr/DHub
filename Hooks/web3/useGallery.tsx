@@ -1,9 +1,10 @@
-import { useEffect, useState, useContext } from 'react'
+import { useEffect, useState, useContext, useMemo } from 'react'
 import { useWallet } from './useWallet'
 import { useContract } from './useContract'
 import { authContext } from '@context/AuthContext'
 import { useToast } from '@chakra-ui/react'
 import { useSearch } from '@hooks/useSearch'
+import { tagsContext } from '@context/TagsContext'
 //Types
 import { Item } from '@roottypes/gallery'
 
@@ -17,6 +18,7 @@ type HookShape = () => {
 
 export const useGallery: HookShape = () => {
   const { isAuth } = useContext(authContext)
+  const { tags, selected, docTags } = useContext(tagsContext)
   const { account } = useWallet()
   const DhubContract = useContract()
   const showToast = useToast()
@@ -48,5 +50,25 @@ export const useGallery: HookShape = () => {
     setLoading(false)
   }
 
-  return { files, searchedItems: items, isLoading, getUserFiles, handleSearch }
+  const filterByTag = (item: Item) => {
+    const isSelected = selected.find(selectedTag => {
+      const targetIdx = tags.findIndex(tag => tag === selectedTag)
+      return docTags[item.id].includes(targetIdx)
+    })
+
+    return isSelected
+  }
+
+  const searchedItems = useMemo(() => items.filter(item => {
+    if (!selected.length)
+      return true
+
+    if (!docTags[item.id])
+      return false
+
+    const isSelected = filterByTag(item)
+    return isSelected
+  }), [items, selected, docTags])
+
+  return { files, searchedItems, isLoading, getUserFiles, handleSearch }
 }
