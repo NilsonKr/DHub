@@ -16,6 +16,7 @@ import {
 	Button,
 	ButtonGroup,
 	Spinner,
+	Divider,
 	useToast
 } from '@chakra-ui/react';
 import { AiOutlineTags } from 'react-icons/ai';
@@ -66,7 +67,7 @@ export const CreateTagModal = ({ account, open, close }: TProps) => {
 			<ModalContent bg='gray.800'>
 				<ModalCloseButton />
 				<ModalHeader>Crate New Tag</ModalHeader>
-				<ModalBody my='5'>
+				<ModalBody my='4'>
 					<InputGroup>
 						<Input onChange={(e) => setTag(e.target.value)} placeholder='Type a name' _placeholder={{ color: 'gray.400' }} />
 						<InputRightAddon

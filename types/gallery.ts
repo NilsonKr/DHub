@@ -7,6 +7,11 @@ export type Item = {
 	url: string;
 };
 
+export type DocTags = {
+	[x: string]: number[];
+};
+
 export type TagsRecord = {
 	tags: string[];
+	linkedDocs: DocTags;
 };

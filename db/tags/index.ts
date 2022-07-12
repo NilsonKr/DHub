@@ -21,6 +21,7 @@ export const CreateTags = async (account: string, tag: string) => {
 	try {
 		await setDoc(doc(dbInstance, USER_COLLECTION, account), {
 			tags: [tag],
+			linkedDocs: {},
 		});
 
 		return true;

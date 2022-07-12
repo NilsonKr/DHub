@@ -17,6 +17,7 @@ export const Clear = ({
 			bg='purple.600'
 			p='2px 15px'
 			h='32px'
+			minW='90px'
 			borderRadius='15px'
 			leftIcon={<GiBroom size='20px' />}
 			disabled={!list.length}

@@ -1,6 +1,5 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext } from 'react'
 import { authContext } from '@context/AuthContext'
-import { useWallet } from '@hooks/web3/useWallet'
 import { useInitAuth } from '@hooks/web3/useInitAuth'
 
 const InstantAuth = (Component: React.FC<any>): React.FC<any> => {

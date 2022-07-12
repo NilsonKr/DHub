@@ -1,11 +1,13 @@
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 //Context
 import { tagsContext } from '@context/TagsContext'
 //UI
-import { HStack, Text, Flex } from '@chakra-ui/react';
+import { HStack, Text, Flex, useToast } from '@chakra-ui/react';
 import { NewTag, Clear } from '../Buttons';
 import { TagHub } from '../Miscellaneous/Tag';
 import { SkeletonTag } from '../Miscellaneous/SkeletonTag';
+//Db
+import { DeleteTag } from '@db/tags'
 
 const mockTags = [
 	'Background',
@@ -17,15 +19,26 @@ const mockTags = [
 	'hobbies',
 ];
 
-type TProps = { newTag: () => void; account: string };
+type ComponentProps = {
+	account: string,
+	tags: string[]
+	selectedTags: string[],
+	isLoading: boolean,
+	blockDelete?: boolean,
+	newTag: () => void,
+	toggleSelect: (tag: string) => void;
+	resetSelected: () => void
+	deleteTag: (tag: string, index?: number, cb?: () => void) => Promise<void> | void
+};
 
-export const TagsCarousel = ({ account, newTag }: TProps) => {
-	const { tags, selected, isLoading, toggleSelect, resetSelected } = useContext(tagsContext)
+export const TagsCarousel: React.FC<ComponentProps> = ({
+	tags, selectedTags, blockDelete, isLoading, newTag, resetSelected, toggleSelect, deleteTag }
+) => {
 
 	return (
 		<Flex align='center' w='100%'>
 			{tags.length > 0 && (
-				<Clear list={selected} handleClear={resetSelected} />
+				<Clear list={selectedTags} handleClear={resetSelected} />
 			)}
 			<HStack
 				w='100%'
@@ -38,7 +51,7 @@ export const TagsCarousel = ({ account, newTag }: TProps) => {
 			>
 				{!isLoading && (tags.length > 0 ? (
 					tags.map((tag, i) => (
-						<TagHub account={account} selectedList={selected} select={toggleSelect} tag={tag} key={i} />
+						<TagHub tag={tag} key={i} blockDelete={blockDelete} selectedList={selectedTags} deleteTag={(tag, cb) => deleteTag(tag, i, cb)} select={toggleSelect} />
 					))
 				) : (
 					<>
