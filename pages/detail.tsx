@@ -1,15 +1,17 @@
 import { useState } from 'react';
 import Image from 'next/image';
+import { useWallet } from '@hooks/web3/useWallet';
 //UI
 import { QrCodeIcon } from '../components/Icons';
 import {
 	RoundedBtn,
 	CreateTagModal,
 	GenericBtn,
-	TagsList,
 	TransferModal,
 	QRCodeModal,
 } from '../components/Index';
+import { ItemTags as ItemTagsModal } from '@components/Modal/ItemTags';
+import { ItemTagsRow } from '@components/Miscellaneous/';
 import { BiLink } from 'react-icons/bi';
 import { ImCloudDownload } from 'react-icons/im';
 import { IoIosSend } from 'react-icons/io';
@@ -23,13 +25,17 @@ import {
 	Badge,
 	Divider,
 } from '@chakra-ui/react';
+//HOC
+import TagsWrapper from '@components/HOC/TagsWrapper';
+import InstantAuth from '@components/HOC/InstantAuth';
 
 const detail = () => {
+	const { account } = useWallet()
 	const [modal, setModal] = useState<string>('');
 
 	return (
 		<>
-			<VStack spacing={3} h='70vh' mt='50px' w='100%' justify='center' px='10' pb='10'>
+			<VStack spacing={5} h='70vh' mt='50px' w='100%' justify='center' px='10' pb='10'>
 				<Flex justify='start' w='100%'>
 					<Box
 						w='280px'
@@ -88,7 +94,7 @@ const detail = () => {
 						</VStack>
 					</VStack>
 				</Flex>
-				<TagsList newTag={() => setModal('new_tag')} />
+				<ItemTagsRow account={account} id={1} background='gray.900' addIcon linkTag={() => setModal('add_tag')} />
 				<HStack justify='start' spacing={3} w='100%'>
 					<RoundedBtn size='50px' bg='purple.500'>
 						<ImCloudDownload color='white' size='30px' />
@@ -107,11 +113,11 @@ const detail = () => {
 					</GenericBtn>
 				</HStack>
 			</VStack>
-			<CreateTagModal open={modal === 'new_tag'} close={() => setModal('')} />
+			{/* <CreateTagModal account={account} open={modal === 'new_tag'} close={() => setModal('')} /> */}
 			<TransferModal open={modal === 'transfer'} close={() => setModal('')} />
 			<QRCodeModal open={modal === 'qrcode'} close={() => setModal('')} />
 		</>
 	);
 };
 
-export default detail;
+export default InstantAuth(TagsWrapper(detail));

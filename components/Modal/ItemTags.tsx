@@ -77,7 +77,7 @@ export const ItemTags: React.FC<ComponentProps> = ({ tagsFrom, close }) => {
       <ModalCloseButton />
       {tagsFrom !== null && <>
         <ModalBody my='5'>
-          <ItemTagsRow account={account} index={tagsFrom} linkTag={linkTag} />
+          <ItemTagsRow account={account} id={tagsFrom} linkTag={linkTag} />
         </ModalBody>
         <Divider orientation='horizontal' w='90%' margin='0 auto' borderWidth='1px' />
       </>}

@@ -5,7 +5,7 @@ import { TagsContext } from '@context/TagsContext'
 
 type HOCProps = (Gallery: React.FC<any>) => React.FC<any>
 
-const GalleryWrapper: HOCProps = (Gallery) => () => {
+const TagsWrapper: HOCProps = (Gallery) => () => {
   const { isAuth } = useContext(authContext)
 
   return isAuth && (
@@ -15,4 +15,4 @@ const GalleryWrapper: HOCProps = (Gallery) => () => {
   )
 }
 
-export default GalleryWrapper
+export default TagsWrapper
