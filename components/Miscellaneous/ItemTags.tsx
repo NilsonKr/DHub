@@ -43,7 +43,7 @@ export const ItemTagsRow: React.FC<ComponentProps> = ({ account, id, title, back
 
   return (
 
-    <Flex w='100%' bg={background} borderRadius='2xl' padding='10px' >
+    <Flex w='100%' bg={background} borderRadius='2xl' padding='10px 10px 6px' >
       {title && <Text fontSize='lg' fontWeight='500'>Tags related to this item</Text>}
       <HStack
         w='90%'

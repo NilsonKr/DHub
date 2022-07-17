@@ -20,9 +20,9 @@ import {
 //Types
 import { Item } from '@roottypes/gallery'
 
-type Props = { item: Item, setSelected: () => void; openCreateTag: () => void }
+type Props = { index: number, item: Item, setSelected: () => void; openCreateTag: () => void }
 
-export const Card = ({ item, setSelected, openCreateTag }: Props) => {
+export const Card = ({ index, item, setSelected, openCreateTag }: Props) => {
 	const [isCopy, setCopy] = useState<boolean>(false);
 	const downloadRef = useRef<HTMLAnchorElement>(null)
 
@@ -40,7 +40,7 @@ export const Card = ({ item, setSelected, openCreateTag }: Props) => {
 	}
 
 	const handleCopy = () => {
-		navigator.clipboard.writeText(window.location.host + `/detail/${item.id}`);
+		navigator.clipboard.writeText(window.location.host + `/detail/${index}`);
 		setCopy(true);
 		setTimeout(() => setCopy(false), 1500);
 	};
@@ -121,7 +121,7 @@ export const Card = ({ item, setSelected, openCreateTag }: Props) => {
 								IconAs={MdOutlineDownload}
 								onClick={handleDownload}
 							/>
-							<NextLink href={`detail/${item.id}`} passHref={true}>
+							<NextLink href={`detail/${index}`} passHref={true}>
 								<a>
 									<RoundedRightArrow size='35px' bg='purple.600' iconSize='20px' />
 								</a>
