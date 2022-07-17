@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useItemDetail } from '@hooks/web3/useItemDetail'
 import { GetServerSidePropsContext } from 'next'
 import Image from 'next/image';
 import { useRouter } from 'next/router'
@@ -27,6 +28,7 @@ import {
 	Badge,
 	Divider,
 } from '@chakra-ui/react';
+import { PageSkeleton } from '@components/Detail/PageSkeleton'
 //HOC
 import TagsWrapper from '@components/HOC/TagsWrapper';
 import InstantAuth from '@components/HOC/InstantAuth';
@@ -40,10 +42,11 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
 const detail = () => {
 	const { query } = useRouter()
-	const { active, account } = useWallet()
+	const { account } = useWallet()
+	const { item, isLoading } = useItemDetail(query.id as string, account)
 	const [modal, setModal] = useState<string>('');
 
-	return (
+	return (isLoading || !item) ? <PageSkeleton /> : (
 		<>
 			<VStack spacing={5} h='70vh' mt='50px' w='100%' justify='center' px='10' pb='10'>
 				<Flex justify='start' w='100%'>
@@ -81,30 +84,30 @@ const detail = () => {
 							</HStack>
 							<Divider orientation='horizontal' w='100%' bg='white' />
 						</Box>
-						<Heading>MyImage.jpg</Heading>
+						<Heading>{item.title}</Heading>
 						<VStack spacing={4} align='start'>
 							<Flex align='center'>
 								<Text>Owner : </Text>
 								<Badge ml='3' bg='gray.700' p='1' borderRadius='5px'>
-									0x91F1838CC5F17666112E5302C19377cB9e99ccA0
+									{account}
 								</Badge>
 							</Flex>
 							<Flex align='center'>
 								<Text>Size : </Text>
 								<Badge ml='3' bg='gray.700' p='1' borderRadius='5px'>
-									82.6 KB
+									{(item.size)} KB
 								</Badge>
 							</Flex>
 							<Flex align='center'>
 								<Text>Upload Date : </Text>
 								<Badge ml='3' bg='gray.700' p='1' borderRadius='5px'>
-									Sat 29 Jan 9:57 PM
+									{new Date(item.uploadDate).toLocaleDateString()}
 								</Badge>
 							</Flex>
 						</VStack>
 					</VStack>
 				</Flex>
-				<ItemTagsRow account={account} id={Number(query.id)} background='gray.900' addIcon linkTag={() => setModal('add_tag')} />
+				<ItemTagsRow account={account} id={Number(item.id)} background='gray.900' addIcon linkTag={() => setModal('add_tag')} />
 				<HStack justify='start' spacing={3} w='100%'>
 					<RoundedBtn size='50px' bg='purple.500'>
 						<ImCloudDownload color='white' size='30px' />
