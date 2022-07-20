@@ -13,9 +13,8 @@ import {
 	TransferModal,
 	QRCodeModal,
 } from '../../components/Index';
-import { ItemTags as ItemTagsModal } from '@components/Modal/ItemTags';
 import { ItemTagsRow } from '@components/Miscellaneous/';
-import { BiLink } from 'react-icons/bi';
+import { BiLink, BiTrash } from 'react-icons/bi';
 import { ImCloudDownload } from 'react-icons/im';
 import { IoIosSend } from 'react-icons/io';
 import {
@@ -29,6 +28,8 @@ import {
 	Divider,
 } from '@chakra-ui/react';
 import { PageSkeleton } from '@components/Detail/PageSkeleton'
+import { DeleteModal } from '@components/Modal'
+import { ItemTags as ItemTagsModal } from '@components/Modal/ItemTags';
 //HOC
 import TagsWrapper from '@components/HOC/TagsWrapper';
 import InstantAuth from '@components/HOC/InstantAuth';
@@ -67,24 +68,32 @@ const detail = () => {
 					</Box>
 					<VStack w='65%' align='start' spacing={5}>
 						<Box w='100%'>
-							<HStack p='10px 5px' align='center' spacing={5}>
-								<Heading fontWeight='semibold' fontSize='2xl'>
-									Share
-								</Heading>
-								<RoundedBtn
-									bg='purple.500'
-									size='40px'
-									onClick={() => setModal('qrcode')}
-								>
-									<QrCodeIcon size='20px' color='white' />
+							<Flex justifyContent='space-between' align='center'>
+								<HStack p='10px 5px' align='center' spacing={5}>
+									<Heading fontWeight='semibold' fontSize='2xl'>
+										Share
+									</Heading>
+									<RoundedBtn
+										bg='purple.500'
+										size='40px'
+										onClick={() => setModal('qrcode')}
+									>
+										<QrCodeIcon size='20px' color='white' />
+									</RoundedBtn>
+									<RoundedBtn bg='purple.500' size='40px'>
+										<BiLink color='white' size='25px' />
+									</RoundedBtn>
+								</HStack>
+								<RoundedBtn bg='red.500' size='40px' onClick={() => setModal('delete_item')}>
+									<BiTrash color='white' size='25px' />
 								</RoundedBtn>
-								<RoundedBtn bg='purple.500' size='40px'>
-									<BiLink color='white' size='25px' />
-								</RoundedBtn>
-							</HStack>
+							</Flex>
 							<Divider orientation='horizontal' w='100%' bg='white' />
 						</Box>
-						<Heading>{item.title}</Heading>
+						<VStack spacing={1} align='flex-start'>
+							<Heading>{item.title}</Heading>
+							<Text fontSize='lg' fontWeight='n' color='gray.400' >{item.description}</Text>
+						</VStack>
 						<VStack spacing={4} align='start'>
 							<Flex align='center'>
 								<Text>Owner : </Text>
@@ -127,6 +136,7 @@ const detail = () => {
 				</HStack>
 			</VStack>
 			{/* <CreateTagModal account={account} open={modal === 'new_tag'} close={() => setModal('')} /> */}
+			{modal === 'delete_item' && <DeleteModal close={() => setModal(null)} />}
 			<TransferModal open={modal === 'transfer'} close={() => setModal('')} />
 			<QRCodeModal open={modal === 'qrcode'} close={() => setModal('')} />
 		</>

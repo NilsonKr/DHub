@@ -43,7 +43,10 @@ export const PageSkeleton = () => {
             </HStack>
             <Divider orientation='horizontal' w='100%' bg='white' />
           </Box>
-          <Skeleton width='250px' h='30px' />
+          <VStack spacing={2} align='flex-start' width='100%'>
+            <Skeleton minWidth='250px' h='30px' />
+            <Skeleton minWidth='80%' h='20px' />
+          </VStack>
           <VStack spacing={6} align='start' w='100%'>
             <Skeleton speed={1.2} width='100%' h='20px' />
             <Skeleton speed={1.2} width='100%' h='20px' />
