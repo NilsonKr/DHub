@@ -1,13 +1,9 @@
-import React, { useContext } from 'react';
-//Context
-import { tagsContext } from '@context/TagsContext'
+import React from 'react';
 //UI
-import { HStack, Text, Flex, useToast } from '@chakra-ui/react';
+import { HStack, Text, Flex, } from '@chakra-ui/react';
 import { NewTag, Clear } from '../Buttons';
 import { TagHub } from '../Miscellaneous/Tag';
 import { SkeletonTag } from '../Miscellaneous/SkeletonTag';
-//Db
-import { DeleteTag } from '@db/tags'
 
 const mockTags = [
 	'Background',
@@ -48,6 +44,16 @@ export const TagsCarousel: React.FC<ComponentProps> = ({
 				spacing='1'
 				overflowY='auto'
 				overflowX='scroll'
+				css={{
+					'&::-webkit-scrollbar': {
+						height: '4px',
+					},
+					'&::-webkit-scrollbar-thumb': {
+						background: '#757575b3',
+						borderRadius: '20px',
+						opacity: '0.5'
+					},
+				}}
 			>
 				{!isLoading && (tags.length > 0 ? (
 					tags.map((tag, i) => (

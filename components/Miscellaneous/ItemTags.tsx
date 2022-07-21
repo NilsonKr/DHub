@@ -43,13 +43,24 @@ export const ItemTagsRow: React.FC<ComponentProps> = ({ account, id, title, back
 
   return (
 
-    <Flex w='100%' bg={background} borderRadius='2xl' padding='10px 10px 6px' >
+    <Flex w='100%' bg={background} borderRadius='2xl' padding='10px 10px 2px' >
       {title && <Text fontSize='lg' fontWeight='500'>Tags related to this item</Text>}
       <HStack
         w='90%'
         spacing='1'
         overflowY='hidden'
         overflowX='scroll'
+        pb='1'
+        css={{
+          '&::-webkit-scrollbar': {
+            height: '4px',
+          },
+          '&::-webkit-scrollbar-thumb': {
+            background: '#757575b3',
+            borderRadius: '20px',
+            opacity: '0.5'
+          },
+        }}
       >
         {!tagsList && <Spinner color='pink.600' />}
         {id !== null && tagsList && ((tagsList.length > 0) ? (
@@ -66,8 +77,8 @@ export const ItemTagsRow: React.FC<ComponentProps> = ({ account, id, title, back
         ))}
       </HStack>
       {addIcon && tagsList && tagsList.length > 0 && (
-        <RoundedBtn onClick={linkTag} bg='purple.500' size='30px' margin='0 0 0 auto' >
-          <MdOutlineAdd size='25px' color='white' />
+        <RoundedBtn onClick={linkTag} mb='10px' bg='purple.500' size='27px' margin='0 0 0 auto' >
+          <MdOutlineAdd size='22px' color='white' />
         </RoundedBtn>
       )}
     </Flex>

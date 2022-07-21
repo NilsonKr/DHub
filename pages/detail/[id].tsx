@@ -26,6 +26,7 @@ import {
 	Text,
 	Badge,
 	Divider,
+	Highlight
 } from '@chakra-ui/react';
 import { PageSkeleton } from '@components/Detail/PageSkeleton'
 import { DeleteModal } from '@components/Modal'
@@ -135,8 +136,17 @@ const detail = () => {
 					</GenericBtn>
 				</HStack>
 			</VStack>
-			{/* <CreateTagModal account={account} open={modal === 'new_tag'} close={() => setModal('')} /> */}
-			{modal === 'delete_item' && <DeleteModal close={() => setModal(null)} />}
+			<CreateTagModal account={account} open={modal === 'new_tag'} close={() => setModal(null)} />
+			{modal === 'add_tag' && <ItemTagsModal tagsFrom={Number(item.id)} close={(next) => setModal(next || null)} />}
+			{modal === 'delete_item' && <DeleteModal
+				content={<Text color='gray.200' fontSize='lg' fontWeight='semibold'>
+					<Highlight query='MyNft.jpg' styles={{ bg: 'transparent', color: 'red.500' }}>
+						You're about to delete this item ( MyNft.jpg ) from your gallery.
+					</Highlight>
+				</Text>}
+				close={() => setModal(null)}
+			/>
+			}
 			<TransferModal open={modal === 'transfer'} close={() => setModal('')} />
 			<QRCodeModal open={modal === 'qrcode'} close={() => setModal('')} />
 		</>
