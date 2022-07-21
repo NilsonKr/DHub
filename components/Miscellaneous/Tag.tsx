@@ -60,11 +60,11 @@ export const TagHub = ({ tag, selectedList, blockDelete, deleteTag, select }: TP
 					transition='transform .1s linear'
 					bg={selectedList.includes(tag) ? 'pink.300' : '#FF0099'}
 					borderRadius='10px'
-					minW='auto'
+					minW='max-content'
 					pr='10px'
 				>
 					<TagLeftIcon color='black' mr='2' as={BsFillTagsFill} />
-					<TagLabel size={'lg'} color='white'>
+					<TagLabel color='white' >
 						{tag}
 					</TagLabel>
 				</Tag>
