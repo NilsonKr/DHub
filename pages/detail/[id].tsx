@@ -5,7 +5,9 @@ import Image from 'next/image';
 import { useRouter } from 'next/router'
 import { useWallet } from '@hooks/web3/useWallet';
 //UI
+import { Bounce as BounceAnimation } from '@components/Animations/Common'
 import { QrCodeIcon } from '../../components/Icons';
+import { CheckCircleIcon } from '@chakra-ui/icons';
 import {
 	RoundedBtn,
 	CreateTagModal,
@@ -47,6 +49,12 @@ const detail = () => {
 	const { account } = useWallet()
 	const { item, isLoading } = useItemDetail(query.id as string, account)
 	const [modal, setModal] = useState<string>('');
+	const [isCopied, setCopy] = useState<boolean>(false)
+
+	const copy = () => {
+		navigator.clipboard.writeText(item.url)
+		setCopy(true)
+	}
 
 	return (isLoading || !item) ? <PageSkeleton /> : (
 		<>
@@ -62,9 +70,7 @@ const detail = () => {
 						<Image
 							layout='fill'
 							objectFit='cover'
-							src='/assets/exampleImg.jpg'
-							placeholder='blur'
-							blurDataURL='/assets/exampleImg.jpg'
+							src={item.url}
 						/>
 					</Box>
 					<VStack w='65%' align='start' spacing={5}>
@@ -81,9 +87,12 @@ const detail = () => {
 									>
 										<QrCodeIcon size='20px' color='white' />
 									</RoundedBtn>
-									<RoundedBtn bg='purple.500' size='40px'>
+									<RoundedBtn bg='purple.500' size='40px' onClick={copy}>
 										<BiLink color='white' size='25px' />
 									</RoundedBtn>
+									{isCopied && <BounceAnimation duration={1} >
+										<CheckCircleIcon color='green.400' w='25px' h='25px' />
+									</BounceAnimation>}
 								</HStack>
 								<RoundedBtn bg='red.500' size='40px' onClick={() => setModal('delete_item')}>
 									<BiTrash color='white' size='25px' />
@@ -148,7 +157,7 @@ const detail = () => {
 			/>
 			}
 			<TransferModal open={modal === 'transfer'} close={() => setModal('')} />
-			<QRCodeModal open={modal === 'qrcode'} close={() => setModal('')} />
+			<QRCodeModal url={item.url} open={modal === 'qrcode'} close={() => setModal('')} />
 		</>
 	);
 };
