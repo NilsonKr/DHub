@@ -10,7 +10,12 @@ const submitVariants: Variants = {
 	},
 };
 
-export const SubmitEntrance: React.FC<{ delay?: number; duration?: number }> = ({
+type ComponentProps = {
+	delay?: number;
+	duration?: number
+}
+
+export const SubmitEntrance: React.FC<ComponentProps> = ({
 	children,
 	duration,
 	delay,
@@ -26,3 +31,20 @@ export const SubmitEntrance: React.FC<{ delay?: number; duration?: number }> = (
 		</motion.div>
 	);
 };
+
+const bounceVariants: Variants = {
+	bounce: {
+		translateY: [0, -10, 0, -6, 1, -2, 1, 0],
+	},
+};
+
+
+export const Bounce: React.FC<ComponentProps> = ({ children, duration, delay }) => {
+	return <motion.div
+		animate='bounce'
+		transition={{ delay, duration: duration ? duration : 1.5 }}
+		variants={bounceVariants}
+	>
+		{children}
+	</motion.div>
+}
