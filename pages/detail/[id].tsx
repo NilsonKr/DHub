@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useItemDetail } from '@hooks/web3/useItemDetail'
 import { GetServerSidePropsContext } from 'next'
 import Image from 'next/image';
@@ -36,6 +36,8 @@ import { ItemTags as ItemTagsModal } from '@components/Modal/ItemTags';
 //HOC
 import TagsWrapper from '@components/HOC/TagsWrapper';
 import InstantAuth from '@components/HOC/InstantAuth';
+//Utils
+import { handleDownload } from '@utils/Item'
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
 	//This is necessary due metamaks didnt connect automatically due to unknown next's deal with dynamic routes
@@ -48,12 +50,17 @@ const detail = () => {
 	const { query } = useRouter()
 	const { account } = useWallet()
 	const { item, isLoading } = useItemDetail(query.id as string, account)
+	const downloadRef = useRef<HTMLAnchorElement>(null)
 	const [modal, setModal] = useState<string>('');
 	const [isCopied, setCopy] = useState<boolean>(false)
 
 	const copy = () => {
 		navigator.clipboard.writeText(item.url)
 		setCopy(true)
+	}
+
+	const download = () => {
+		handleDownload(downloadRef, item.url, item.title)
 	}
 
 	return (isLoading || !item) ? <PageSkeleton /> : (
@@ -128,9 +135,11 @@ const detail = () => {
 				</Flex>
 				<ItemTagsRow account={account} id={Number(item.id)} background='gray.900' addIcon linkTag={() => setModal('add_tag')} />
 				<HStack justify='start' spacing={3} w='100%'>
-					<RoundedBtn size='50px' bg='purple.500'>
+					<RoundedBtn size='50px' bg='purple.500' onClick={download}>
 						<ImCloudDownload color='white' size='30px' />
 					</RoundedBtn>
+					<a ref={downloadRef} download='' href='' >
+					</a>
 					<GenericBtn
 						hoverColor=''
 						rightIcon={<IoIosSend size='30px' color='white' />}
