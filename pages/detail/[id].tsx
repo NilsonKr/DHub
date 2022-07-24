@@ -28,7 +28,7 @@ import {
 	Text,
 	Badge,
 	Divider,
-	Highlight
+	Highlight,
 } from '@chakra-ui/react';
 import { PageSkeleton } from '@components/Detail/PageSkeleton'
 import { DeleteModal } from '@components/Modal'
@@ -49,7 +49,8 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 const detail = () => {
 	const { query } = useRouter()
 	const { account } = useWallet()
-	const { item, isLoading } = useItemDetail(query.id as string, account)
+
+	const { item, isLoading, deleteItem } = useItemDetail(query.id as string, account)
 	const downloadRef = useRef<HTMLAnchorElement>(null)
 	const [modal, setModal] = useState<string>('');
 	const [isCopied, setCopy] = useState<boolean>(false)
@@ -163,6 +164,7 @@ const detail = () => {
 					</Highlight>
 				</Text>}
 				close={() => setModal(null)}
+				onClick={deleteItem}
 			/>
 			}
 			<TransferModal open={modal === 'transfer'} close={() => setModal('')} />
