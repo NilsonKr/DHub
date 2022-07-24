@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react'
 import { useContract } from '@hooks/web3/useContract'
+import { useRouter } from 'next/router'
 
 import { useToast } from '@chakra-ui/react'
 
 import { Item } from '@roottypes/gallery'
 
 export const useItemDetail = (position: string, account: string) => {
+  const { push } = useRouter()
   const showToast = useToast()
   const DhubContract = useContract()
   const [isLoading, setLoading] = useState<boolean>(false)
@@ -33,5 +35,31 @@ export const useItemDetail = (position: string, account: string) => {
     setLoading(false)
   }
 
-  return { item, isLoading }
+
+  const deleteItem = async () => {
+    setLoading(true)
+    try {
+      await DhubContract.methods.removeFile(position).send({ from: account })
+
+      showToast({
+        title: `Item deleted succesfully`,
+        description: 'You will be redirected to your gallery!',
+        status: 'success',
+        duration: 3000,
+        position: 'top',
+      })
+
+      setTimeout(() => push('/gallery'), 2000)
+    } catch (error) {
+      showToast({
+        title: `There was an unexpected error trying to delete this item`,
+        description: 'Please, try again',
+        status: 'error',
+        duration: 6000,
+        position: 'top',
+      })
+    }
+  }
+
+  return { item, isLoading, deleteItem }
 }

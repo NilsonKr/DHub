@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 //UI
 import {
   Modal,
@@ -11,12 +11,21 @@ import {
   Button,
   ButtonGroup,
   Heading,
+  Spinner
 } from '@chakra-ui/react';
 import { GenericBtn } from '../Buttons/index';
 
-type TProps = { content: React.ReactElement, close: () => void };
+type TProps = { content: React.ReactElement, close: () => void, onClick: () => Promise<void> | void };
 
-export const DeleteModal = ({ content, close }: TProps) => {
+export const DeleteModal = ({ content, close, onClick }: TProps) => {
+  const [isLoading, setLoading] = useState<boolean>(false)
+
+  const handleDelete = async () => {
+    setLoading(true)
+    await onClick()
+    setLoading(false)
+  }
+
   return (
     <Modal isOpen onClose={close}>
       <ModalOverlay />
@@ -35,8 +44,8 @@ export const DeleteModal = ({ content, close }: TProps) => {
             <Button onClick={close} variant='outline' colorScheme='white'>
               Cancel
             </Button>
-            <GenericBtn w='100px' handleClick={() => { }} colorSchema='red'>
-              Delete
+            <GenericBtn w='100px' handleClick={handleDelete} colorSchema='red' disabled={isLoading}>
+              {isLoading ? <Spinner /> : 'Delete'}
             </GenericBtn>
           </ButtonGroup>
         </ModalFooter>
