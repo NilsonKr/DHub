@@ -27,7 +27,7 @@ const gallery = () => {
 		<>
 			<Box as='section' mt='80px' w='100%'>
 				<Flex w='100%' justifyContent='space-between' align='end' mb='10px'>
-					<Heading>{user?.name}'s Gallery</Heading>
+					<Heading><span style={{ color: '#B794F4' }}>{user?.name}'s</span> Gallery</Heading>
 					{!!files.length && <SearchInput handleSearch={(value: string) => handleSearch('title', value)} />}
 				</Flex>
 				{files.length > 0 && (
@@ -46,9 +46,9 @@ const gallery = () => {
 					justifyContent='center'
 				>
 					{new Array(6).fill(null).map((_, index) => <SkeletonCard key={index} />)}
-				</Grid>
-				}
-				{!isLoading && !!searchedItems.length && (files.length ? (
+				</Grid>}
+				{/* User has item and matches with filters & searches  */}
+				{!isLoading && !!searchedItems.length && (
 					<Grid
 						templateColumns='repeat(auto-fill, 240px)'
 						autoRows='260px'
@@ -64,7 +64,9 @@ const gallery = () => {
 							</GridItem>
 						))}
 					</Grid>
-				) : (
+				)}
+				{/* User has no items */}
+				{!files.length && (
 					<Flex h='65vh' w='100%' direction='column' justify='center' align='center'>
 						<EmptyHubDraw />
 						<Heading mt='3' fontSize='xl'>
@@ -72,7 +74,8 @@ const gallery = () => {
 						</Heading>
 						<Upload fireUpload={() => setModal('new_upload')} size='xl' mt='8' />
 					</Flex>
-				))}
+				)}
+				{/* User has items but no one match with filters or searches */}
 				{!!files.length && !searchedItems.length && <Flex h='65vh' w='100%' direction='column' justify='center' align='center'>
 					<NextImage src='/assets/search.png' width='160px' height='180px' />
 					<Heading mt='3' fontSize='xl'>
