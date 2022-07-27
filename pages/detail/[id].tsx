@@ -50,7 +50,7 @@ const detail = () => {
 	const { query } = useRouter()
 	const { account } = useWallet()
 
-	const { item, isLoading, deleteItem } = useItemDetail(query.id as string, account)
+	const { item, isLoading, deleteItem, transferItem } = useItemDetail(query.id as string, account)
 	const downloadRef = useRef<HTMLAnchorElement>(null)
 	const [modal, setModal] = useState<string>('');
 	const [isCopied, setCopy] = useState<boolean>(false)
@@ -64,7 +64,7 @@ const detail = () => {
 		handleDownload(downloadRef, item.url, item.title)
 	}
 
-	return (isLoading || !item) ? <PageSkeleton /> : (
+	return <>{(isLoading || !item) ? <PageSkeleton /> : (
 		<>
 			<VStack spacing={5} h='70vh' mt='50px' w='100%' justify='center' px='10' pb='10'>
 				<Flex justify='start' w='100%'>
@@ -167,10 +167,17 @@ const detail = () => {
 				onClick={deleteItem}
 			/>
 			}
-			<TransferModal open={modal === 'transfer'} close={() => setModal('')} />
 			<QRCodeModal url={item.url} open={modal === 'qrcode'} close={() => setModal('')} />
 		</>
-	);
+	)}
+		{item && <TransferModal
+			item={item}
+			account={account}
+			open={modal === 'transfer'}
+			close={() => setModal('')}
+			transferItem={transferItem}
+		/>}
+	</>;
 };
 
 export default InstantAuth(TagsWrapper(detail));

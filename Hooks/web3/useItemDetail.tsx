@@ -58,8 +58,36 @@ export const useItemDetail = (position: string, account: string) => {
         duration: 6000,
         position: 'top',
       })
+      setLoading(false)
     }
   }
 
-  return { item, isLoading, deleteItem }
+  const transferItem = async (target: string) => {
+    setLoading(true)
+    try {
+      await DhubContract.methods.transferFile(account, target, position).send({ from: account })
+
+      showToast({
+        title: `Item transfered to ${target}`,
+        description: 'Transaction executed succesfully',
+        status: 'success',
+        variant: 'top-accent',
+        duration: 3000,
+        position: 'top',
+      })
+
+      setTimeout(() => push('/gallery'), 1000)
+    } catch (error) {
+      showToast({
+        title: `There was an unexpected error trying to transfer this item`,
+        description: 'Please, check the receiver and try again ',
+        status: 'error',
+        duration: 6000,
+        position: 'top',
+      })
+      setLoading(false)
+    }
+  }
+
+  return { item, isLoading, deleteItem, transferItem }
 }
