@@ -18,16 +18,13 @@ import {
 import { SubmitEntrance } from '../Animations/Common';
 import { GenericBtn } from '../Buttons/index';
 
-type TProps = { close: () => void; open: boolean };
+type TProps = { url: string; open: boolean; close: () => void; };
 
-const ExampleImg: string =
-	'https://ipfs.io/ipfs/QmUY34xPFVd2uiu2HZjRTtUtzvsXZcFAdxmrADnkRpfiZx';
-
-export const QRCodeModal = ({ open, close }: TProps) => {
+export const QRCodeModal = ({ url, open, close }: TProps) => {
 	const [isShare, setShare] = useState<boolean>(false);
 
 	const shareImg = () => {
-		navigator.clipboard.writeText(ExampleImg);
+		navigator.clipboard.writeText(url);
 		setShare(true);
 		setTimeout(() => setShare(false), 2500);
 	};
@@ -38,11 +35,11 @@ export const QRCodeModal = ({ open, close }: TProps) => {
 			<ModalContent bg='gray.800'>
 				<ModalCloseButton />
 				<ModalBody my='5'>
-					<Square w='100%' h='100%' mt='50px'>
+					<Square size='100%' mt='50px'>
 						<QRCode
 							size={300}
-							value='+57 318 637 2624'
-							imageSettings={{ src: '/assets/MyNft.png', width: 50, height: 50 }}
+							value={url}
+							imageSettings={{ src: url, width: 50, height: 50 }}
 						/>
 					</Square>
 					<GenericBtn

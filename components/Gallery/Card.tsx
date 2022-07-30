@@ -19,28 +19,21 @@ import {
 } from '@chakra-ui/react';
 //Types
 import { Item } from '@roottypes/gallery'
+//Utils
+import { handleDownload } from '@utils/Item'
 
-type Props = { item: Item, setSelected: () => void; openCreateTag: () => void }
+type Props = { index: number, item: Item, setSelected: () => void; openCreateTag: () => void }
 
-export const Card = ({ item, setSelected, openCreateTag }: Props) => {
+export const Card = ({ index, item, setSelected, openCreateTag }: Props) => {
 	const [isCopy, setCopy] = useState<boolean>(false);
 	const downloadRef = useRef<HTMLAnchorElement>(null)
 
-	const handleDownload = async () => {
-		const data = await fetch(item.url)
-		const blob = await data.blob()
-
-		const url = URL.createObjectURL(blob)
-		const extension = blob.type.split('/')[1]
-
-		downloadRef.current.download = `${item.title}.${extension}`
-		downloadRef.current.href = url
-
-		downloadRef.current.click()
+	const download = () => {
+		handleDownload(downloadRef, item.url, item.title)
 	}
 
 	const handleCopy = () => {
-		navigator.clipboard.writeText(window.location.host + `/detail/${item.id}`);
+		navigator.clipboard.writeText(window.location.host + `/detail/${index}`);
 		setCopy(true);
 		setTimeout(() => setCopy(false), 1500);
 	};
@@ -119,9 +112,9 @@ export const Card = ({ item, setSelected, openCreateTag }: Props) => {
 								size='35px'
 								iconSize='20px'
 								IconAs={MdOutlineDownload}
-								onClick={handleDownload}
+								onClick={download}
 							/>
-							<NextLink href={`detail/${item.id}`} passHref={true}>
+							<NextLink href={`detail/${index}`} passHref={true}>
 								<a>
 									<RoundedRightArrow size='35px' bg='purple.600' iconSize='20px' />
 								</a>

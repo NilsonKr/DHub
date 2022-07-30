@@ -90,12 +90,14 @@ export const HomeMain = () => {
 
 	const handleLogin = async () => {
 		const result = await login()
+		let withRegister = false
 
 		if (result.error) {
 			setRegister({ message: result.error, open: true })
+			withRegister = true
 		}
 
-		setTimeout(() => handleAnimation(null, true), 2000)
+		setTimeout(() => handleAnimation(null, withRegister), 2000)
 	}
 
 	return (
@@ -144,7 +146,7 @@ export const HomeMain = () => {
 						>
 							<SlideFade in={true} offsetX='-50px'>
 								<Square
-									h='250px'
+									minHeight='250px'
 									px='30px'
 									flexFlow='column'
 									bg='gray.900'
@@ -163,7 +165,7 @@ export const HomeMain = () => {
 							</SlideFade>
 							<SlideFade in={true} offsetX='-50px'>
 								<Square
-									h='250px'
+									minHeight='250px'
 									px='30px'
 									flexFlow='column'
 									bg='gray.900'

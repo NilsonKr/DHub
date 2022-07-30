@@ -14,7 +14,7 @@ import { SearchInput, GalleryTags, MenuActions, Upload } from '../components/Ind
 import { ItemTags } from '@components/Modal/ItemTags';
 //HOC
 import InstantAuth from '@components/HOC/InstantAuth'
-import GalleryWrapper from '@components/HOC/GalleryWrapper';
+import TagsWrapper from '@components/HOC/TagsWrapper';
 
 const gallery = () => {
 	const { account } = useWallet()
@@ -60,7 +60,7 @@ const gallery = () => {
 					>
 						{searchedItems.map((item, i) => (
 							<GridItem key={i} h='100%' w='100%' borderRadius='5px'>
-								<Card item={item} setSelected={() => setSelected(Number(item.id))} openCreateTag={() => setModal('item_tags')} />
+								<Card index={i} item={item} setSelected={() => setSelected(Number(item.id))} openCreateTag={() => setModal('item_tags')} />
 							</GridItem>
 						))}
 					</Grid>
@@ -104,4 +104,4 @@ const gallery = () => {
 	);
 };
 
-export default InstantAuth(GalleryWrapper(gallery));
+export default InstantAuth(TagsWrapper(gallery));

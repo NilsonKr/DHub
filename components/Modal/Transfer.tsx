@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 //UI
 import {
 	Modal,
@@ -15,20 +15,39 @@ import {
 	Button,
 	ButtonGroup,
 	Text,
+	Spinner,
 } from '@chakra-ui/react';
 import { AiOutlineTags } from 'react-icons/ai';
 import { RiSendPlaneFill } from 'react-icons/ri';
 import { GenericBtn } from '../Buttons/index';
+//Types
+import { Item } from '@roottypes/gallery'
 
-type TProps = { close: () => void; open: boolean };
 
-export const TransferModal = ({ open, close }: TProps) => {
+type TProps = {
+	item: Item;
+	account: string;
+	open: boolean;
+	transferItem: (target: string) => Promise<void>;
+	close: () => void;
+};
+
+export const TransferModal = ({ item, open, account, transferItem, close }: TProps) => {
+	const [receiver, setReceiver] = useState<string>('')
+	const [isLoading, setLoading] = useState<boolean>(false)
+
+	const handleTransfer = async () => {
+		setLoading(true)
+		await transferItem(receiver)
+		setLoading(false)
+	}
+
 	return (
 		<Modal isOpen={open} onClose={close}>
 			<ModalOverlay />
 			<ModalContent bg='gray.800'>
 				<ModalCloseButton />
-				<ModalHeader>Transfer "MyNft.jpg"</ModalHeader>
+				<ModalHeader>Transfer "{item.title}"</ModalHeader>
 				<ModalBody my='5'>
 					<Text fontSize='sm' color='gray.500'>
 						From (Your address)
@@ -37,7 +56,7 @@ export const TransferModal = ({ open, close }: TProps) => {
 						<Input
 							variant='flushed'
 							disabled={true}
-							value='CHUS5tFC6CMvJLVm8hVHpbpJ5DUyGr4CbhGfRyy6D1w3'
+							value={account}
 						/>
 					</InputGroup>
 					<Text fontSize='sm' color='gray.500'>
@@ -48,6 +67,9 @@ export const TransferModal = ({ open, close }: TProps) => {
 							variant='flushed'
 							placeholder='Receiver Address'
 							_placeholder={{ color: 'gray.400' }}
+							value={receiver}
+							onChange={e => setReceiver(e.target.value)}
+							disabled={isLoading}
 						/>
 						<InputRightAddon
 							bg='purple.600'
@@ -60,8 +82,8 @@ export const TransferModal = ({ open, close }: TProps) => {
 						<Button onClick={close} variant='outline' colorScheme='white'>
 							Cancel
 						</Button>
-						<GenericBtn w='100px' handleClick={() => {}} colorSchema='purple'>
-							Transfer
+						<GenericBtn w='100px' handleClick={handleTransfer} disabled={isLoading} colorSchema='purple'>
+							{isLoading ? <Spinner /> : 'Transfer'}
 						</GenericBtn>
 					</ButtonGroup>
 				</ModalFooter>

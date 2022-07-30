@@ -21,7 +21,6 @@ export const useConfetti = (particleNumber: number): TReturn => {
 			...opts,
 		});
 	};
-
 	//Fire realistic Confetti
 	const realisticConfetti = () => {
 		fireConfetti(0.25, {
