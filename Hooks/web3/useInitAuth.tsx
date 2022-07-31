@@ -19,16 +19,14 @@ export const useInitAuth: HookProps = (handleLogin) => {
   }
 
   useEffect(() => {
+    const storageFlag = localStorage.getItem('isConnected')
+
     if (active && !isAuth) {
-
-      if (localStorage.getItem('isConnected') === 'true') {
-        autoLogin()
-      } else {
-        push('/')
-      }
-
-    } else if (!active) {
+      autoLogin()
+    } else if (!active && storageFlag === 'true') {
       handleConnect()
+    } else if (!active && storageFlag === 'false') {
+      push('/')
     }
 
   }, [active])
