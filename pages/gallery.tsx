@@ -1,13 +1,10 @@
 import { useState, useContext } from 'react';
 import { useGallery } from '@hooks/web3/useGallery'
 import { authContext } from '@context/AuthContext'
-import { tagsContext } from '@context/TagsContext'
 import { useWallet } from '@hooks/web3/useWallet';
 import NextImage from 'next/image'
-//Context
-import { TagsContext } from '@context/TagsContext'
 //UI
-import { Box, Grid, GridItem, Heading, Flex } from '@chakra-ui/react';
+import { Box, Grid, GridItem, Heading, Flex, Highlight } from '@chakra-ui/react';
 import { Card, CreateTagModal, UploadModal, SkeletonCard } from '../components/Index';
 import { BgLeftAdornment, BgRightAdornment, EmptyHubDraw } from '../components/Icons/';
 import { SearchInput, GalleryTags, MenuActions, Upload } from '../components/Index';
@@ -27,7 +24,11 @@ const gallery = () => {
 		<>
 			<Box as='section' mt='80px' w='100%'>
 				<Flex w='100%' justifyContent='space-between' align='end' mb='10px'>
-					<Heading><span style={{ color: '#B794F4' }}>{user?.name}'s</span> Gallery</Heading>
+					<Heading>
+						<Highlight query={user.name} styles={{ bg: 'transparent', color: 'purple.300' }}>
+							{`${user?.name}'s Gallery`}
+						</Highlight>
+					</Heading>
 					{!!files.length && <SearchInput handleSearch={(value: string) => handleSearch('title', value)} />}
 				</Flex>
 				{files.length > 0 && (
