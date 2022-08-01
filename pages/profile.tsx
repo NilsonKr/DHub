@@ -4,7 +4,6 @@ import { useDebounce } from '../Hooks/useDebounce';
 import Image from 'next/image';
 import { authContext } from '@context/AuthContext'
 import { useContract } from '@hooks/web3/useContract';
-import { getFile } from '@ipfs/methods/'
 //UI
 import Jazzicon, { jsNumberForAddress } from 'react-jazzicon'
 import { FaShareSquare } from 'react-icons/fa';
@@ -179,8 +178,7 @@ const profile = () => {
 							transition='opacity .1s linear'
 							position='absolute'
 							top='0'
-							w='100%'
-							h='100%'
+							size='100%'
 							zIndex={10}
 							bg='rgba(255,41,170,.5)'
 						>
