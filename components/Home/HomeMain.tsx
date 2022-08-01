@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext, useCallback } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { authContext, Context } from '@context/AuthContext'
 import Link from 'next/link';
 import { useConfetti } from '@hooks/useConfetti';
@@ -48,8 +48,8 @@ export const HomeMain = () => {
 	useInitAuth(() => setOpenBox(true))
 
 	useEffect(() => {
-		//When register but is not logged in already
-		if (user && !isAuth) {
+		//After get registered into the app
+		if (isRegister.open && isAuth) {
 			setError(null)
 			setRegister({ open: false, message: '' })
 			setTimeout(() => handleAnimation(null), animate.trigger ? 0 : 2000)
