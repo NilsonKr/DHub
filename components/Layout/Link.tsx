@@ -3,9 +3,9 @@ import { useRouter } from 'next/router';
 import NextLink from 'next/link';
 import { Button, Text } from '@chakra-ui/react';
 
-type TProps = { href: string; color?: string };
+type TProps = { isAuth: boolean, href: string; color?: string };
 
-export const NavLink: React.FC<TProps> = ({ href, children }) => {
+export const NavLink: React.FC<TProps> = ({ isAuth, href, children }) => {
 	const { route } = useRouter();
 
 	return (
@@ -20,7 +20,7 @@ export const NavLink: React.FC<TProps> = ({ href, children }) => {
 				<Text
 					fontSize='2xl'
 					borderBottomWidth='1px'
-					borderBottomColor={route === href ? `white` : 'transparent'}
+					borderBottomColor={isAuth ? (route === href ? 'white' : 'transparent') : 'transparent'}
 					_groupHover={{ borderColor: 'transparent' }}
 				>
 					{children}

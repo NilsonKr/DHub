@@ -1,3 +1,5 @@
+import { useContext } from 'react'
+import { authContext } from '@context/AuthContext'
 import NextLink from 'next/link';
 //UI
 import { LogoIcon } from '../Icons';
@@ -6,6 +8,8 @@ import { Grid, GridItem, Box, Flex, Heading, Avatar } from '@chakra-ui/react';
 import { AiOutlineUser } from 'react-icons/ai';
 
 export const Header = () => {
+	const { isAuth } = useContext(authContext)
+
 	return (
 		<Grid mt='12' templateColumns='1fr 3fr 1fr' gap={8} alignItems='center'>
 			<GridItem w='100%'>
@@ -17,19 +21,19 @@ export const Header = () => {
 			</GridItem>
 			<GridItem w='100%'>
 				<Flex justifyContent='space-around'>
-					<NavLink href='/' color='blue'>
+					<NavLink isAuth={isAuth} href='/' color='blue'>
 						Home
 					</NavLink>
-					<NavLink href='/gallery' color='green'>
+					<NavLink isAuth={isAuth} href={isAuth ? '/gallery' : '/'} color='green'>
 						Gallery
 					</NavLink>
-					<NavLink href='/profile' color='pink'>
+					<NavLink isAuth={isAuth} href={isAuth ? '/profile' : '/'} color='pink'>
 						Profile
 					</NavLink>
 				</Flex>
 			</GridItem>
 			<GridItem w='100%'>
-				<NextLink href='/profile'>
+				<NextLink href={isAuth ? '/profile' : '/'}>
 					<Box mx='auto' w='min'>
 						<Avatar
 							bg='pink.700'
