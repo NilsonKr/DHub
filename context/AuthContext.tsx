@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useState, useEffect } from 'react'
 import { useContract } from '@hooks/web3/useContract'
 import { useWallet } from '@hooks/web3/useWallet'
 
@@ -20,6 +20,13 @@ export const AuthContext: React.FC = ({ children }) => {
   const { active, account, disconnect } = useWallet()
   const [user, setUser] = useState<User>(null)
   const [isAuth, setAuthState] = useState<boolean>(false)
+
+  useEffect(() => {
+    if (active) {
+      setAuthState(false)
+      login()
+    }
+  }, [account])
 
   const login = useCallback(async (): Promise<loginReturn> => {
     try {
