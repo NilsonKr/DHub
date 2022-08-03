@@ -62,8 +62,8 @@ export const ItemTagsRow: React.FC<ComponentProps> = ({ account, id, title, back
           },
         }}
       >
-        {!tagsList && <Spinner color='pink.600' />}
-        {id !== null && tagsList && ((tagsList.length > 0) ? (
+        {!docTags && <Spinner color='pink.600' />}
+        {id !== null && ((tagsList?.length > 0) ? (
           tagsList.map((tagIndex, i) => (
             <TagHub deleteTag={(tag, cb) => handleUnlinkTags(tag, i, cb)} selectedList={[]} select={() => { }} tag={tags[tagIndex]} key={i} />
           ))
@@ -72,7 +72,7 @@ export const ItemTagsRow: React.FC<ComponentProps> = ({ account, id, title, back
             <Text fontSize='md' mr='1' color='gray.400'>
               You have not added any tags to this item yet
             </Text>
-            <GenericBtn handleClick={linkTag} bg='#FF0099' hoverColor='pink.400' p='0px 20px'> Add one </GenericBtn>
+            <GenericBtn rightIcon={<MdOutlineAdd size='20px' color='white' />} handleClick={linkTag} bg='#FF0099' hoverColor='pink.400' p='0px 20px'> Add one </GenericBtn>
           </>
         ))}
       </HStack>

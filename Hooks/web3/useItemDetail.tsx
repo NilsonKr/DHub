@@ -1,15 +1,18 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { useContract } from '@hooks/web3/useContract'
 import { useRouter } from 'next/router'
-
 import { useToast } from '@chakra-ui/react'
-
+import { tagsContext } from '@context/TagsContext'
+//Types
 import { Item } from '@roottypes/gallery'
+//DB
+import { ClearTagsFrom } from '@db/itemTags'
 
 export const useItemDetail = (position: string, account: string) => {
   const { push } = useRouter()
   const showToast = useToast()
   const DhubContract = useContract()
+  const { docTags } = useContext(tagsContext)
   const [isLoading, setLoading] = useState<boolean>(false)
   const [item, setItem] = useState<Item>(null)
 
@@ -39,8 +42,8 @@ export const useItemDetail = (position: string, account: string) => {
   const deleteItem = async () => {
     setLoading(true)
     try {
+      await ClearTagsFrom(account, item.id, docTags)
       await DhubContract.methods.removeFile(position).send({ from: account })
-
       showToast({
         title: `Item deleted succesfully`,
         description: 'You will be redirected to your gallery!',
