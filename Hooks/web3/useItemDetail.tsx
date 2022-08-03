@@ -68,6 +68,7 @@ export const useItemDetail = (position: string, account: string) => {
   const transferItem = async (target: string) => {
     setLoading(true)
     try {
+      await ClearTagsFrom(account, item.id, docTags)
       await DhubContract.methods.transferFile(account, target, position).send({ from: account })
 
       showToast({
