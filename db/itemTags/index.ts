@@ -1,14 +1,4 @@
-import {
-	doc,
-	collection,
-	arrayUnion,
-	arrayRemove,
-	setDoc,
-	updateDoc,
-	onSnapshot,
-	DocumentData,
-	DocumentSnapshot,
-} from 'firebase/firestore';
+import { doc, updateDoc } from 'firebase/firestore';
 import { FirebaseError } from 'firebase/app';
 
 import { dbInstance } from '..';
@@ -44,6 +34,24 @@ export const DeleteTagsFrom = async (
 		newTags.splice(index, 1);
 		await updateDoc(doc(dbInstance, USER_COLLECTION, account), {
 			linkedDocs: { ...current, [itemId]: [...newTags] },
+		});
+	} catch (error) {
+		const msg = (error as FirebaseError).message;
+		throw new Error(msg);
+	}
+};
+
+export const ClearTagsFrom = async (
+	account: string,
+	itemId: string,
+	current: DocTags
+) => {
+	try {
+		const newDicc = { ...current };
+		delete newDicc[itemId];
+
+		await updateDoc(doc(dbInstance, USER_COLLECTION, account), {
+			linkedDocs: newDicc,
 		});
 	} catch (error) {
 		const msg = (error as FirebaseError).message;
