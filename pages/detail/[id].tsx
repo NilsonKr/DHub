@@ -56,13 +56,15 @@ const detail = () => {
 	const [isCopied, setCopy] = useState<boolean>(false)
 
 	const copy = () => {
-		navigator.clipboard.writeText(item.url)
+		navigator.clipboard.writeText(`${window.location.href}?share=${account}`)
 		setCopy(true)
 	}
 
 	const download = () => {
 		handleDownload(downloadRef, item.url, item.title)
 	}
+
+	const isShared = query?.share
 
 	return <>{(isLoading || !item) ? <PageSkeleton /> : (
 		<>
@@ -102,9 +104,15 @@ const detail = () => {
 										<CheckCircleIcon color='green.400' w='25px' h='25px' />
 									</BounceAnimation>}
 								</HStack>
-								<RoundedBtn bg='red.500' size='40px' onClick={() => setModal('delete_item')}>
-									<BiTrash color='white' size='25px' />
-								</RoundedBtn>
+								{!isShared ?
+									<RoundedBtn bg='red.500' size='40px' onClick={() => setModal('delete_item')}>
+										<BiTrash color='white' size='25px' />
+									</RoundedBtn>
+									:
+									<RoundedBtn size='40px' bg='purple.500' onClick={download}>
+										<ImCloudDownload color='white' size='25px' />
+									</RoundedBtn>
+								}
 							</Flex>
 							<Divider orientation='horizontal' w='100%' bg='white' />
 						</Box>
@@ -134,25 +142,27 @@ const detail = () => {
 						</VStack>
 					</VStack>
 				</Flex>
-				<ItemTagsRow account={account} id={Number(item.id)} background='gray.900' addIcon linkTag={() => setModal('add_tag')} />
+				{!isShared && <ItemTagsRow account={account} id={Number(item.id)} background='gray.900' addIcon linkTag={() => setModal('add_tag')} />}
 				<HStack justify='start' spacing={3} w='100%'>
-					<RoundedBtn size='50px' bg='purple.500' onClick={download}>
-						<ImCloudDownload color='white' size='30px' />
-					</RoundedBtn>
 					<a ref={downloadRef} download='' href='' >
 					</a>
-					<GenericBtn
-						hoverColor=''
-						rightIcon={<IoIosSend size='30px' color='white' />}
-						bg='linear-gradient(90deg, rgba(255, 0, 184, 0.62) 1.1%, #3E02C9 98.9%)'
-						handleClick={() => setModal('transfer')}
-						fontSize='2xl'
-						fontWeight='semibold'
-						h='50px'
-						borderRadius='10px'
-					>
-						TRANSFER
-					</GenericBtn>
+					{!isShared && <>
+						<RoundedBtn size='50px' bg='purple.500' onClick={download}>
+							<ImCloudDownload color='white' size='30px' />
+						</RoundedBtn>
+						<GenericBtn
+							hoverColor=''
+							rightIcon={<IoIosSend size='30px' color='white' />}
+							bg='linear-gradient(90deg, rgba(255, 0, 184, 0.62) 1.1%, #3E02C9 98.9%)'
+							handleClick={() => setModal('transfer')}
+							fontSize='2xl'
+							fontWeight='semibold'
+							h='50px'
+							borderRadius='10px'
+						>
+							TRANSFER
+						</GenericBtn>
+					</>}
 				</HStack>
 			</VStack>
 			<CreateTagModal account={account} open={modal === 'new_tag'} close={() => setModal(null)} />

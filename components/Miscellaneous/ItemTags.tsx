@@ -63,7 +63,7 @@ export const ItemTagsRow: React.FC<ComponentProps> = ({ account, id, title, back
         }}
       >
         {!docTags && <Spinner color='pink.600' />}
-        {id !== null && ((tagsList?.length > 0) ? (
+        {docTags && id !== null && ((tagsList?.length > 0) ? (
           tagsList.map((tagIndex, i) => (
             <TagHub deleteTag={(tag, cb) => handleUnlinkTags(tag, i, cb)} selectedList={[]} select={() => { }} tag={tags[tagIndex]} key={i} />
           ))
