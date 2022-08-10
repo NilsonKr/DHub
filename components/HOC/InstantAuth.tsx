@@ -8,9 +8,7 @@ const InstantAuth = (Component: React.FC<any>): React.FC<any> => {
   return () => {
     const { login, isAuth } = useContext(authContext)
 
-    useInitAuth(() => {
-      login()
-    })
+    useInitAuth(login)
 
     return isAuth ? <Component /> : <Box w='100%' h='80vh' />
   }

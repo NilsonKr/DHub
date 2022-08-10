@@ -34,7 +34,7 @@ export const UploadModal = ({ close, refreshItems }: TProps) => {
 			const ipfsResult = await addFileToIpfs(file)
 			const ipfsUrl = `https://ipfs.infura-ipfs.io/ipfs/${ipfsResult.payload.path}`
 
-			const fileRecord = [0, ipfsUrl, fileForm.name, fileForm.description, new Date().toString(), info.rawSize]
+			const fileRecord = [0, ipfsUrl, fileForm.name, fileForm.description, new Date().toString(), info.rawSize, false]
 			await Dhub.methods.uploadFile(fileRecord).send({ from: account })
 
 			refreshItems(account)

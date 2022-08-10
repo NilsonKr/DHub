@@ -55,8 +55,10 @@ const detail = () => {
 	const [modal, setModal] = useState<string>('');
 	const [isCopied, setCopy] = useState<boolean>(false)
 
+	const shareUrl = `${window.location.href}?share=${account}`
+
 	const copy = () => {
-		navigator.clipboard.writeText(`${window.location.href}?share=${account}`)
+		navigator.clipboard.writeText(shareUrl)
 		setCopy(true)
 	}
 
@@ -177,7 +179,7 @@ const detail = () => {
 				onClick={deleteItem}
 			/>
 			}
-			<QRCodeModal url={item.url} open={modal === 'qrcode'} close={() => setModal('')} />
+			<QRCodeModal iconUrl={item.url} url={shareUrl} open={modal === 'qrcode'} close={() => setModal('')} />
 		</>
 	)}
 		{item && <TransferModal

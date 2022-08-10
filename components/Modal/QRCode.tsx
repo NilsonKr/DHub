@@ -18,9 +18,9 @@ import {
 import { SubmitEntrance } from '../Animations/Common';
 import { GenericBtn } from '../Buttons/index';
 
-type TProps = { url: string; open: boolean; close: () => void; };
+type TProps = { iconUrl: string; url: string; open: boolean; close: () => void; };
 
-export const QRCodeModal = ({ url, open, close }: TProps) => {
+export const QRCodeModal = ({ iconUrl, url, open, close }: TProps) => {
 	const [isShare, setShare] = useState<boolean>(false);
 
 	const shareImg = () => {
@@ -39,7 +39,7 @@ export const QRCodeModal = ({ url, open, close }: TProps) => {
 						<QRCode
 							size={300}
 							value={url}
-							imageSettings={{ src: url, width: 50, height: 50 }}
+							imageSettings={{ src: iconUrl, width: 50, height: 50 }}
 						/>
 					</Square>
 					<GenericBtn
