@@ -31,7 +31,7 @@ import {
 	Highlight,
 } from '@chakra-ui/react';
 import { PageSkeleton } from '@components/Detail/PageSkeleton'
-import { DeleteModal } from '@components/Modal'
+import { DeleteModal, ShareItem } from '@components/Modal'
 import { ItemTags as ItemTagsModal } from '@components/Modal/ItemTags';
 //HOC
 import TagsWrapper from '@components/HOC/TagsWrapper';
@@ -58,8 +58,8 @@ const detail = () => {
 	const shareUrl = `${window.location.href}?share=${account}`
 
 	const copy = () => {
-		navigator.clipboard.writeText(shareUrl)
-		setCopy(true)
+		// navigator.clipboard.writeText(shareUrl)
+		// setCopy(true)
 	}
 
 	const download = () => {
@@ -99,7 +99,7 @@ const detail = () => {
 									>
 										<QrCodeIcon size='20px' color='white' />
 									</RoundedBtn>
-									<RoundedBtn bg='purple.500' size='40px' onClick={copy}>
+									<RoundedBtn bg='purple.500' size='40px' onClick={() => setModal('share_item')}>
 										<BiLink color='white' size='25px' />
 									</RoundedBtn>
 									{isCopied && <BounceAnimation duration={1} >
@@ -179,6 +179,7 @@ const detail = () => {
 				onClick={deleteItem}
 			/>
 			}
+			{modal === 'share_item' && <ShareItem url={shareUrl} item={item} account={account} close={() => setModal(null)} />}
 			<QRCodeModal iconUrl={item.url} url={shareUrl} open={modal === 'qrcode'} close={() => setModal('')} />
 		</>
 	)}
