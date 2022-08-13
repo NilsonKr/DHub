@@ -50,7 +50,7 @@ const detail = () => {
 	const { query } = useRouter()
 	const { account } = useWallet()
 
-	const { item, isLoading, deleteItem, transferItem } = useItemDetail(query.id as string, account)
+	const { item, isLoading, deleteItem, updateShareState, transferItem } = useItemDetail(query.id as string, account)
 	const downloadRef = useRef<HTMLAnchorElement>(null)
 	const [modal, setModal] = useState<string>('');
 	const [isCopied, setCopy] = useState<boolean>(false)
@@ -179,7 +179,7 @@ const detail = () => {
 				onClick={deleteItem}
 			/>
 			}
-			{modal === 'share_item' && <ShareItem url={shareUrl} item={item} account={account} close={() => setModal(null)} />}
+			{modal === 'share_item' && <ShareItem url={shareUrl} item={item} account={account} updateShareState={updateShareState} close={() => setModal(null)} />}
 			<QRCodeModal iconUrl={item.url} url={shareUrl} open={modal === 'qrcode'} close={() => setModal('')} />
 		</>
 	)}

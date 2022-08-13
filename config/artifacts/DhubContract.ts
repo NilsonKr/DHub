@@ -1,6 +1,6 @@
 export const DhubContract: IDhubContract = {
 	address: {
-		4: '0x379CBDf60C8BF7EA1801d3De1F0992b6F25852c7',
+		4: '0x61960815dd03B1E43C533731f117e558A946Ee30',
 	},
 	abi: [
 		{
@@ -458,6 +458,19 @@ export const DhubContract: IDhubContract = {
 				},
 			],
 			name: 'transferFile',
+			outputs: [],
+			stateMutability: 'nonpayable',
+			type: 'function',
+		},
+		{
+			inputs: [
+				{
+					internalType: 'uint8',
+					name: 'position',
+					type: 'uint8',
+				},
+			],
+			name: 'updateShareState',
 			outputs: [],
 			stateMutability: 'nonpayable',
 			type: 'function',

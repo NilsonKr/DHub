@@ -32,12 +32,13 @@ export const UploadModal = ({ close, refreshItems }: TProps) => {
 		setLoading(true)
 		try {
 			const ipfsResult = await addFileToIpfs(file)
-			const ipfsUrl = `https://ipfs.infura-ipfs.io/ipfs/${ipfsResult.payload.path}`
+			console.log(ipfsResult, 'ipfsResult')
+			// const ipfsUrl = `https://ipfs.infura-ipfs.io/ipfs/${ipfsResult.payload.path}`
 
-			const fileRecord = [0, ipfsUrl, fileForm.name, fileForm.description, new Date().toString(), info.rawSize, false]
-			await Dhub.methods.uploadFile(fileRecord).send({ from: account })
+			// const fileRecord = [0, ipfsUrl, fileForm.name, fileForm.description, new Date().toString(), info.rawSize, false]
+			// await Dhub.methods.uploadFile(fileRecord).send({ from: account })
 
-			refreshItems(account)
+			// refreshItems(account)
 			showToast({
 				title: `Successful upload`,
 				description: `There's a new item in your storage!`,

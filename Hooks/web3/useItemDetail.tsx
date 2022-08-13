@@ -65,6 +65,22 @@ export const useItemDetail = (position: string, account: string) => {
     }
   }
 
+  const updateShareState = async () => {
+    try {
+      await DhubContract.methods.updateShareState(position).call({ from: account })
+
+      setItem(prev => ({ ...prev, shareable: !prev.shareable }))
+    } catch (error) {
+      showToast({
+        title: `There was an unexpected error updating the 'shareable' state`,
+        description: 'Please, go back or refresh the page',
+        status: 'error',
+        duration: 10000,
+        position: 'top',
+      })
+    }
+  }
+
   const transferItem = async (target: string) => {
     setLoading(true)
     try {
@@ -93,5 +109,5 @@ export const useItemDetail = (position: string, account: string) => {
     }
   }
 
-  return { item, isLoading, deleteItem, transferItem }
+  return { item, isLoading, deleteItem, updateShareState, transferItem }
 }

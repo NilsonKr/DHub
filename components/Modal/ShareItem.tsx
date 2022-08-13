@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useContract } from '@hooks/web3/useContract'
 //UI
 import {
   Modal,
@@ -28,20 +29,25 @@ type TProps = {
   item: Item;
   url: string;
   account: string;
+  updateShareState: () => Promise<void>
   close: () => void;
 };
 
-export const ShareItem = ({ item, url, account, close }: TProps) => {
+export const ShareItem = ({ item, url, account, updateShareState, close }: TProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [showUnlock, setUnlock] = useState<boolean>(false)
+
+  console.log(item, 'item')
 
   const handleShare = async () => {
     setIsLoading(true)
     try {
+      await updateShareState()
 
     } catch (error) {
-
+      console.log(error)
     }
+    setIsLoading(false)
   }
 
   return (
