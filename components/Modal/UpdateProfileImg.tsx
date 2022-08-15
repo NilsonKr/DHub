@@ -1,5 +1,4 @@
 import React, { useState, useContext } from 'react';
-import { addFileToIpfs } from '@ipfs/methods'
 import { useContract } from '@hooks/web3/useContract'
 import { useWallet } from '@hooks/web3/useWallet'
 import { authContext } from '@context/AuthContext'
@@ -14,6 +13,8 @@ import {
 	ModalCloseButton,
 	useToast
 } from '@chakra-ui/react';
+//Types
+import { UploadResponse } from '@roottypes/api/files'
 
 type TProps = { close: () => void };
 
@@ -36,8 +37,15 @@ export const UpdateProfilePicModal = ({ close }: TProps) => {
 	const uploadFile = async () => {
 		setLoading(true)
 		try {
-			const ipfsResult = await addFileToIpfs(file)
-			const ipfsUrl = `https://ipfs.infura-ipfs.io/ipfs/${ipfsResult.payload.path}`
+			const requestBody = new FormData()
+			requestBody.append('file', file)
+			//Upload file to ipfs to get the hash url
+			const result = await window.fetch('/api/uploadFile', {
+				method: 'POST',
+				body: requestBody,
+			})
+			const data: UploadResponse = await result.json()
+			const ipfsUrl = `https://dhub.infura-ipfs.io/ipfs/${data.hash}`
 
 			Dhub.methods.editUser('profileUrl', ipfsUrl).send({ from: account })
 				.on('transactionHash', () => {
@@ -53,6 +61,7 @@ export const UpdateProfilePicModal = ({ close }: TProps) => {
 				.on('receipt', () => {
 					login()
 					setLoading(false)
+					close()
 					showToast({
 						title: `Profile updated!`,
 						description: `Your new profile photo was succesfully uploaded`,

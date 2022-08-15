@@ -1,12 +1,12 @@
 import { create } from 'ipfs-http-client';
 
-//TO-DO: Pass this logic to server-side using NEXT API pages
+const { INFURA_ID, INFURA_SECRET } = process.env;
 
-// const authorization = "Basic " + btoa(projectId + ":" + projectSecret);
+const authorization = 'Basic ' + btoa(INFURA_ID + ':' + INFURA_SECRET);
 
 export const IPFSClient = create({
 	url: 'https://ipfs.infura.io:5001/api/v0',
 	headers: {
-		// authorization,
+		authorization,
 	},
 });
