@@ -44,6 +44,7 @@ export const useItemDetail = (position: string, account: string) => {
     try {
       await ClearTagsFrom(account, item.id, docTags)
       await DhubContract.methods.removeFile(position).send({ from: account })
+
       showToast({
         title: `Item deleted succesfully`,
         description: 'You will be redirected to your gallery!',
@@ -51,7 +52,6 @@ export const useItemDetail = (position: string, account: string) => {
         duration: 3000,
         position: 'top',
       })
-
       setTimeout(() => push('/gallery'), 2000)
     } catch (error) {
       showToast({
@@ -67,9 +67,16 @@ export const useItemDetail = (position: string, account: string) => {
 
   const updateShareState = async () => {
     try {
-      await DhubContract.methods.updateShareState(position).call({ from: account })
+      await DhubContract.methods.updateShareState(position).send({ from: account })
 
       setItem(prev => ({ ...prev, shareable: !prev.shareable }))
+      showToast({
+        title: `Udapted share state succesfully`,
+        status: 'success',
+        duration: 3000,
+        position: 'top',
+        variant: 'subtle'
+      })
     } catch (error) {
       showToast({
         title: `There was an unexpected error updating the 'shareable' state`,
