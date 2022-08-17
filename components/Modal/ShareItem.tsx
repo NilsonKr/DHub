@@ -18,10 +18,12 @@ import {
   Icon,
   Highlight,
   Skeleton,
+  HStack,
+  useToast
 } from '@chakra-ui/react';
 import { AiFillLock, AiFillUnlock } from 'react-icons/ai';
 import { MdCopyAll } from 'react-icons/md'
-import { GenericBtn } from '../Buttons/index';
+import { GenericBtn } from '@components/Index';
 //Types
 import { Item } from '@roottypes/gallery'
 
@@ -34,6 +36,7 @@ type TProps = {
 };
 
 export const ShareItem = ({ item, url, account, updateShareState, close }: TProps) => {
+  const showToast = useToast()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [showIcon, setIcon] = useState<boolean>(false)
 
@@ -41,6 +44,18 @@ export const ShareItem = ({ item, url, account, updateShareState, close }: TProp
     setIsLoading(true)
     await updateShareState()
     setIsLoading(false)
+  }
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(url)
+    showToast({
+      title: `Copy to clipboard`,
+      description: 'Share it with your friends!',
+      status: 'success',
+      duration: 2000,
+      variant: 'subtle',
+      position: 'top',
+    })
   }
 
   return (
@@ -55,11 +70,12 @@ export const ShareItem = ({ item, url, account, updateShareState, close }: TProp
               <Text color='green.400'>
                 You are sharing this item to everyone who has this link!
               </Text>
-              <Text fontSize='sm' color='gray.400' my='2'>
-                <Highlight query='copy icon' styles={{ color: 'white', fontWeight: 'bold' }}>
-                  Toggle the copy icon if you dont want to share it
-                </Highlight>
-              </Text>
+              <HStack align='center' mt='2'>
+                <GenericBtn p='2' h='28px' fontSize='0.9rem' size='sm' bg='pink.600' handleClick={handleShare}>Lock it</GenericBtn>
+                <Text fontSize='sm' color='gray.400' my='2'>
+                  if you dont want to share it anymore
+                </Text>
+              </HStack>
             </>
             :
             <>
@@ -93,21 +109,30 @@ export const ShareItem = ({ item, url, account, updateShareState, close }: TProp
               fontSize='0.9rem'
               p='5px 20px 5px 0'
             />
-            <InputRightAddon
-              role='group'
-              bg={item.shareable ? 'purple.500' : 'purple.900'}
-              _hover={{ bg: 'purple.700' }}
-              cursor='pointer'
-              _active={{ bg: 'purple.300' }}
-              onClick={handleShare}
-              onMouseEnter={() => setIcon(true)}
-              onMouseLeave={() => setIcon(false)}
-              children={item.shareable ?
-                <Icon _groupActive={{ transform: 'scale(0.9)' }} transition='transform 50ms linear' color={showIcon ? 'gray.400' : 'white'} h='28px' w='28px' as={showIcon ? AiFillLock : MdCopyAll} />
+            {
+              item.shareable ?
+                <InputRightAddon
+                  role='group'
+                  bg={'purple.500'}
+                  _hover={{ bg: 'purple.700' }}
+                  cursor='pointer'
+                  _active={{ bg: 'purple.300' }}
+                  onClick={handleCopy}
+                  children={<Icon _groupActive={{ transform: 'scale(0.9)' }} transition='transform 50ms linear' color={'white'} h='25px' w='25px' as={MdCopyAll} />}
+                />
                 :
-                <Icon _groupActive={{ transform: 'scale(0.9)' }} transition='transform 50ms linear' color={showIcon ? 'white' : 'gray.500'} h='28px' w='28px' as={showIcon ? AiFillUnlock : AiFillLock} />
-              }
-            />
+                <InputRightAddon
+                  role='group'
+                  bg={item.shareable ? 'purple.500' : 'purple.900'}
+                  _hover={{ bg: 'purple.700' }}
+                  cursor='pointer'
+                  _active={{ bg: 'purple.300' }}
+                  onClick={handleShare}
+                  onMouseEnter={() => setIcon(true)}
+                  onMouseLeave={() => setIcon(false)}
+                  children={<Icon _groupActive={{ transform: 'scale(0.9)' }} transition='transform 50ms linear' color={showIcon ? 'white' : 'gray.500'} h='28px' w='28px' as={showIcon ? AiFillUnlock : AiFillLock} />}
+                />
+            }
           </InputGroup>
         </ModalBody>
         <ModalFooter>

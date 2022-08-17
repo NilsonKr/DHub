@@ -38,6 +38,7 @@ import TagsWrapper from '@components/HOC/TagsWrapper';
 import InstantAuth from '@components/HOC/InstantAuth';
 //Utils
 import { handleDownload } from '@utils/Item'
+import Link from 'next/link';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
 	//This is necessary due metamaks didnt connect automatically due to unknown next's deal with dynamic routes
@@ -56,17 +57,20 @@ const detail = () => {
 	const [isCopied, setCopy] = useState<boolean>(false)
 
 	const shareUrl = `${window.location.href}?share=${account}`
+	const isShared = query?.share
 
 	const copy = () => {
-		// navigator.clipboard.writeText(shareUrl)
-		// setCopy(true)
+		if (!isShared) {
+			setModal('share_item')
+		} else {
+			navigator.clipboard.writeText(window.location.href)
+			setCopy(true)
+		}
 	}
 
 	const download = () => {
 		handleDownload(downloadRef, item.url, item.title)
 	}
-
-	const isShared = query?.share
 
 	return <>{(isLoading || !item) ? <PageSkeleton /> : (
 		<>
@@ -99,7 +103,7 @@ const detail = () => {
 									>
 										<QrCodeIcon size='20px' color='white' />
 									</RoundedBtn>
-									<RoundedBtn bg='purple.500' size='40px' onClick={() => setModal('share_item')}>
+									<RoundedBtn bg='purple.500' size='40px' onClick={copy}>
 										<BiLink color='white' size='25px' />
 									</RoundedBtn>
 									{isCopied && <BounceAnimation duration={1} >
@@ -148,7 +152,7 @@ const detail = () => {
 				<HStack justify='start' spacing={3} w='100%'>
 					<a ref={downloadRef} download='' href='' >
 					</a>
-					{!isShared && <>
+					{!isShared ? <>
 						<RoundedBtn size='50px' bg='purple.500' onClick={download}>
 							<ImCloudDownload color='white' size='30px' />
 						</RoundedBtn>
@@ -164,7 +168,23 @@ const detail = () => {
 						>
 							TRANSFER
 						</GenericBtn>
-					</>}
+					</>
+						:
+						<a href={item.url} target='_blank'>
+							<GenericBtn
+								hoverColor=''
+								rightIcon={<IoIosSend size='30px' color='white' />}
+								bg='linear-gradient(90deg, rgba(255, 0, 184, 0.62) 1.1%, #3E02C9 98.9%)'
+								handleClick={() => { }}
+								fontSize='2xl'
+								fontWeight='semibold'
+								h='50px'
+								borderRadius='10px'
+							>
+								Watch it on IPFS
+							</GenericBtn>
+						</a>
+					}
 				</HStack>
 			</VStack>
 			<CreateTagModal account={account} open={modal === 'new_tag'} close={() => setModal(null)} />
