@@ -8,13 +8,14 @@ import { Item } from '@roottypes/gallery'
 //DB
 import { ClearTagsFrom } from '@db/itemTags'
 
-export const useItemDetail = (position: string, account: string) => {
+export const useItemDetail = (position: string, account: string, shareAcc: string) => {
   const { push } = useRouter()
   const showToast = useToast()
   const DhubContract = useContract()
   const { docTags } = useContext(tagsContext)
   const [isLoading, setLoading] = useState<boolean>(false)
   const [item, setItem] = useState<Item>(null)
+  const [isForbidden, setForbidden] = useState<boolean>(false)
 
   useEffect(() => {
     getItem()
@@ -23,17 +24,27 @@ export const useItemDetail = (position: string, account: string) => {
   const getItem = async () => {
     setLoading(true)
     try {
-      const result: Item = await DhubContract.methods.getFileByPosition(position).call({ from: account })
+      let result: Item
+
+      if (shareAcc) {
+        result = await DhubContract.methods.getFileByPosition(position, shareAcc).call({ from: account })
+      } else {
+        result = await DhubContract.methods.getFileByPosition(position).call({ from: account })
+      }
 
       setItem(result)
     } catch (error) {
-      showToast({
-        title: `There was an unexpected error accessing to this item`,
-        description: 'Please, go back or refresh the page',
-        status: 'error',
-        duration: 10000,
-        position: 'top',
-      })
+      if (shareAcc) {
+        setForbidden(true)
+      } else {
+        showToast({
+          title: `There was an unexpected error accessing to this item`,
+          description: 'Please, go back or refresh the page',
+          status: 'error',
+          duration: 10000,
+          position: 'top',
+        })
+      }
     }
     setLoading(false)
   }
@@ -116,5 +127,5 @@ export const useItemDetail = (position: string, account: string) => {
     }
   }
 
-  return { item, isLoading, deleteItem, updateShareState, transferItem }
+  return { item, isLoading, isForbidden, deleteItem, updateShareState, transferItem }
 }

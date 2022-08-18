@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useContract } from '@hooks/web3/useContract'
 //UI
 import {
   Modal,
@@ -71,7 +70,9 @@ export const ShareItem = ({ item, url, account, updateShareState, close }: TProp
                 You are sharing this item to everyone who has this link!
               </Text>
               <HStack align='center' mt='2'>
-                <GenericBtn p='2' h='28px' fontSize='0.9rem' size='sm' bg='pink.600' handleClick={handleShare}>Lock it</GenericBtn>
+                <GenericBtn p='2' h='28px' fontSize='0.9rem' size='sm' bg='pink.600' rightIcon={<AiFillLock size='18px' />} handleClick={handleShare}>
+                  Lock it
+                </GenericBtn>
                 <Text fontSize='sm' color='gray.400' my='2'>
                   if you dont want to share it anymore
                 </Text>
@@ -103,7 +104,7 @@ export const ShareItem = ({ item, url, account, updateShareState, close }: TProp
               value={url.split('//')[1]}
               disabled={true}
               _disabled={{
-                color: item.shareable ? 'purple.200' : 'gray.500'
+                color: item.shareable ? 'purple.200' : 'gray.600'
               }}
               color='gray.600'
               fontSize='0.9rem'
