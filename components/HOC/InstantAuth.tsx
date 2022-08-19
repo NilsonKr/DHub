@@ -6,7 +6,10 @@ import { Box } from '@chakra-ui/react'
 
 const InstantAuth = (Component: React.FC<any>): React.FC<any> => {
   return () => {
-    const { login, isAuth } = useContext(authContext)
+    const { login, isAuth, isItemShared } = useContext(authContext)
+
+    if (isItemShared)
+      return <Component />
 
     useInitAuth(login)
 

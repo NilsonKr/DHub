@@ -3,14 +3,14 @@ import { authContext } from '@context/AuthContext'
 
 import { TagsContext } from '@context/TagsContext'
 
-type HOCProps = (Gallery: React.FC<any>) => React.FC<any>
+type HOCProps = (Component: React.FC<any>) => React.FC<any>
 
-const TagsWrapper: HOCProps = (Gallery) => () => {
-  const { isAuth } = useContext(authContext)
+const TagsWrapper: HOCProps = (Component) => () => {
+  const { isAuth, isItemShared } = useContext(authContext)
 
-  return isAuth && (
-    <TagsContext>
-      <Gallery />
+  return (isAuth || isItemShared) && (
+    <TagsContext isItemShared={isItemShared} >
+      <Component />
     </TagsContext>
   )
 }

@@ -1,6 +1,7 @@
 import React, { useCallback, useState, useEffect } from 'react'
 import { useContract } from '@hooks/web3/useContract'
 import { useWallet } from '@hooks/web3/useWallet'
+import { useRouter } from 'next/router'
 
 import { loginReturn, User } from '@roottypes/auth'
 
@@ -8,6 +9,7 @@ export type Context = {
   user: User
   isAuth: boolean
   account: string
+  isItemShared: boolean
   login: () => Promise<loginReturn>
   register: (name: string) => Promise<loginReturn>
   logout: () => void
@@ -17,9 +19,12 @@ export const authContext = React.createContext<Context | null>(null)
 
 export const AuthContext: React.FC = ({ children }) => {
   const DhubContract = useContract()
+  const router = useRouter()
   const { active, account, disconnect } = useWallet()
   const [user, setUser] = useState<User>(null)
   const [isAuth, setAuthState] = useState<boolean>(false)
+
+  const isItemShared = router.pathname === '/detail/[id]' && !!router.query?.share
 
   useEffect(() => {
     if (active) {
@@ -55,6 +60,6 @@ export const AuthContext: React.FC = ({ children }) => {
   }
 
   return (
-    <authContext.Provider value={{ user, isAuth, account, login, register, logout }} >{children}</authContext.Provider>
+    <authContext.Provider value={{ user, isAuth, account, isItemShared, login, register, logout }} >{children}</authContext.Provider>
   )
 }

@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useItemDetail } from '@hooks/web3/useItemDetail'
 import { GetServerSidePropsContext } from 'next'
 import Image from 'next/image';
@@ -57,8 +57,12 @@ const detail = () => {
 	const [modal, setModal] = useState<string>('');
 	const [isCopied, setCopy] = useState<boolean>(false)
 
-	const shareUrl = `${window.location.href}?share=${account}`
 	const isShared = query?.share
+	let shareUrl = ''
+
+	useEffect(() => {
+		shareUrl = `${window.location.href}?share=${account}&description=${item?.description}&title=${item?.title}&size=${item?.size}&uploadDate=${item?.uploadDate}&url=${item?.url.split('//')[1]}`
+	}, [])
 
 	const copy = () => {
 		if (!isShared) {
@@ -134,7 +138,7 @@ const detail = () => {
 									<Flex align='center'>
 										<Text>Owner : </Text>
 										<Badge ml='3' bg='gray.700' p='1' borderRadius='5px'>
-											{account}
+											{account ?? query?.share}
 										</Badge>
 									</Flex>
 									<Flex align='center'>

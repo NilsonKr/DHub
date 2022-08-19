@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from 'react'
-import { useContract } from '@hooks/web3/useContract'
 import { useRouter } from 'next/router'
+import { useContract } from '@hooks/web3/useContract'
 import { useToast } from '@chakra-ui/react'
 import { tagsContext } from '@context/TagsContext'
 //Types
@@ -9,7 +9,7 @@ import { Item } from '@roottypes/gallery'
 import { ClearTagsFrom } from '@db/itemTags'
 
 export const useItemDetail = (position: string, account: string, shareAcc: string) => {
-  const { push } = useRouter()
+  const router = useRouter()
   const showToast = useToast()
   const DhubContract = useContract()
   const { docTags } = useContext(tagsContext)
@@ -18,7 +18,19 @@ export const useItemDetail = (position: string, account: string, shareAcc: strin
   const [isForbidden, setForbidden] = useState<boolean>(false)
 
   useEffect(() => {
-    getItem()
+    if (!shareAcc) {
+      getItem()
+    } else {
+      setItem({
+        id: router.query?.id as string,
+        title: router.query?.title as string,
+        description: router.query?.description as string,
+        size: router.query?.size as string,
+        uploadDate: router.query?.uploadDate as string,
+        url: `https://${router.query?.url as string}`,
+        shareable: true
+      })
+    }
   }, [])
 
   const getItem = async () => {
@@ -63,7 +75,7 @@ export const useItemDetail = (position: string, account: string, shareAcc: strin
         duration: 3000,
         position: 'top',
       })
-      setTimeout(() => push('/gallery'), 2000)
+      setTimeout(() => router.push('/gallery'), 2000)
     } catch (error) {
       showToast({
         title: `There was an unexpected error trying to delete this item`,
@@ -114,7 +126,7 @@ export const useItemDetail = (position: string, account: string, shareAcc: strin
         position: 'top',
       })
 
-      setTimeout(() => push('/gallery'), 1000)
+      setTimeout(() => router.push('/gallery'), 1000)
     } catch (error) {
       showToast({
         title: `There was an unexpected error trying to transfer this item`,

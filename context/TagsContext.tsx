@@ -15,9 +15,13 @@ export type Context = {
   resetSelected: () => void
 }
 
+type ComponentProps = {
+  isItemShared: boolean
+}
+
 export const tagsContext = React.createContext<Context | null>(null)
 
-export const TagsContext: React.FC = ({ children }) => {
+export const TagsContext: React.FC<ComponentProps> = ({ children, isItemShared }) => {
   const { account } = useWallet()
   const { tags, selected, setTagsState, toggleSelect, resetSelected } = useTags()
   const [docTags, setDocsTags] = useState<DocTags>(null)
@@ -36,7 +40,10 @@ export const TagsContext: React.FC = ({ children }) => {
     })
   };
 
-  useEffect(fetchTags, []);
+  useEffect(() => {
+    if (!isItemShared)
+      fetchTags()
+  }, []);
 
   return (
     <tagsContext.Provider value={{ tags, docTags, selected, isLoading, toggleSelect, resetSelected }} >{children}</tagsContext.Provider>
