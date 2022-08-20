@@ -56,13 +56,14 @@ const detail = () => {
 	const downloadRef = useRef<HTMLAnchorElement>(null)
 	const [modal, setModal] = useState<string>('');
 	const [isCopied, setCopy] = useState<boolean>(false)
+	const [shareUrl, setShareUrl] = useState<string>('')
 
 	const isShared = query?.share
-	let shareUrl = ''
 
 	useEffect(() => {
-		shareUrl = `${window.location.href}?share=${account}&description=${item?.description}&title=${item?.title}&size=${item?.size}&uploadDate=${item?.uploadDate}&url=${item?.url.split('//')[1]}`
-	}, [])
+		if (item)
+			setShareUrl(`${window.location.href}?share=${account}&description=${item?.description}&title=${item?.title}&size=${item?.size}&uploadDate=${item?.uploadDate}&url=${item?.url.split('//')[1]}`)
+	}, [item])
 
 	const copy = () => {
 		if (!isShared) {

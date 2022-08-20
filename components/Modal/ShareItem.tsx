@@ -99,9 +99,8 @@ export const ShareItem = ({ item, url, account, updateShareState, close }: TProp
           <InputGroup my='3'>
             <Input
               variant='flushed'
-              placeholder='Receiver Address'
               _placeholder={{ color: 'gray.400' }}
-              value={url.split('//')[1]}
+              value={url}
               disabled={true}
               _disabled={{
                 color: item.shareable ? 'purple.200' : 'gray.600'
