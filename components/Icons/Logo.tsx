@@ -1,10 +1,16 @@
+import React from 'react'
 import { motion } from 'framer-motion';
 
-export const LogoIcon = () => {
+type ComponentProps = {
+	width: string
+	height: string
+}
+
+export const LogoIcon: React.FC<ComponentProps> = ({ width, height }) => {
 	return (
 		<motion.svg
-			width='140'
-			height='32'
+			width={width}
+			height={height}
 			viewBox='0 0 137 36'
 			xmlns='http://www.w3.org/2000/svg'
 			initial={{ opacity: 0 }}
