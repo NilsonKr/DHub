@@ -1,18 +1,43 @@
 import React from 'react'
 import { Form } from '@hooks/useForm'
-
-import { VStack, Heading, Text } from '@chakra-ui/react'
+//UI
+import { MdEdit } from 'react-icons/md'
+import {
+  VStack,
+  Heading,
+  Text,
+  InputGroup,
+  Input,
+  InputRightElement,
+  FormControl,
+} from '@chakra-ui/react'
 
 type ComponentProps = {
   form: Form,
+  isEdit: boolean
   handleChange: (field: string, value: string) => void
 }
 
-export const UpdatableFields: React.FC<ComponentProps> = ({ form, handleChange }) => {
+export const UpdatableFields: React.FC<ComponentProps> = ({ form, isEdit, handleChange }) => {
   return (
-    <VStack spacing={1} align='flex-start'>
-      <Heading>{form.title}</Heading>
-      <Text fontSize='lg' fontWeight='n' color='gray.400' >{form.description}</Text>
-    </VStack>
+    <FormControl>
+      <VStack spacing={2} align='flex-start'>
+        {!isEdit ? <>
+          <Heading>{form.title}</Heading>
+          <Text fontSize='lg' fontWeight='n' color='gray.400' >{form.description}</Text>
+        </> :
+          <>
+            <InputGroup w='100%' background='gray.900' borderColor='transparent' >
+              <Input fontSize='1.4rem' fontWeight='bold' value={form.title} onChange={e => handleChange('title', e.target.value)} />
+              <InputRightElement children={<MdEdit size='22px' color='white' />} />
+            </InputGroup>
+            <InputGroup w='100%' background='gray.900' borderColor='transparent' >
+              <Input color='gray.400' value={form.description} onChange={e => handleChange('description', e.target.value)} />
+              <InputRightElement children={<MdEdit size='22px' color='white' />} />
+            </InputGroup>
+          </>
+        }
+      </VStack>
+    </FormControl>
   )
 }

@@ -27,7 +27,7 @@ const detail = () => {
 	const { query } = useRouter()
 	const { account } = useWallet()
 
-	const { item, isLoading, isForbidden, deleteItem, updateShareState, transferItem } = useItemDetail(query.id as string, account, query?.share as string)
+	const { item, isLoading, isForbidden, deleteItem, updateItem, updateShareState, transferItem } = useItemDetail(query.id as string, account, query?.share as string)
 	const [modal, setModal] = useState<string>('');
 	const [shareUrl, setShareUrl] = useState<string>('')
 
@@ -46,6 +46,7 @@ const detail = () => {
 					<DetailView
 						item={item}
 						account={account}
+						handleEdit={updateItem}
 						isShared={isShared as string}
 						setModal={(modal) => setModal(modal)}
 					/>

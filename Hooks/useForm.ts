@@ -7,6 +7,7 @@ type Return = {
 	handleChange: (key: string, value: string) => void;
 	cleanForm: () => void;
 	validateEmptyForm: (keys: string[]) => boolean;
+	resetForm: (newValues?: Form) => void;
 };
 
 export const useForm = (values: Form): Return => {
@@ -28,5 +29,9 @@ export const useForm = (values: Form): Return => {
 		return isEmpty;
 	};
 
-	return { form, handleChange, cleanForm, validateEmptyForm };
+	const resetForm = (newValues?: Form) => {
+		setForm(newValues ?? values);
+	};
+
+	return { form, handleChange, cleanForm, validateEmptyForm, resetForm };
 };

@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import { useContract } from '@hooks/web3/useContract'
 import { useToast } from '@chakra-ui/react'
 import { tagsContext } from '@context/TagsContext'
+import { Form } from '@hooks/useForm'
 //Types
 import { Item } from '@roottypes/gallery'
 //DB
@@ -61,6 +62,45 @@ export const useItemDetail = (position: string, account: string, shareAcc: strin
     setLoading(false)
   }
 
+  const updateItem = (fields: Form): Promise<void> => new Promise((resolve, reject) => {
+    const { title, description } = fields as { [k: string]: string }
+
+    DhubContract.methods.editFile(position, title, description).send({ from: account })
+      .on('transactionHash', () => {
+        setLoading(true)
+        showToast({
+          title: `This may take a couple of minutes`,
+          description: 'While we update the item in the smart-contract',
+          status: 'info',
+          duration: 8000,
+          position: 'top',
+        })
+      })
+      .on('receipt', () => {
+        setItem(prev => ({ ...prev, title, description }))
+        showToast({
+          title: `Your item has been updated!`,
+          status: 'success',
+          duration: 3000,
+          position: 'top',
+          variant: 'subtle'
+        })
+        resolve()
+        setLoading(false)
+
+      })
+      .on("error", () => {
+        showToast({
+          title: `There was an unexpected error updating the item`,
+          description: 'Please go back or refresh the page',
+          status: 'error',
+          duration: 10000,
+          position: 'top',
+        })
+        reject()
+        setLoading(false)
+      })
+  })
 
   const deleteItem = async () => {
     setLoading(true)
@@ -79,7 +119,7 @@ export const useItemDetail = (position: string, account: string, shareAcc: strin
     } catch (error) {
       showToast({
         title: `There was an unexpected error trying to delete this item`,
-        description: 'Please, try again',
+        description: 'Please try again',
         status: 'error',
         duration: 6000,
         position: 'top',
@@ -95,15 +135,14 @@ export const useItemDetail = (position: string, account: string, shareAcc: strin
           title: `This may take a couple of minutes`,
           description: 'While we update the state in the smart-contract',
           status: 'info',
-          duration: 6000,
+          duration: 8000,
           position: 'top',
-          variant: 'subtle'
         })
       })
       .on('receipt', () => {
         setItem(prev => ({ ...prev, shareable: !prev.shareable }))
         showToast({
-          title: `Udapted share state succesfully`,
+          title: `Updated share state succesfully`,
           status: 'success',
           duration: 3000,
           position: 'top',
@@ -114,7 +153,7 @@ export const useItemDetail = (position: string, account: string, shareAcc: strin
       .on("error", () => {
         showToast({
           title: `There was an unexpected error updating the 'shareable' state`,
-          description: 'Please, go back or refresh the page',
+          description: 'Please go back or refresh the page',
           status: 'error',
           duration: 10000,
           position: 'top',
@@ -151,5 +190,5 @@ export const useItemDetail = (position: string, account: string, shareAcc: strin
     }
   }
 
-  return { item, isLoading, isForbidden, deleteItem, updateShareState, transferItem }
+  return { item, isLoading, isForbidden, deleteItem, updateItem, updateShareState, transferItem }
 }

@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react'
 import Image from 'next/image';
-import { useForm } from '@hooks/useForm'
+import { useForm, Form } from '@hooks/useForm'
 //UI
 import { Bounce as BounceAnimation } from '@components/Animations/Common'
 import { QrCodeIcon } from '../../components/Icons';
@@ -10,6 +10,8 @@ import { ItemTagsRow } from '@components/Miscellaneous/';
 import { BiLink, BiTrash } from 'react-icons/bi';
 import { ImCloudDownload } from 'react-icons/im';
 import { IoIosSend } from 'react-icons/io';
+import { FiEdit2 } from 'react-icons/fi'
+import { TiCancel } from 'react-icons/ti'
 import {
   VStack,
   HStack,
@@ -30,14 +32,18 @@ type ComponentProps = {
   item: Item,
   isShared: string
   account: string
+  handleEdit: (form: Form) => Promise<void>
   setModal: (modal: string) => void
 }
 
-export const DetailView: React.FC<ComponentProps> = ({ item, isShared, account, setModal }) => {
+export const DetailView: React.FC<ComponentProps> = ({ item, isShared, account, handleEdit, setModal }) => {
   const downloadRef = useRef<HTMLAnchorElement>(null)
 
-  const { form, handleChange } = useForm({ description: item.description, title: item.title })
+  const { form, handleChange, resetForm } = useForm({ description: item.description, title: item.title })
   const [isCopied, setCopy] = useState<boolean>(false)
+  const [isEdit, setEdit] = useState<boolean>(false)
+
+  const formValid = ((form.description !== item.description || (form.title !== item.title)) && form.title !== '')
 
   const copy = () => {
     if (!isShared) {
@@ -49,6 +55,16 @@ export const DetailView: React.FC<ComponentProps> = ({ item, isShared, account, 
   }
   const download = () => {
     handleDownload(downloadRef, item.url, item.title)
+  }
+
+  const finishEdit = (cancel: boolean) => {
+    setEdit(false)
+
+    if (!cancel) {
+      handleEdit(form)
+    } else {
+      resetForm()
+    }
   }
 
   return (
@@ -89,19 +105,30 @@ export const DetailView: React.FC<ComponentProps> = ({ item, isShared, account, 
                     <CheckCircleIcon color='green.400' w='25px' h='25px' />
                   </BounceAnimation>}
                 </HStack>
-                {!isShared ?
-                  <RoundedBtn bg='red.500' size='40px' onClick={() => setModal('delete_item')}>
-                    <BiTrash color='white' size='25px' />
-                  </RoundedBtn>
-                  :
-                  <RoundedBtn size='40px' bg='purple.500' onClick={download}>
-                    <ImCloudDownload color='white' size='25px' />
-                  </RoundedBtn>
-                }
+                <HStack spacing={5}>
+                  {!isShared ?
+                    <>
+                      {isEdit ?
+                        <GenericBtn disabled={!formValid} handleClick={() => finishEdit(false)} borderRadius='20px' bg='#ff009a'>
+                          Done
+                        </GenericBtn>
+                        : <RoundedBtn bg='purple.500' size='40px' onClick={() => setEdit(true)}>
+                          <FiEdit2 color='white' size='22px' />
+                        </RoundedBtn>}
+                      <RoundedBtn bg='red.500' size='40px' onClick={() => isEdit ? finishEdit(true) : setModal('delete_item')}>
+                        {isEdit ? <TiCancel fill='white' size='30px' /> : <BiTrash color='white' size='25px' />}
+                      </RoundedBtn>
+                    </>
+                    :
+                    <RoundedBtn size='40px' bg='purple.500' onClick={download}>
+                      <ImCloudDownload color='white' size='25px' />
+                    </RoundedBtn>
+                  }
+                </HStack>
               </Flex>
               <Divider orientation='horizontal' w='100%' bg='white' />
             </Box>
-            <UpdatableFields form={form} handleChange={handleChange} />
+            <UpdatableFields isEdit={isEdit} form={form} handleChange={handleChange} />
             <VStack spacing={4} align='start'>
               <Flex align='center'>
                 <Text>Owner : </Text>
