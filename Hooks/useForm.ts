@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
-type Form = { [k: string]: string | number };
+export type Form = { [k: string]: string | number };
 
 type Return = {
 	form: Form;

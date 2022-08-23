@@ -29,12 +29,11 @@ import { Item } from '@roottypes/gallery'
 type TProps = {
   item: Item;
   url: string;
-  account: string;
   updateShareState: () => Promise<void>
   close: () => void;
 };
 
-export const ShareItem = ({ item, url, account, updateShareState, close }: TProps) => {
+export const ShareItem = ({ item, url, updateShareState, close }: TProps) => {
   const showToast = useToast()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [showIcon, setIcon] = useState<boolean>(false)

@@ -88,28 +88,40 @@ export const useItemDetail = (position: string, account: string, shareAcc: strin
     }
   }
 
-  const updateShareState = async () => {
-    try {
-      await DhubContract.methods.updateShareState(position).send({ from: account })
-
-      setItem(prev => ({ ...prev, shareable: !prev.shareable }))
-      showToast({
-        title: `Udapted share state succesfully`,
-        status: 'success',
-        duration: 3000,
-        position: 'top',
-        variant: 'subtle'
+  const updateShareState = (): Promise<void> => new Promise((resolve, reject) => {
+    DhubContract.methods.updateShareState(position).send({ from: account })
+      .on('transactionHash', () => {
+        showToast({
+          title: `This may take a couple of minutes`,
+          description: 'While we update the state in the smart-contract',
+          status: 'info',
+          duration: 6000,
+          position: 'top',
+          variant: 'subtle'
+        })
       })
-    } catch (error) {
-      showToast({
-        title: `There was an unexpected error updating the 'shareable' state`,
-        description: 'Please, go back or refresh the page',
-        status: 'error',
-        duration: 10000,
-        position: 'top',
+      .on('receipt', () => {
+        setItem(prev => ({ ...prev, shareable: !prev.shareable }))
+        showToast({
+          title: `Udapted share state succesfully`,
+          status: 'success',
+          duration: 3000,
+          position: 'top',
+          variant: 'subtle'
+        })
+        resolve()
       })
-    }
-  }
+      .on("error", () => {
+        showToast({
+          title: `There was an unexpected error updating the 'shareable' state`,
+          description: 'Please, go back or refresh the page',
+          status: 'error',
+          duration: 10000,
+          position: 'top',
+        })
+        reject()
+      })
+  })
 
   const transferItem = async (target: string) => {
     setLoading(true)
