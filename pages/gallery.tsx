@@ -6,7 +6,7 @@ import NextImage from 'next/image'
 //UI
 import { Box, Grid, GridItem, Heading, Flex, Highlight } from '@chakra-ui/react';
 import { Card, CreateTagModal, UploadModal, SkeletonCard } from '../components/Index';
-import { BgLeftAdornment, BgRightAdornment, EmptyHubDraw } from '../components/Icons/';
+import { EmptyHubDraw } from '../components/Icons/';
 import { SearchInput, GalleryTags, MenuActions, Upload } from '../components/Index';
 import { ItemTags } from '@components/Modal/ItemTags';
 //HOC
@@ -84,12 +84,6 @@ const gallery = () => {
 					</Heading>
 				</Flex>}
 				{files.length > 0 && <GalleryTags account={account} openNewTag={() => setModal('new_tag')} />}
-			</Box>
-			<Box position='absolute' top='0px' left='10px' zIndex='-1'>
-				<BgLeftAdornment />
-			</Box>
-			<Box position='absolute' bottom='0px' right='0px' zIndex='-1'>
-				<BgRightAdornment />
 			</Box>
 			<CreateTagModal
 				account={account}

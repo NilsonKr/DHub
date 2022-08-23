@@ -5,6 +5,7 @@ export type Item = {
 	uploadDate: string;
 	size: string;
 	url: string;
+	shareable: boolean;
 };
 
 export type DocTags = {

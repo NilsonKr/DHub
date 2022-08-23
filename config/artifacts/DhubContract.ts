@@ -1,6 +1,6 @@
 export const DhubContract: IDhubContract = {
 	address: {
-		4: '0x7d8593c1416b1D8eE66056B7802F6D406f91B523',
+		4: '0x61960815dd03B1E43C533731f117e558A946Ee30',
 	},
 	abi: [
 		{
@@ -49,6 +49,11 @@ export const DhubContract: IDhubContract = {
 							internalType: 'uint256',
 							name: 'size',
 							type: 'uint256',
+						},
+						{
+							internalType: 'bool',
+							name: 'shareable',
+							type: 'bool',
 						},
 					],
 					indexed: false,
@@ -100,6 +105,11 @@ export const DhubContract: IDhubContract = {
 							internalType: 'uint256',
 							name: 'size',
 							type: 'uint256',
+						},
+						{
+							internalType: 'bool',
+							name: 'shareable',
+							type: 'bool',
 						},
 					],
 					indexed: false,
@@ -197,6 +207,72 @@ export const DhubContract: IDhubContract = {
 					name: 'size',
 					type: 'uint256',
 				},
+				{
+					internalType: 'bool',
+					name: 'shareable',
+					type: 'bool',
+				},
+			],
+			stateMutability: 'view',
+			type: 'function',
+		},
+		{
+			inputs: [
+				{
+					internalType: 'uint8',
+					name: 'position',
+					type: 'uint8',
+				},
+				{
+					internalType: 'address',
+					name: 'shareAcc',
+					type: 'address',
+				},
+			],
+			name: 'getFileByPosition',
+			outputs: [
+				{
+					components: [
+						{
+							internalType: 'uint8',
+							name: 'id',
+							type: 'uint8',
+						},
+						{
+							internalType: 'string',
+							name: 'url',
+							type: 'string',
+						},
+						{
+							internalType: 'string',
+							name: 'title',
+							type: 'string',
+						},
+						{
+							internalType: 'string',
+							name: 'description',
+							type: 'string',
+						},
+						{
+							internalType: 'string',
+							name: 'uploadDate',
+							type: 'string',
+						},
+						{
+							internalType: 'uint256',
+							name: 'size',
+							type: 'uint256',
+						},
+						{
+							internalType: 'bool',
+							name: 'shareable',
+							type: 'bool',
+						},
+					],
+					internalType: 'struct Dhub.UserFile',
+					name: '',
+					type: 'tuple',
+				},
 			],
 			stateMutability: 'view',
 			type: 'function',
@@ -243,6 +319,11 @@ export const DhubContract: IDhubContract = {
 							name: 'size',
 							type: 'uint256',
 						},
+						{
+							internalType: 'bool',
+							name: 'shareable',
+							type: 'bool',
+						},
 					],
 					internalType: 'struct Dhub.UserFile',
 					name: '',
@@ -287,6 +368,11 @@ export const DhubContract: IDhubContract = {
 							internalType: 'uint256',
 							name: 'size',
 							type: 'uint256',
+						},
+						{
+							internalType: 'bool',
+							name: 'shareable',
+							type: 'bool',
 						},
 					],
 					internalType: 'struct Dhub.UserFile[]',
@@ -379,6 +465,19 @@ export const DhubContract: IDhubContract = {
 		{
 			inputs: [
 				{
+					internalType: 'uint8',
+					name: 'position',
+					type: 'uint8',
+				},
+			],
+			name: 'updateShareState',
+			outputs: [],
+			stateMutability: 'nonpayable',
+			type: 'function',
+		},
+		{
+			inputs: [
+				{
 					components: [
 						{
 							internalType: 'uint8',
@@ -409,6 +508,11 @@ export const DhubContract: IDhubContract = {
 							internalType: 'uint256',
 							name: 'size',
 							type: 'uint256',
+						},
+						{
+							internalType: 'bool',
+							name: 'shareable',
+							type: 'bool',
 						},
 					],
 					internalType: 'struct Dhub.UserFile',

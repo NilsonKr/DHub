@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from 'react'
-import { useContract } from '@hooks/web3/useContract'
 import { useRouter } from 'next/router'
+import { useContract } from '@hooks/web3/useContract'
 import { useToast } from '@chakra-ui/react'
 import { tagsContext } from '@context/TagsContext'
 //Types
@@ -8,32 +8,55 @@ import { Item } from '@roottypes/gallery'
 //DB
 import { ClearTagsFrom } from '@db/itemTags'
 
-export const useItemDetail = (position: string, account: string) => {
-  const { push } = useRouter()
+export const useItemDetail = (position: string, account: string, shareAcc: string) => {
+  const router = useRouter()
   const showToast = useToast()
   const DhubContract = useContract()
   const { docTags } = useContext(tagsContext)
   const [isLoading, setLoading] = useState<boolean>(false)
   const [item, setItem] = useState<Item>(null)
+  const [isForbidden, setForbidden] = useState<boolean>(false)
 
   useEffect(() => {
-    getItem()
+    if (!shareAcc) {
+      getItem()
+    } else {
+      setItem({
+        id: router.query?.id as string,
+        title: router.query?.title as string,
+        description: router.query?.description as string,
+        size: router.query?.size as string,
+        uploadDate: router.query?.uploadDate as string,
+        url: `https://${router.query?.url as string}`,
+        shareable: true
+      })
+    }
   }, [])
 
   const getItem = async () => {
     setLoading(true)
     try {
-      const result: Item = await DhubContract.methods.getFileByPosition(position).call({ from: account })
+      let result: Item
+
+      if (shareAcc) {
+        result = await DhubContract.methods.getFileByPosition(position, shareAcc).call({ from: account })
+      } else {
+        result = await DhubContract.methods.getFileByPosition(position).call({ from: account })
+      }
 
       setItem(result)
     } catch (error) {
-      showToast({
-        title: `There was an unexpected error accessing to this item`,
-        description: 'Please, go back or refresh the page',
-        status: 'error',
-        duration: 10000,
-        position: 'top',
-      })
+      if (shareAcc) {
+        setForbidden(true)
+      } else {
+        showToast({
+          title: `There was an unexpected error accessing to this item`,
+          description: 'Please, go back or refresh the page',
+          status: 'error',
+          duration: 10000,
+          position: 'top',
+        })
+      }
     }
     setLoading(false)
   }
@@ -44,6 +67,7 @@ export const useItemDetail = (position: string, account: string) => {
     try {
       await ClearTagsFrom(account, item.id, docTags)
       await DhubContract.methods.removeFile(position).send({ from: account })
+
       showToast({
         title: `Item deleted succesfully`,
         description: 'You will be redirected to your gallery!',
@@ -51,8 +75,7 @@ export const useItemDetail = (position: string, account: string) => {
         duration: 3000,
         position: 'top',
       })
-
-      setTimeout(() => push('/gallery'), 2000)
+      setTimeout(() => router.push('/gallery'), 2000)
     } catch (error) {
       showToast({
         title: `There was an unexpected error trying to delete this item`,
@@ -62,6 +85,29 @@ export const useItemDetail = (position: string, account: string) => {
         position: 'top',
       })
       setLoading(false)
+    }
+  }
+
+  const updateShareState = async () => {
+    try {
+      await DhubContract.methods.updateShareState(position).send({ from: account })
+
+      setItem(prev => ({ ...prev, shareable: !prev.shareable }))
+      showToast({
+        title: `Udapted share state succesfully`,
+        status: 'success',
+        duration: 3000,
+        position: 'top',
+        variant: 'subtle'
+      })
+    } catch (error) {
+      showToast({
+        title: `There was an unexpected error updating the 'shareable' state`,
+        description: 'Please, go back or refresh the page',
+        status: 'error',
+        duration: 10000,
+        position: 'top',
+      })
     }
   }
 
@@ -80,7 +126,7 @@ export const useItemDetail = (position: string, account: string) => {
         position: 'top',
       })
 
-      setTimeout(() => push('/gallery'), 1000)
+      setTimeout(() => router.push('/gallery'), 1000)
     } catch (error) {
       showToast({
         title: `There was an unexpected error trying to transfer this item`,
@@ -93,5 +139,5 @@ export const useItemDetail = (position: string, account: string) => {
     }
   }
 
-  return { item, isLoading, deleteItem, transferItem }
+  return { item, isLoading, isForbidden, deleteItem, updateShareState, transferItem }
 }

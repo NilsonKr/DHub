@@ -11,7 +11,10 @@ export const useInitAuth: HookProps = (handleLogin) => {
   const { push } = useRouter()
 
   const autoLogin = async () => {
-    await handleLogin()
+    const result = await handleLogin()
+
+    if (result?.error)
+      push('/')
   }
 
   const handleConnect = async () => {

@@ -5,7 +5,7 @@ type MethodReturn = {
 	payload: any;
 };
 
-export const addFileToIpfs = async (file: File): Promise<MethodReturn> => {
+export const addFileToIpfs = async (file: any): Promise<MethodReturn> => {
 	try {
 		const ipfsResult = await IPFSClient.add(file);
 		return { error: false, payload: ipfsResult };

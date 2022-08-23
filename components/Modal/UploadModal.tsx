@@ -12,8 +12,8 @@ import {
 	ModalCloseButton,
 	useToast
 } from '@chakra-ui/react';
-//Utils
-import { addFileToIpfs } from '@ipfs/methods'
+//Types
+import { UploadResponse } from '@roottypes/api/files'
 
 type TProps = { close: () => void, refreshItems: (acc: string) => Promise<void> };
 
@@ -31,10 +31,19 @@ export const UploadModal = ({ close, refreshItems }: TProps) => {
 	const upload = async (info: TFileInfo, fileForm: DocumentForm) => {
 		setLoading(true)
 		try {
-			const ipfsResult = await addFileToIpfs(file)
-			const ipfsUrl = `https://ipfs.infura-ipfs.io/ipfs/${ipfsResult.payload.path}`
+			const requestBody = new FormData()
+			requestBody.append('file', file)
 
-			const fileRecord = [0, ipfsUrl, fileForm.name, fileForm.description, new Date().toString(), info.rawSize]
+			//Upload file to ipfs to get the hash url
+			const result = await window.fetch('/api/uploadFile', {
+				method: 'POST',
+				body: requestBody,
+			})
+			const data: UploadResponse = await result.json()
+			const ipfsUrl = `https://dhub.infura-ipfs.io/ipfs/${data.hash}`
+
+			//Save file record on contract
+			const fileRecord = [0, ipfsUrl, fileForm.name, fileForm.description, new Date().toString(), info.rawSize, false]
 			await Dhub.methods.uploadFile(fileRecord).send({ from: account })
 
 			refreshItems(account)

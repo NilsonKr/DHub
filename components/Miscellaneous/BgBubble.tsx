@@ -13,7 +13,7 @@ const initialStyles: any = {
 	transform: 'translate(50%, -50%)',
 };
 
-export const BgBubble = (props: BoxProps) => {
+export const BgBubble = () => {
 	return (
 		<>
 			<motion.div
