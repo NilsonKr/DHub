@@ -22,6 +22,7 @@ import {
   Badge,
   Divider,
 } from '@chakra-ui/react';
+import { ExtensibleImage } from './ExtensibleImage'
 import { UpdatableFields } from './UpdatableFields'
 //Utils
 import { handleDownload } from '@utils/Item'
@@ -70,20 +71,8 @@ export const DetailView: React.FC<ComponentProps> = ({ item, isShared, account, 
   return (
     <>
       <VStack spacing={5} h='70vh' mt='50px' w='100%' justify='center' px='10' pb='10'>
-        <Flex justify='start' w='100%'>
-          <Box
-            w='280px'
-            h='280px'
-            position='relative'
-            shadow='0px 2px 10px rgba(255, 255, 255, 0.3)'
-            mr='12'
-          >
-            <Image
-              layout='fill'
-              objectFit='cover'
-              src={item.url}
-            />
-          </Box>
+        <Flex justify='start' w='100%' align='center'>
+          <ExtensibleImage url={item.url} />
           <VStack w='65%' align='start' spacing={5}>
             <Box w='100%'>
               <Flex justifyContent='space-between' align='center'>
