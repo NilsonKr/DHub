@@ -58,7 +58,7 @@ export const Card = ({ index, item, setSelected, openCreateTag }: Props) => {
 				zIndex='2'
 				bg='linear-gradient(180deg, rgba(0, 0, 0, 0.60) 0%, rgba(0, 0, 0, 0) 40%)'
 				_hover={{
-					bg: 'linear-gradient(180deg, rgba(0,0,0,0.7) 0%, rgba(246,246,246,0) 50%, rgba(0,0,0,0.7) 100%)',
+					bg: 'linear-gradient(180deg, rgba(0,0,0,0.5) 0%, rgba(246,246,246,0) 50%, rgba(0,0,0,0.7) 100%)',
 				}}
 			>
 				<VStack px='3' py='2' h='100%' justifyContent='space-between'>
