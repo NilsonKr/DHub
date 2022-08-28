@@ -16,8 +16,8 @@ export const Header = () => {
 				<NextLink href='/'>
 					<Flex cursor='pointer' justifyContent={isAuth ? 'start' : 'center'}>
 						<LogoIcon
-							width={isAuth ? '140px' : '190px'}
-							height={isAuth ? '32px' : '48px'}
+							width={isAuth ? '140px' : ['150px', '190px']}
+							height={isAuth ? '32px' : ['36px', '48px']}
 						/>
 					</Flex>
 				</NextLink>

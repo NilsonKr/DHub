@@ -1,25 +1,29 @@
 import React from 'react';
 //UI
 import { motion, Variants } from 'framer-motion';
-import { Box } from '@chakra-ui/react';
+import { Box, useMediaQuery } from '@chakra-ui/react';
 
-const variants: Variants = {
-  hidden: {
-    opacity: 0,
-    translateY: '50px',
-  },
-  entrance: {
-    opacity: 1,
-    translateY: '0px',
-    transition: {
-      delay: 0.3,
-      duration: 1,
+const getVariants = (isMobile: boolean): Variants => {
+  return {
+    hidden: {
+      opacity: 0,
+      translateY: '50px',
     },
-  },
-};
+    entrance: {
+      opacity: 1,
+      translateY: isMobile ? '-50px' : '0px',
+      transition: {
+        delay: 0.3,
+        duration: 1,
+      },
+    },
+  };
+}
 
 export const ConnectAnimation = (Component: React.FC<any>): React.FC<any> => {
   return (props) => {
+    const [isMobile] = useMediaQuery('(max-width: 768px)')
+
     return (
       <Box
         position='absolute'
@@ -29,7 +33,7 @@ export const ConnectAnimation = (Component: React.FC<any>): React.FC<any> => {
         minW='65%'
         zIndex='1'
       >
-        <motion.div variants={variants} animate='entrance' initial='hidden'>
+        <motion.div variants={getVariants(isMobile)} animate='entrance' initial='hidden'>
           <Component {...props} />
         </motion.div>
       </Box>

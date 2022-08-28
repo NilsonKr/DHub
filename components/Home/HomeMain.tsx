@@ -104,9 +104,11 @@ export const HomeMain = () => {
 		<Box my='10' position='relative'>
 			<BgBubble />
 
+			<ErrorConnection errorMsg={'nothing important'} />
+
 			{animate.trigger && isRegister.open && <Register msg={isRegister.message} />}
 			{animate.trigger && !error && !isRegister.open && <LoggedIn />}
-			{animate.trigger && error && !isRegister.open && <ErrorConnection errorMsg={error} />}
+			{/* {animate.trigger && error && !isRegister.open && <ErrorConnection errorMsg={error} />} */}
 
 			<motion.div variants={variants} animate={animate.trigger ? 'open' : {}}>
 				<VStack
@@ -117,7 +119,7 @@ export const HomeMain = () => {
 					textAlign='center'
 				>
 					<MagicBox open={openBox} />
-					<Heading>Your own descentralized storage</Heading>
+					<Heading fontSize={['2xl', '4xl']} > Your own descentralized storage</Heading>
 					{!animate.trigger && (
 						<>
 							<Text>Get start by sign in</Text>
