@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from 'react';
 import { authContext } from '@context/AuthContext'
 import Image from 'next/image';
 //UI
+import { Box } from '@chakra-ui/react'
 import { motion, Variants } from 'framer-motion';
 
 type TProps = { open: boolean };
@@ -44,24 +45,28 @@ export const MagicBox = ({ open }: TProps) => {
 			initial='idle'
 			style={{ cursor: 'pointer' }}
 		>
-			{openBox ? (
-				<Image
-					src={'/assets/boxOpen.png'}
-					alt='Descentralized open box'
-					width='250px'
-					height='250px'
-				/>
-			) : (
-				<Image
-					onClick={() => handleShaking()}
-					src={'/assets/box.png'}
-					blurDataURL={'/assets/box.png'}
-					alt='Descentralized box'
-					width='250px'
-					height='250px'
-					placeholder='blur'
-				/>
-			)}
+			<Box w={['200px', '250px']} h={['200px', '250px']}>
+				{openBox ? (
+					<Image
+						src={'/assets/boxOpen.png'}
+						alt='Descentralized open box'
+						width='100%'
+						height='100%'
+						layout='responsive'
+					/>
+				) : (
+					<Image
+						onClick={() => handleShaking()}
+						src={'/assets/box.png'}
+						blurDataURL={'/assets/box.png'}
+						alt='Descentralized box'
+						layout='responsive'
+						width='100%'
+						height='100%'
+						placeholder='blur'
+					/>
+				)}
+			</Box>
 		</motion.div>
 	);
 };

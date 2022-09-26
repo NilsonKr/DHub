@@ -1,7 +1,7 @@
 import React from 'react';
 //UI
-import { motion, MotionStyle } from 'framer-motion';
-import { Box, BoxProps, Flex } from '@chakra-ui/react';
+import { motion } from 'framer-motion';
+import { Box } from '@chakra-ui/react';
 
 const opacityKeyFrames = [0, 1, 1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.5, 0.5, 0.5, 0.1];
 
@@ -26,8 +26,8 @@ export const BgBubble = () => {
 				style={{ zIndex: '-1' }}
 			>
 				<Box
-					width='50px'
-					h='50px'
+					width={['20px', '50px']}
+					h={['20px', '50px']}
 					borderRadius='50%'
 					bgGradient='radial-gradient(50% 50% at 50% 50%, #6B11FF 0%, rgba(107, 17, 255, 0.1) 100%)'
 					zIndex='-1'
@@ -43,8 +43,8 @@ export const BgBubble = () => {
 				style={{ zIndex: '-1' }}
 			>
 				<Box
-					width='50px'
-					h='50px'
+					width={['20px', '50px']}
+					h={['20px', '50px']}
 					borderRadius='50%'
 					bgGradient='radial-gradient(50% 50% at 50% 50%, #6B11FF 0%, rgba(107, 17, 255, 0.1) 100%)'
 					zIndex='-1'
