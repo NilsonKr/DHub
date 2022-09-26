@@ -19,7 +19,8 @@ import { BsFileEarmarkFill } from 'react-icons/bs';
 import { MdEdit } from 'react-icons/md';
 import { EmptyFile } from '../Icons/';
 //Utils
-import { ProcessFile } from '../Utils/processFile';
+import { ProcessFile } from '@components/Utils/processFile';
+import { formatRawSize } from '@utils/Item'
 
 type TProps = {
 	file: File | null;
@@ -53,10 +54,7 @@ export const FileDetail = ({ file, isProcessed, imgInfo, btnLabel, blockEdit, lo
 			const nameBits = file.name.split('.');
 			nameBits.splice(nameBits.length - 1, 1);
 			//Get size expressed by MB or KB
-			const size =
-				file!.size / 1000000 < 1
-					? `${(file!.size / 1024).toFixed(1)} KB`
-					: `${(file!.size / 1000000).toFixed(2)} MB`;
+			const size = formatRawSize(file!.size)
 			//Get a image url to display preview
 			const urlPreview = ProcessFile(file);
 
