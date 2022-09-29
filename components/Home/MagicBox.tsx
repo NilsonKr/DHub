@@ -45,7 +45,7 @@ export const MagicBox = ({ open }: TProps) => {
 			initial='idle'
 			style={{ cursor: 'pointer' }}
 		>
-			<Box w={['200px', '250px']} h={['200px', '250px']}>
+			<Box w={['200px', '220px']} h={['200px', '220px']}>
 				{openBox ? (
 					<Image
 						src={'/assets/boxOpen.png'}

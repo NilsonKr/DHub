@@ -7,7 +7,7 @@ import { BgLeftAdornment, BgRightAdornment } from '@components/Icons';
 
 export const Layout: React.FunctionComponent = ({ children }) => {
 	return (
-		<Container maxW='1000px'>
+		<Container maxW='1200px' position='relative'>
 			<Box w={['220px', '440px']} h={['300px', '690px']} position='absolute' top='0px' left='10px' zIndex='-1'>
 				<BgLeftAdornment />
 			</Box>

@@ -110,7 +110,7 @@ export const HomeMain = () => {
 
 			<motion.div variants={variants} animate={animate.trigger ? 'open' : {}}>
 				<VStack
-					minH={animate.trigger ? '120vh' : '100vh'}
+					minH={animate.trigger ? '120vh' : '65vh'}
 					spacing={3}
 					justify='center'
 					align='center'

@@ -18,7 +18,7 @@ export const BgBubble = () => {
 		<>
 			<motion.div
 				animate={{
-					scale: 15,
+					scale: 13,
 					opacity: opacityKeyFrames,
 				}}
 				initial={initialStyles}
@@ -35,7 +35,7 @@ export const BgBubble = () => {
 			</motion.div>
 			<motion.div
 				animate={{
-					scale: 15,
+					scale: 13,
 					opacity: opacityKeyFrames,
 				}}
 				initial={initialStyles}
