@@ -16,3 +16,12 @@ export const handleDownload = async (
 
 	downloadRef.current.click();
 };
+
+export const formatRawSize = (rawSize: number): string => {
+	const size =
+		rawSize / 1000000 < 1
+			? `${(rawSize / 1000).toFixed(1)} KB`
+			: `${(rawSize / 1000000).toFixed(2)} MB`;
+
+	return size;
+};

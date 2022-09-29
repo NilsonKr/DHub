@@ -104,11 +104,9 @@ export const HomeMain = () => {
 		<Box my='10' position='relative'>
 			<BgBubble />
 
-			<ErrorConnection errorMsg={'nothing important'} />
-
 			{animate.trigger && isRegister.open && <Register msg={isRegister.message} />}
 			{animate.trigger && !error && !isRegister.open && <LoggedIn />}
-			{/* {animate.trigger && error && !isRegister.open && <ErrorConnection errorMsg={error} />} */}
+			{animate.trigger && error && !isRegister.open && <ErrorConnection errorMsg={error} />}
 
 			<motion.div variants={variants} animate={animate.trigger ? 'open' : {}}>
 				<VStack

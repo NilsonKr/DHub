@@ -25,7 +25,7 @@ import {
 import { ExtensibleImage } from './ExtensibleImage'
 import { UpdatableFields } from './UpdatableFields'
 //Utils
-import { handleDownload } from '@utils/Item'
+import { handleDownload, formatRawSize } from '@utils/Item'
 //Types
 import { Item } from '@roottypes/gallery'
 
@@ -128,7 +128,7 @@ export const DetailView: React.FC<ComponentProps> = ({ item, isShared, account, 
               <Flex align='center'>
                 <Text>Size : </Text>
                 <Badge ml='3' bg='gray.700' p='1' borderRadius='5px'>
-                  {(item.size)} KB
+                  {formatRawSize(Number(item.size))}
                 </Badge>
               </Flex>
               <Flex align='center'>
