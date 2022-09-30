@@ -67,7 +67,7 @@ export const TagsCarousel: React.FC<ComponentProps> = ({
 						<NewTag isVariant={false} create={newTag} />
 					</>
 				))}
-				{isLoading && mockTags.map(() => <SkeletonTag />)}
+				{isLoading && mockTags.map((_, index) => <SkeletonTag key={index} />)}
 			</HStack>
 		</Flex>
 	);

@@ -162,7 +162,7 @@ export const DetailView: React.FC<ComponentProps> = ({ item, isShared, account, 
             </GenericBtn>
           </>
             :
-            <a href={item.url} target='_blank'>
+            <a href={item.url} target='_blank' rel='noreferrer'>
               <GenericBtn
                 hoverColor=''
                 rightIcon={<IoIosSend size='30px' color='white' />}

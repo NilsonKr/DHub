@@ -37,7 +37,7 @@ type SubmitState = {
 	payload: [string, string]
 }
 
-const profile = () => {
+const Profile = () => {
 	const { push } = useRouter()
 	const DhubContract = useContract()
 
@@ -141,15 +141,13 @@ const profile = () => {
 								variant='flushed'
 								disabled={submit?.trigger}
 							/>
-							<InputRightElement
-								children={
-									submit?.trigger && (
-										<SubmitEntrance>
-											<CheckCircleIcon color='green.400' w='15px' h='15px' />
-										</SubmitEntrance>
-									)
-								}
-							/>
+							<InputRightElement>
+								{submit?.trigger && (
+									<SubmitEntrance>
+										<CheckCircleIcon color='green.400' w='15px' h='15px' />
+									</SubmitEntrance>
+								)}
+							</InputRightElement>
 						</InputGroup>
 						{submit?.trigger && <FormHelperText color='green.400'>Updated!</FormHelperText>}
 						{emptyName && (
@@ -240,4 +238,4 @@ const profile = () => {
 	);
 };
 
-export default InstantAuth(profile);
+export default InstantAuth(Profile);

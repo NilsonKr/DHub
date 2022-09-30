@@ -13,8 +13,7 @@ export const RoundedRightArrow = ({
 		<Circle
 			_active={{ transform: 'scale(0.8)' }}
 			transition='transform .1s linear'
-			w={size}
-			h={size}
+			size={size}
 			bg={bg}
 		>
 			<Icon

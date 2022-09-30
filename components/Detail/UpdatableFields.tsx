@@ -29,11 +29,15 @@ export const UpdatableFields: React.FC<ComponentProps> = ({ form, isEdit, handle
           <>
             <InputGroup w='100%' background='gray.900' borderColor='transparent' >
               <Input fontSize='1.4rem' fontWeight='bold' value={form.title} onChange={e => handleChange('title', e.target.value)} />
-              <InputRightElement children={<MdEdit size='22px' color='white' />} />
+              <InputRightElement>
+                <MdEdit size='22px' color='white' />
+              </InputRightElement>
             </InputGroup>
             <InputGroup w='100%' background='gray.900' borderColor='transparent' >
               <Input color='gray.400' value={form.description} onChange={e => handleChange('description', e.target.value)} />
-              <InputRightElement children={<MdEdit size='22px' color='white' />} />
+              <InputRightElement>
+                <MdEdit size='22px' color='white' />
+              </InputRightElement>
             </InputGroup>
           </>
         }

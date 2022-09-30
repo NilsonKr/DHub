@@ -5,14 +5,18 @@ import { TagsContext } from '@context/TagsContext'
 
 type HOCProps = (Component: React.FC<any>) => React.FC<any>
 
-const TagsWrapper: HOCProps = (Component) => () => {
-  const { isAuth, isItemShared } = useContext(authContext)
+const TagsWrapper: HOCProps = (Component) => {
+  const Hoc = () => {
+    const { isAuth, isItemShared } = useContext(authContext)
 
-  return (isAuth || isItemShared) && (
-    <TagsContext isItemShared={isItemShared} >
-      <Component />
-    </TagsContext>
-  )
+    return (isAuth || isItemShared) && (
+      <TagsContext isItemShared={isItemShared} >
+        <Component />
+      </TagsContext>
+    )
+  }
+
+  return Hoc
 }
 
 export default TagsWrapper

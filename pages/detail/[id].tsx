@@ -23,7 +23,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 	}
 }
 
-const detail = () => {
+const Detail = () => {
 	const { query } = useRouter()
 	const { account } = useWallet()
 
@@ -78,4 +78,4 @@ const detail = () => {
 	</>;
 };
 
-export default InstantAuth(TagsWrapper(detail));
+export default InstantAuth(TagsWrapper(Detail));

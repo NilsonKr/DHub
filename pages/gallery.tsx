@@ -13,7 +13,7 @@ import { ItemTags } from '@components/Modal/ItemTags';
 import InstantAuth from '@components/HOC/InstantAuth'
 import TagsWrapper from '@components/HOC/TagsWrapper';
 
-const gallery = () => {
+const Gallery = () => {
 	const { account } = useWallet()
 	const { user } = useContext(authContext)
 	const [modal, setModal] = useState<string>('');
@@ -99,4 +99,4 @@ const gallery = () => {
 	);
 };
 
-export default InstantAuth(TagsWrapper(gallery));
+export default InstantAuth(TagsWrapper(Gallery));

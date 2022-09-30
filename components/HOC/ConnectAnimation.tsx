@@ -21,7 +21,7 @@ const getVariants = (isMobile: boolean): Variants => {
 }
 
 export const ConnectAnimation = (Component: React.FC<any>): React.FC<any> => {
-  return (props) => {
+  const Hoc = (props) => {
     const [isMobile] = useMediaQuery('(max-width: 768px)')
 
     return (
@@ -39,4 +39,6 @@ export const ConnectAnimation = (Component: React.FC<any>): React.FC<any> => {
       </Box>
     )
   }
+
+  return Hoc
 }

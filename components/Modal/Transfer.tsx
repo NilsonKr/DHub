@@ -71,10 +71,9 @@ export const TransferModal = ({ item, open, account, transferItem, close }: TPro
 							onChange={e => setReceiver(e.target.value)}
 							disabled={isLoading}
 						/>
-						<InputRightAddon
-							bg='purple.600'
-							children={<Icon color='white' h='18px' w='18px' as={RiSendPlaneFill} />}
-						/>
+						<InputRightAddon bg='purple.600'>
+							<Icon color='white' h='18px' w='18px' as={RiSendPlaneFill} />
+						</InputRightAddon>
 					</InputGroup>
 				</ModalBody>
 				<ModalFooter>

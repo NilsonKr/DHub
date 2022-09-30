@@ -117,8 +117,9 @@ export const ShareItem = ({ item, url, updateShareState, close }: TProps) => {
                   cursor='pointer'
                   _active={{ bg: 'purple.300' }}
                   onClick={handleCopy}
-                  children={<Icon _groupActive={{ transform: 'scale(0.9)' }} transition='transform 50ms linear' color={'white'} h='25px' w='25px' as={MdCopyAll} />}
-                />
+                >
+                  <Icon _groupActive={{ transform: 'scale(0.9)' }} transition='transform 50ms linear' color={'white'} h='25px' w='25px' as={MdCopyAll} />
+                </InputRightAddon>
                 :
                 <InputRightAddon
                   role='group'
@@ -129,8 +130,9 @@ export const ShareItem = ({ item, url, updateShareState, close }: TProps) => {
                   onClick={handleShare}
                   onMouseEnter={() => setIcon(true)}
                   onMouseLeave={() => setIcon(false)}
-                  children={<Icon _groupActive={{ transform: 'scale(0.9)' }} transition='transform 50ms linear' color={showIcon ? 'white' : 'gray.500'} h='28px' w='28px' as={showIcon ? AiFillUnlock : AiFillLock} />}
-                />
+                >
+                  <Icon _groupActive={{ transform: 'scale(0.9)' }} transition='transform 50ms linear' color={showIcon ? 'white' : 'gray.500'} h='28px' w='28px' as={showIcon ? AiFillUnlock : AiFillLock} />
+                </InputRightAddon>
             }
           </InputGroup>
         </ModalBody>

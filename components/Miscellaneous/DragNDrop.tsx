@@ -39,8 +39,8 @@ export const DragNDrop = ({ handleFile, label, loading }: TProps) => {
 			onDragLeave={handleDragExit}
 			onDropCapture={handleDrop}
 			bg={isDrag ? '#8800ff45' : 'transparent'}
-			w='100%'
-			h='280px'
+			minW='100%'
+			minH='280px'
 			py='50px'
 			mt='40px'
 			textAlign='center'

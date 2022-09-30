@@ -3,9 +3,9 @@ import { useEffect, useContext } from 'react'
 import { authContext } from '@context/AuthContext'
 import { useWallet } from '@hooks/web3/useWallet'
 
-type HookProps = (handleLogin: () => Promise<any> | void) => void
+type HookProps = (handleLogin: () => Promise<any> | void, isExternal?: boolean) => void
 
-export const useInitAuth: HookProps = (handleLogin) => {
+export const useInitAuth: HookProps = (handleLogin, isExternal = false) => {
   const { active, connect } = useWallet()
   const { isAuth } = useContext(authContext)
   const { push } = useRouter()
@@ -22,15 +22,16 @@ export const useInitAuth: HookProps = (handleLogin) => {
   }
 
   useEffect(() => {
-    const storageFlag = localStorage.getItem('isConnected')
+    if (!isExternal) {
+      const storageFlag = localStorage.getItem('isConnected')
 
-    if (active && !isAuth) {
-      autoLogin()
-    } else if (!active && storageFlag === 'true') {
-      handleConnect()
-    } else if (!active && storageFlag === 'false') {
-      push('/')
+      if (active && !isAuth) {
+        autoLogin()
+      } else if (!active && storageFlag === 'true') {
+        handleConnect()
+      } else if (!active && storageFlag === 'false') {
+        push('/')
+      }
     }
-
   }, [active])
 }

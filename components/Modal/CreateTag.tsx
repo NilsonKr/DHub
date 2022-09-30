@@ -70,10 +70,9 @@ export const CreateTagModal = ({ account, open, close }: TProps) => {
 				<ModalBody my='4'>
 					<InputGroup>
 						<Input onChange={(e) => setTag(e.target.value)} placeholder='Type a name' _placeholder={{ color: 'gray.400' }} />
-						<InputRightAddon
-							bg='purple.500'
-							children={<Icon color='white' h='25px' w='25px' as={AiOutlineTags} />}
-						/>
+						<InputRightAddon bg='purple.500'>
+							<Icon color='white' h='25px' w='25px' as={AiOutlineTags} />
+						</InputRightAddon>
 					</InputGroup>
 				</ModalBody>
 				<ModalFooter>
